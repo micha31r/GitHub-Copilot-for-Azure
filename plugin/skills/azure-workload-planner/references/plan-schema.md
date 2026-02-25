@@ -71,4 +71,4 @@ Each element represents one Azure resource:
 
 ## Example
 
-See [sample_infrastructure_plan.json](../sample_infrastructure_plan.json) for a complete example.
+See [sample_infrastructure_plan.json](./sample_infrastructure_plan.json) for a complete example.
