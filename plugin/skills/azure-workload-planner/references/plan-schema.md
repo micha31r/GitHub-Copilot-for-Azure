@@ -16,6 +16,7 @@ The infrastructure plan is written to `.azure/infrastructure-plan.json`. This do
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
+
 | `planId` | string | Yes | Unique identifier (e.g., `plan-1`) |
 | `generatedAt` | string | Yes | ISO 8601 timestamp |
 | `version` | string | Yes | Schema version (e.g., `0.1-draft`) |
@@ -25,6 +26,7 @@ The infrastructure plan is written to `.azure/infrastructure-plan.json`. This do
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
+
 | `userGoal` | string | Yes | User's stated objective or workload description |
 
 ## `plan` (required)
@@ -35,9 +37,10 @@ Each element represents one Azure resource:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
+
 | `name` | string | Yes | Logical resource name (CAF-compliant) |
 | `type` | string | Yes | ARM resource type (e.g., `Microsoft.Storage/storageAccounts`) |
-| `subtype` | string | No | Friendly subtype (e.g., `Blob Storage`, `Azure Function`) |
+| `subtype` | string | No | Exact subtype (e.g., `Blob Storage`, `Azure Function`) |
 | `location` | string | Yes | Azure region (e.g., `eastus`) |
 | `sku` | string | Yes | SKU tier (e.g., `Standard_LRS`, `Consumption`) |
 | `properties` | object | No | Resource-specific properties |
@@ -50,6 +53,7 @@ Each element represents one Azure resource:
 
 | Field | Type | Description |
 |-------|------|-------------|
+
 | `whyChosen` | string | Justification referencing WAF pillars or requirements |
 | `alternativesConsidered` | string[] | Other options evaluated |
 | `tradeoffs` | string | Key tradeoffs in this choice |
@@ -58,6 +62,7 @@ Each element represents one Azure resource:
 
 | Field | Type | Description |
 |-------|------|-------------|
+
 | `summary` | string | Overall architecture rationale |
 | `tradeoffs` | string | Top-level tradeoffs and gaps |
 
@@ -65,6 +70,7 @@ Each element represents one Azure resource:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
+
 | `validation` | string | Yes | Deployment coherence statement |
 | `architecturePrinciples` | string[] | Yes | Guiding principles (e.g., `Highly available`, `Secure`) |
 | `references` | array | Yes | Architecture-level doc links |

@@ -27,7 +27,7 @@ Activate this skill when user wants to:
 ## Rules
 
 1. ****
-2. **Research before planning** — Use MCP tools to research best practices for SKUs, regions, naming conventions, and architecture
+2. **Research before planning** — Use `microsoft_docs_search` and `microsoft_docs_fetch` to research best practices for SKUs, regions, naming conventions, and architecture
 3. **Create an infrastructure plan before IAC** — Generate `.azure/infrastructure-plan.json` before any IaC so we can map the plan to the generated code and ensure alignment
 4. **Get approval** — Plan status must be `approved` before deployment
 5. **User chooses IaC format** — Bicep or Terraform; ask if not specified
@@ -53,25 +53,27 @@ Gather all information needed to make correct resource decisions.
 
 | # | Action | Reference |
 |---|--------|-----------|
-| 1 | **Identify Requirements** — Analyze repo or gather user workload description | — |
-| 2 | **Research Architecture** — Use `mcp_azure_mcp_cloudarchitect` for recommendations | [research.md](references/research.md) |
-| 3 | **Check SKUs & Regions** — Use `mcp_azure_mcp_quota` for availability | [research.md](references/research.md) |
+| 1 | **Identify Requirements** — Gather user workload description and repository context if applicable | — |
+| 2 | **Research Architecture** — Search Learn docs for architecture patterns and recommendations | [research.md](references/research.md) |
+| 3 | **Check SKUs & Regions** — Each resource file has a Region Availability category. Foundational resources are available everywhere — no check needed. For Mainstream or Strategic resources, fetch `https://learn.microsoft.com/azure/reliability/availability-service-by-category` to confirm the target region supports the service. | [research.md](references/research.md) |
 | 4 | **Apply Naming Conventions** — Validate names against hard constraints | [naming-conventions.md](references/naming-conventions.md) |
-| 5 | **Confirm Azure Context** — Use `mcp_azure_mcp_subscription_list` for subscription | [research.md](references/research.md) |
-| 6 | **Gather Documentation** — Use `mcp_azure_mcp_documentation` for Learn docs | [research.md](references/research.md) |
+| 5 | **Load Resource References** — For each planned resource type, load the per-resource file for verified types, SKUs, naming rules, and pairing constraints | [resources.md](references/resources.md) |
+| 6 | **Research Resource Details** — Fetch specific Learn doc pages for any resource not covered by reference files | [research.md](references/research.md) |
 
 ## Phase 2: Plan Generation
 
-Produce the structured infrastructure plan JSON.
+Build the infrastructure plan **one resource at a time**. For each resource, write it to the plan JSON, then immediately verify it before moving to the next. This enforces correct naming, dependency wiring, and property compatibility at every step.
 
 | # | Action | Reference |
 |---|--------|-----------|
-| 1 | **Build Resource List** — Map requirements to Azure resource types with SKUs, regions, properties | [plan-schema.md](references/plan-schema.md) |
-| 2 | **Add Reasoning** — Document why each resource was chosen, alternatives, tradeoffs | [plan-schema.md](references/plan-schema.md) |
-| 3 | **Order Dependencies** — Define resource provisioning order | [plan-schema.md](references/plan-schema.md) |
-| 4 | **Write Plan** — Generate `.azure/infrastructure-plan.json` with status `draft` | [plan-schema.md](references/plan-schema.md) |
-| 5 | **Verify Plan** — Run verification pass: validate names, dependencies, and cross-resource pairing constraints. Fix issues in-place and record results in `meta.verification`. | [verification.md](references/verification.md) |
-| 6 | **Present Plan** — Show plan to user with verification summary and request approval | — |
+| 1 | **Initialize Plan** — Create `.azure/infrastructure-plan.json` with `meta` (status `draft`), `inputs`, and an empty `plan.resources[]` | [plan-schema.md](references/plan-schema.md) |
+| 2 | **Determine Resource Order** — From research, list all needed resources in dependency order (dependencies first) | [plan-schema.md](references/plan-schema.md) |
+| 3 | **For each resource (in order):** | |
+| 3a | **Load Resource File** — Load the per-resource reference file for this type from [resources.md](references/resources.md) index. Use it for naming rules, required properties, valid SKUs/kinds, and pairing constraints. | [resources.md](references/resources.md) → `resources/{category}/{type}.md` |
+| 3b | **Write Resource** — Add one resource entry to `plan.resources[]` with type, name, SKU, location, properties, reasoning, dependencies, and references | [plan-schema.md](references/plan-schema.md) |
+| 3c | **Verify Resource** — Immediately validate this resource: check name constraints (from resource file Naming section), dependency references resolve, SKU/property compatibility with already-written resources (from resource file Pairing Constraints section). Fix any issues in-place. | [verification.md](references/verification.md) |
+| 4 | **Finalize Plan** — Add `plan.overallReasoning`, `plan.architecturePrinciples`, and `plan.validation`. Record verification summary in `meta.verification`. | [plan-schema.md](references/plan-schema.md) |
+| 5 | **Present Plan** — Show plan to user with verification summary and request approval | — |
 
 > **⛔ STOP HERE** — Do NOT proceed to Phase 3 until the user approves the plan and status is set to `approved`.
 
@@ -82,9 +84,9 @@ Generate infrastructure-as-code from the approved plan. Ask user for format if n
 | # | Action | Reference |
 |---|--------|-----------|
 | 1 | **Choose Format** — Bicep or Terraform (user's choice) | — |
-| 2 | **Generate Bicep** — Use `mcp_azure_mcp_bicepschema` for schema accuracy | [bicep-generation.md](references/bicep-generation.md) |
-| 3 | **Generate Terraform** — Module structure, providers, variables | [terraform-generation.md](references/terraform-generation.md) |
-| 4 | **Apply IaC Rules** — Use `mcp_azure_mcp_deploy` `iac rules get` for best practices | — |
+| 2 | **Generate Bicep** — Use resource docs from plan references for schema accuracy | [bicep-generation.md](references/DSLs/bicep/bicep-generation.md) |
+| 3 | **Generate Terraform** — Module structure, providers, variables | [terraform-generation.md](references/DSLs/terraform/terraform-generation.md) |
+| 4 | **Verify IaC** — Fetch Learn docs for each resource to cross-check API versions and properties | — |
 
 ## Phase 4: Deployment
 
@@ -128,11 +130,7 @@ draft → reviewed → approved → deployed
 
 | Tool | Purpose |
 |------|---------|
-| `mcp_azure_mcp_cloudarchitect` | Architecture designs and recommendations |
-| `mcp_azure_mcp_bicepschema` | Bicep schemas and resource definitions |
-| `mcp_azure_mcp_deploy` | Deployment plans, IaC rules, architecture diagrams |
-| `mcp_azure_mcp_quota` | Region availability and quota/usage limits |
-| `mcp_azure_mcp_documentation` | Search Microsoft Learn docs |
-| `mcp_azure_mcp_subscription_list` | List available subscriptions |
-| `mcp_azure_mcp_group_list` | List resource groups in subscription |
-| `mcp_azure_mcp_role` | RBAC role assignment management |
+| `microsoft_docs_search` | Search Microsoft Learn for architecture patterns, SKU details, naming rules, and best practices. Returns up to 10 chunks (500 tokens each). Use specific queries for best results. |
+| `microsoft_docs_fetch` | Fetch the full content of a specific Learn doc page by URL. Use after search to get complete details, or when the URL is already known from plan references. || `mcp_azure_mcp_ser_subscription_list` | List the user's available Azure subscriptions. Use to confirm which subscription to deploy into. |
+| `mcp_azure_mcp_ser_group_list` | List resource groups in a subscription. Use to discover existing resource groups for deployment or co-location. |
+| `azure_resources-query_azure_resource_graph` | Query Azure Resource Graph to discover existing deployed resources — names, types, SKUs, locations, properties. Use when new resources need to connect to or depend on existing infrastructure. |

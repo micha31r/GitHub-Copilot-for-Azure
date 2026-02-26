@@ -14,32 +14,43 @@ Determine the input scenario and gather requirements accordingly:
 
 ## MCP Tool Usage
 
-### Architecture Recommendations
+### Architecture Research
 
-Use `mcp_azure_mcp_cloudarchitect` to get architecture guidance based on workload description:
-- Provide the user's goal or requirements as input
-- Extract recommended resource types and patterns
+Use `microsoft_docs_search` to find architecture guidance:
+- Search for architecture patterns matching the workload type (e.g., "Azure web app architecture best practices")
+- Search for Well-Architected Framework guidance for the relevant pillars
+- Extract recommended resource types and design patterns from results
 
 ### SKU and Region Availability
 
-Use `mcp_azure_mcp_quota` to verify:
+Use `microsoft_docs_search` and `microsoft_docs_fetch` to verify:
 - Which regions support the selected resource types
-- Available SKUs and their limits in the target region
-- Current quota usage in the user's subscription
+- Available SKUs and their capabilities
+- Service limits and quotas for target SKUs
 
-### Azure Context
+### Resource Documentation
 
-Use `mcp_azure_mcp_subscription_list` and `mcp_azure_mcp_group_list` to:
-- List the user's available subscriptions
-- Confirm which subscription to deploy into
-- List existing resource groups or plan new ones
+For each planned resource type, use `microsoft_docs_fetch` on the relevant Learn doc pages to:
+- Confirm correct ARM resource type and API version
+- Verify required and optional properties
+- Check configuration constraints and incompatibilities
+- Populate the `references` array in the plan JSON with doc URLs
 
-### Documentation
+### Search → Fetch Pattern
 
-Use `mcp_azure_mcp_documentation` to:
-- Search Microsoft Learn for service-specific best practices
-- Ground architecture decisions in official documentation
-- Populate the `references` array in the plan JSON with relevant doc URLs
+1. **Search first** — Use `microsoft_docs_search` with a specific query to find relevant pages
+2. **Fetch high-value pages** — Use `microsoft_docs_fetch` on URLs from search results that need full detail
+3. **Record URLs** — Save fetched URLs in the resource's `references` array for verification traceability
+
+### Existing Resource Discovery
+
+When new resources need to connect to already-deployed infrastructure:
+
+1. **Identify subscription** — Use `mcp_azure_mcp_ser_subscription_list` to list subscriptions and confirm the target
+2. **List resource groups** — Use `mcp_azure_mcp_ser_group_list` to find existing groups in the subscription
+3. **Query deployed resources** — Use `azure_resources-query_azure_resource_graph` with a natural language intent (e.g., "list all resources in resource group X with their type, SKU, and location")
+4. **Extract connection points** — From the query results, identify resource names, SKUs, networking config, and other properties that new resources must align with
+5. **Add as dependencies** — Reference existing resources in the plan's `dependencies` arrays so the generated IaC can wire up correctly
 
 ## Research Checklist
 

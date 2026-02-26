@@ -1,0 +1,121 @@
+# Virtual Machine
+
+## Identity
+
+| Field | Value |
+|-------|-------|
+
+| ARM Type | `Microsoft.Compute/virtualMachines` |
+| Bicep API Version | `2025-04-01` |
+| CAF Prefix | `vm` |
+
+## Region Availability
+
+**Category:** Foundational — available in all recommended and alternate Azure regions.
+
+## Subtypes (kind)
+
+Virtual Machine does not use `kind`.
+
+## SKU Names
+
+VM does not use a top-level `sku` block. VM size is set via `properties.hardwareProfile.vmSize`:
+
+| vmSize Example | Family | Use Case |
+|----------------|--------|----------|
+
+| `Standard_B2s` | Burstable | Dev/test, low-traffic web servers |
+| `Standard_D2s_v5` | General purpose | Balanced compute/memory |
+| `Standard_E4s_v5` | Memory optimized | Databases, in-memory caching |
+| `Standard_F4s_v2` | Compute optimized | Batch processing, analytics |
+| `Standard_L8s_v3` | Storage optimized | Large data, high disk throughput |
+| `Standard_NC6s_v3` | GPU | ML training, rendering |
+
+> **Note:** VM sizes are not a closed enum. Use `az vm list-sizes --location {region}` or Resource Graph to discover valid values for a given region.
+
+## Naming
+
+| Constraint | Value |
+|------------|-------|
+
+| Min Length | 1 |
+| Max Length | 15 (Windows hostname) / 64 (Linux / resource name) |
+| Allowed Characters | Alphanumerics, hyphens, underscores. Windows: no periods at end, no trailing hyphens. Linux: no trailing periods or hyphens. |
+| Scope | Resource group |
+| Pattern | `vm-{workload}-{env}-{instance}` |
+| Example | `vm-webserver-prod-001` |
+
+## Required Properties (Bicep)
+
+```bicep
+resource vm 'Microsoft.Compute/virtualMachines@2025-04-01' = {
+  name: 'string'       // required
+  location: 'string'   // required
+  properties: {
+    hardwareProfile: {
+      vmSize: 'string'  // required — e.g. 'Standard_D2s_v5'
+    }
+    storageProfile: {
+      osDisk: {
+        createOption: 'string'  // required — 'FromImage', 'Attach', 'Empty'
+      }
+    }
+    osProfile: {              // required when createOption = 'FromImage'
+      computerName: 'string'
+      adminUsername: 'string'
+      adminPassword: 'string' // or use SSH key for Linux
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: 'string'  // required — NIC resource ID
+        }
+      ]
+    }
+  }
+}
+```
+
+## Key Properties
+
+| Property | Description | Values |
+|----------|-------------|--------|
+
+| `properties.hardwareProfile.vmSize` | VM size | Any valid size string (e.g. `Standard_D2s_v5`) |
+| `properties.storageProfile.osDisk.createOption` | OS disk creation | `FromImage`, `Attach`, `Empty`, `Copy`, `Restore` |
+| `properties.storageProfile.osDisk.managedDisk.storageAccountType` | Disk tier | `Premium_LRS`, `StandardSSD_LRS`, `Standard_LRS`, `PremiumV2_LRS`, `UltraSSD_LRS` |
+| `properties.storageProfile.osDisk.caching` | Disk caching | `None`, `ReadOnly`, `ReadWrite` |
+| `properties.storageProfile.osDisk.deleteOption` | Disk on VM delete | `Delete`, `Detach` |
+| `properties.priority` | VM priority | `Regular`, `Spot`, `Low` |
+| `properties.evictionPolicy` | Spot eviction | `Deallocate`, `Delete` (only when priority = Spot) |
+| `properties.securityProfile.securityType` | Security type | `TrustedLaunch`, `ConfidentialVM` |
+| `identity.type` | Managed identity | `None`, `SystemAssigned`, `UserAssigned`, `SystemAssigned, UserAssigned` |
+
+## Pairing Constraints
+
+When connected to other resources, enforce these rules:
+
+| Paired With | Constraint |
+|-------------|------------|
+
+| **NIC** | At least one NIC required via `networkProfile.networkInterfaces`. NIC must be in the same region. |
+| **Availability Set** | Cannot combine with `virtualMachineScaleSet` or availability zones. Set `availabilitySet.id`. |
+| **Availability Zone** | Cannot combine with availability sets. Set `zones: ['1']` (string array). |
+| **Managed Disk (UltraSSD)** | Requires `additionalCapabilities.ultraSSDEnabled: true`. |
+| **Dedicated Host** | Cannot specify both `host` and `hostGroup`. |
+| **Boot Diagnostics Storage** | Cannot use Premium or ZRS storage. Use `Standard_LRS` or `Standard_GRS`. |
+
+## Child Resources
+
+| Child Type | ARM Type | Purpose |
+|------------|----------|---------|
+
+| Extensions | `Microsoft.Compute/virtualMachines/extensions` | VM agents and scripts |
+| Run Commands | `Microsoft.Compute/virtualMachines/runCommands` | Execute scripts on VM |
+
+## References
+
+- [Bicep resource reference (2025-04-01)](https://learn.microsoft.com/azure/templates/microsoft.compute/virtualmachines?pivots=deployment-language-bicep)
+- [Virtual Machines overview](https://learn.microsoft.com/azure/virtual-machines/overview)
+- [Azure naming rules — Compute](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute)
+- [VM sizes](https://learn.microsoft.com/azure/virtual-machines/sizes/overview)
