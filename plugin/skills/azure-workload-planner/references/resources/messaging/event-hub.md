@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.EventHub/namespaces` |
 | Bicep API Version | `2024-01-01` |
 | CAF Prefix | `evhns` (namespace) / `evh` (event hub) |
@@ -21,7 +20,6 @@ Event Hub does not use `kind`.
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `Basic` | `Basic` | Basic — 1 consumer group, 1-day retention, 100 brokered connections |
 | `Standard` | `Standard` | Standard — 20 consumer groups, 7-day retention, 1000 connections |
 | `Premium` | `Premium` | Premium — dedicated capacity, 90-day retention, VNet, zones |
@@ -32,7 +30,6 @@ Event Hub does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 6 |
 | Max Length | 50 |
 | Allowed Characters | Alphanumerics and hyphens. Must start with a letter, end with letter or number. |
@@ -59,7 +56,6 @@ resource eventHubNs 'Microsoft.EventHub/namespaces@2024-01-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | Pricing tier | `Basic`, `Standard`, `Premium` |
 | `sku.tier` | Tier (matches name) | `Basic`, `Standard`, `Premium` |
 | `sku.capacity` | Throughput/processing units | Integer (Standard: `1`–`40`, Premium: `1`–`16`) |
@@ -77,7 +73,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet** | Only Premium SKU supports VNet service endpoints and private endpoints natively. |
 | **Zone Redundancy** | Available in Standard (with ≥4 TU recommended) and Premium. |
 | **Kafka** | Kafka protocol support available in Standard and Premium only (not Basic). |
@@ -90,7 +85,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Event Hubs | `Microsoft.EventHub/namespaces/eventhubs` | Individual event hubs |
 | Auth Rules | `Microsoft.EventHub/namespaces/authorizationRules` | SAS access policies |
 | Consumer Groups | `Microsoft.EventHub/namespaces/eventhubs/consumergroups` | Consumer group definitions |

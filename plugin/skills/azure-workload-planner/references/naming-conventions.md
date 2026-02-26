@@ -14,7 +14,6 @@ Example: `st-datapipeline-prod-eastus-001`
 
 | Resource Type | Abbreviation | Example |
 |---------------|--------------|---------|
-
 | Resource Group | `rg` | `rg-datapipeline-prod` |
 | Storage Account | `st` | `stdatapipelineprod` |
 | App Service | `app` | `app-datapipeline-prod` |
@@ -39,7 +38,6 @@ These constraints cause deployment failures if violated. **The skill MUST enforc
 
 | Resource | Min | Max | Allowed Characters | Scope |
 |----------|-----|-----|--------------------|-------|
-
 | Storage Account | 3 | 24 | Lowercase letters and numbers only | Global |
 | Key Vault | 3 | 24 | Alphanumeric and hyphens, start with letter | Global |
 | Resource Group | 1 | 90 | Alphanumeric, hyphens, underscores, periods, parens | Subscription |
@@ -59,7 +57,6 @@ Certain Azure services **require** their subnet to have an exact, hardcoded name
 
 | Service | Required Subnet Name | Min Size | Notes |
 |---------|----------------------|----------|-------|
-
 | Azure Firewall | `AzureFirewallSubnet` | /26 | **Must** be exactly this name. No other name accepted. |
 | Azure Firewall (forced tunneling) | `AzureFirewallManagementSubnet` | /26 | Required when forced tunneling is enabled. |
 | Azure Bastion | `AzureBastionSubnet` | /26 | **Must** be exactly this name. |
@@ -79,7 +76,6 @@ Certain Azure services **require** their subnet to have an exact, hardcoded name
 
 | Pairing | Constraint |
 |---------|------------|
-
 | Function Apps sharing a Storage Account | Function app name is truncated to 32 chars for host ID. Two apps with identical first 32 chars on the same storage account cause a **host ID collision** (hard failure in runtime v4.x). Use separate storage accounts or ensure names diverge within 32 chars. |
 | AKS Cluster + Resource Group | Auto-generated node RG `MC_{rgName}_{clusterName}_{region}` must be ≤ 80 chars total. |
 | SQL Server + SQL Managed Instance | Both share the `<name>.database.windows.net` DNS namespace. Cannot reuse a name for 7 days after deletion of either type. |

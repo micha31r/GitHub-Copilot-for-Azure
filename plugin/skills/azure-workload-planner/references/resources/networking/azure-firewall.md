@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/azureFirewalls` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `afw` |
@@ -23,7 +22,6 @@ Azure Firewall does not use `kind`. The deployment mode is determined by `sku.na
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `AZFW_VNet` | `Basic` | Basic — for SMB, limited features |
 | `AZFW_VNet` | `Standard` | Standard — threat intelligence, TLS inspection |
 | `AZFW_VNet` | `Premium` | Premium — Standard + IDPS, URL filtering, TLS inspection |
@@ -37,7 +35,6 @@ Azure Firewall does not use `kind`. The deployment mode is determined by `sku.na
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 56 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -73,7 +70,6 @@ resource firewall 'Microsoft.Network/azureFirewalls@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.sku.name` | Deployment mode | `AZFW_VNet`, `AZFW_Hub` |
 | `properties.sku.tier` | Feature tier | `Basic`, `Standard`, `Premium` |
 | `properties.threatIntelMode` | Threat intelligence mode | `Alert`, `Deny`, `Off` |
@@ -91,7 +87,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet** | Requires a subnet named exactly `AzureFirewallSubnet` with minimum /26 prefix. |
 | **Basic Tier** | Additionally requires `AzureFirewallManagementSubnet` with /26 minimum and its own public IP. |
 | **Public IP** | Requires Standard SKU public IP with Static allocation. |

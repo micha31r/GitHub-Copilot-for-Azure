@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Sql/servers` |
 | Bicep API Version | `2023-08-01` |
 | CAF Prefix | `sql` |
@@ -25,7 +24,6 @@ SQL Server (logical server) does not use SKU. SKU is configured on the child **d
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 63 |
 | Allowed Characters | Lowercase letters, numbers, and hyphens. Must start with a letter, end with a letter or number. |
@@ -50,7 +48,6 @@ resource sqlServer 'Microsoft.Sql/servers@2023-08-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.administratorLogin` | SQL admin username | String — **immutable** after creation |
 | `properties.administratorLoginPassword` | SQL admin password | String — write-only, not returned by GET |
 | `properties.administrators` | Azure AD admin config | Object with `azureADOnlyAuthentication`, `login`, `sid`, `tenantId` |
@@ -65,7 +62,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **SQL Database** | Databases are child resources — must reference this server as parent. |
 | **Key Vault (TDE)** | Key Vault must have `enablePurgeProtection: true`. Must be in same Azure AD tenant. Server needs GET, WRAP KEY, UNWRAP KEY permissions on key. |
 | **Virtual Network** | Use `Microsoft.Sql/servers/virtualNetworkRules` to restrict access to specific subnets. Subnets need `Microsoft.Sql` service endpoint. |
@@ -77,7 +73,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Databases | `Microsoft.Sql/servers/databases` | SQL databases (see [sql-database.md](sql-database.md)) |
 | Elastic Pools | `Microsoft.Sql/servers/elasticPools` | Shared resource pools |
 | Firewall Rules | `Microsoft.Sql/servers/firewallRules` | IP-based firewall rules |

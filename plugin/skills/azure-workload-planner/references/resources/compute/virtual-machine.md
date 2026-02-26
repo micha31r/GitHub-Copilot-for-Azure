@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Compute/virtualMachines` |
 | Bicep API Version | `2025-04-01` |
 | CAF Prefix | `vm` |
@@ -23,7 +22,6 @@ VM does not use a top-level `sku` block. VM size is set via `properties.hardware
 
 | vmSize Example | Family | Use Case |
 |----------------|--------|----------|
-
 | `Standard_B2s` | Burstable | Dev/test, low-traffic web servers |
 | `Standard_D2s_v5` | General purpose | Balanced compute/memory |
 | `Standard_E4s_v5` | Memory optimized | Databases, in-memory caching |
@@ -37,7 +35,6 @@ VM does not use a top-level `sku` block. VM size is set via `properties.hardware
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 15 (Windows hostname) / 64 (Linux / resource name) |
 | Allowed Characters | Alphanumerics, hyphens, underscores. Windows: no periods at end, no trailing hyphens. Linux: no trailing periods or hyphens. |
@@ -80,7 +77,6 @@ resource vm 'Microsoft.Compute/virtualMachines@2025-04-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.hardwareProfile.vmSize` | VM size | Any valid size string (e.g. `Standard_D2s_v5`) |
 | `properties.storageProfile.osDisk.createOption` | OS disk creation | `FromImage`, `Attach`, `Empty`, `Copy`, `Restore` |
 | `properties.storageProfile.osDisk.managedDisk.storageAccountType` | Disk tier | `Premium_LRS`, `StandardSSD_LRS`, `Standard_LRS`, `PremiumV2_LRS`, `UltraSSD_LRS` |
@@ -97,7 +93,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **NIC** | At least one NIC required via `networkProfile.networkInterfaces`. NIC must be in the same region. |
 | **Availability Set** | Cannot combine with `virtualMachineScaleSet` or availability zones. Set `availabilitySet.id`. |
 | **Availability Zone** | Cannot combine with availability sets. Set `zones: ['1']` (string array). |
@@ -109,7 +104,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Extensions | `Microsoft.Compute/virtualMachines/extensions` | VM agents and scripts |
 | Run Commands | `Microsoft.Compute/virtualMachines/runCommands` | Execute scripts on VM |
 

@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/virtualNetworkGateways` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `vpng` |
@@ -21,7 +20,6 @@ VPN Gateway does not use `kind`. The gateway type is set via `properties.gateway
 
 | Gateway Type | Description |
 |--------------|-------------|
-
 | `Vpn` | VPN gateway (site-to-site, point-to-site, VNet-to-VNet) |
 | `ExpressRoute` | ExpressRoute gateway |
 | `LocalGateway` | Local network gateway |
@@ -30,7 +28,6 @@ VPN Gateway does not use `kind`. The gateway type is set via `properties.gateway
 
 | VPN Type | Description |
 |----------|-------------|
-
 | `RouteBased` | Route-based VPN — **recommended**, required for most scenarios |
 | `PolicyBased` | Policy-based VPN — limited to 1 S2S tunnel, IKEv1 only |
 
@@ -38,7 +35,6 @@ VPN Gateway does not use `kind`. The gateway type is set via `properties.gateway
 
 | SKU Name | Gateway Type | Max S2S Tunnels | Max P2S Connections | Throughput |
 |----------|--------------|-----------------|---------------------|------------|
-
 | `Basic` | Vpn | 10 | 128 | 100 Mbps |
 | `VpnGw1` | Vpn | 30 | 250 | 650 Mbps |
 | `VpnGw1AZ` | Vpn | 30 | 250 | 650 Mbps (zone-redundant) |
@@ -64,7 +60,6 @@ VPN Gateway does not use `kind`. The gateway type is set via `properties.gateway
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -102,7 +97,6 @@ resource vpnGw 'Microsoft.Network/virtualNetworkGateways@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.gatewayType` | Gateway type | `Vpn`, `ExpressRoute`, `LocalGateway` |
 | `properties.vpnType` | VPN type | `RouteBased`, `PolicyBased` |
 | `properties.vpnGatewayGeneration` | Hardware generation | `Generation1`, `Generation2`, `None` |
@@ -116,7 +110,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet** | Requires a subnet named exactly `GatewaySubnet` with minimum /27 prefix. |
 | **Public IP** | Basic VPN SKU requires Basic public IP. VpnGw1+ requires Standard public IP. |
 | **Active-Active** | Requires 2 public IPs and 2 IP configurations. Only supported with VpnGw1+. |
@@ -128,7 +121,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | NAT Rules | `Microsoft.Network/virtualNetworkGateways/natRules` | NAT rule definitions |
 
 ## References

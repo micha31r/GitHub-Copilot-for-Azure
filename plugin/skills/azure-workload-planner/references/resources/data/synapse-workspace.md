@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Synapse/workspaces` |
 | Bicep API Version | `2021-06-01` |
 | CAF Prefix | `synw` |
@@ -28,7 +27,6 @@ Does not use `sku`. The workspace resource itself has no SKU. Compute costs are 
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 50 |
 | Allowed Characters | Lowercase letters, numbers, and hyphens. Must start and end with a letter or number. Cannot contain `-ondemand`. |
@@ -57,7 +55,6 @@ resource synapseWorkspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.defaultDataLakeStorage.accountUrl` | ADLS Gen2 account DFS URL | string (required) |
 | `properties.defaultDataLakeStorage.filesystem` | ADLS Gen2 filesystem/container | string (required) |
 | `properties.defaultDataLakeStorage.resourceId` | ARM resource ID of storage account | string |
@@ -81,7 +78,6 @@ resource synapseWorkspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **ADLS Gen2 Storage Account** | **Required.** Storage account must have `isHnsEnabled: true` (hierarchical namespace / Data Lake Storage Gen2) and `kind: 'StorageV2'`. Synapse managed identity needs `Storage Blob Data Contributor` role on the storage account. |
 | **Key Vault** | For CMK encryption, Key Vault must have `softDeleteEnabled: true` and `enablePurgeProtection: true`. Synapse managed identity needs `Get`, `Unwrap Key`, and `Wrap Key` permissions. |
 | **Managed VNet** | When `managedVirtualNetwork: 'default'`, all outbound connections require managed private endpoints. Set at creation time — cannot be changed after. |
@@ -93,7 +89,6 @@ resource synapseWorkspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Administrators | `Microsoft.Synapse/workspaces/administrators` | Workspace active directory admin |
 | Auditing Settings | `Microsoft.Synapse/workspaces/auditingSettings` | SQL auditing configuration |
 | Entra ID Only Auth | `Microsoft.Synapse/workspaces/azureADOnlyAuthentications` | Enforce Entra ID-only auth |

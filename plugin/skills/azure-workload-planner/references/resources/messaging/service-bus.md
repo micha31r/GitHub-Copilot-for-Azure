@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.ServiceBus/namespaces` |
 | Bicep API Version | `2024-01-01` |
 | CAF Prefix | `sbns` (namespace) / `sbq` (queue) / `sbt` (topic) |
@@ -21,7 +20,6 @@ Service Bus does not use `kind`.
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `Basic` | `Basic` | Basic — queues only, no topics, 256 KB message size |
 | `Standard` | `Standard` | Standard — queues + topics, 256 KB messages, shared capacity |
 | `Premium` | `Premium` | Premium — dedicated capacity, 100 MB messages, VNet, zones |
@@ -30,7 +28,6 @@ Service Bus does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 6 |
 | Max Length | 50 |
 | Allowed Characters | Alphanumerics and hyphens. Must start with a letter, end with letter or number. |
@@ -55,7 +52,6 @@ resource serviceBus 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | Pricing tier | `Basic`, `Standard`, `Premium` |
 | `sku.tier` | Tier (matches name) | `Basic`, `Standard`, `Premium` |
 | `sku.capacity` | Messaging units (Premium) | `1`, `2`, `4`, `8`, `16` |
@@ -71,7 +67,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Topics** | Only Standard and Premium SKUs support topics and subscriptions. Basic supports queues only. |
 | **VNet** | Only Premium SKU supports VNet service endpoints and private endpoints. |
 | **Zone Redundancy** | Only Premium SKU supports zone redundancy. |
@@ -83,7 +78,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Queues | `Microsoft.ServiceBus/namespaces/queues` | Message queues |
 | Topics | `Microsoft.ServiceBus/namespaces/topics` | Pub/sub topics (Standard/Premium) |
 | Auth Rules | `Microsoft.ServiceBus/namespaces/authorizationRules` | SAS access policies |

@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/publicIPAddresses` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `pip` |
@@ -21,7 +20,6 @@ Public IP does not use `kind`.
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `Basic` | `Regional` | Basic SKU — **being retired**, avoid for new deployments |
 | `Standard` | `Regional` | Standard SKU — zone-redundant, static only |
 | `Standard` | `Global` | Global Standard for cross-region load balancer |
@@ -33,7 +31,6 @@ Public IP does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -62,7 +59,6 @@ resource pip 'Microsoft.Network/publicIPAddresses@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.publicIPAllocationMethod` | Allocation method | `Dynamic`, `Static` |
 | `properties.publicIPAddressVersion` | IP version | `IPv4`, `IPv6` |
 | `properties.idleTimeoutInMinutes` | TCP idle timeout | `4` to `30` (default: `4`) |
@@ -76,7 +72,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Standard SKU** | Must use `Static` allocation method. `Dynamic` only works with Basic SKU. |
 | **Load Balancer** | Public IP SKU must match Load Balancer SKU (Standard ↔ Standard, Basic ↔ Basic). |
 | **Application Gateway** | Standard_v2 App Gateway requires Standard SKU public IP with Static allocation. |

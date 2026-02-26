@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.CognitiveServices/accounts` |
 | Bicep API Version | `2024-10-01` |
 | CAF Prefix | Varies by kind — see Subtypes table |
@@ -19,7 +18,6 @@ The `kind` property is a required string that determines the specific Cognitive 
 
 | Kind | Service Name | CAF Prefix |
 |------|--------------|------------|
-
 | `AIServices` | Azure AI Foundry (multi-service) | `aif` |
 | `CognitiveServices` | Foundry Tools multi-service account | `ais` |
 | `OpenAI` | Azure OpenAI Service | `oai` |
@@ -44,7 +42,6 @@ Exact `sku.name` values for Bicep (string). Available SKUs depend on `kind`. The
 
 | SKU Name | Common Usage | Notes |
 |----------|--------------|-------|
-
 | `F0` | Free tier | Available for most kinds; single instance per subscription per kind per region |
 | `S0` | Standard paid tier | Most common paid SKU; available for most kinds |
 | `S1` | Standard tier (higher) | Available for select kinds (e.g., SpeechServices) |
@@ -56,7 +53,6 @@ Exact `sku.name` values for Bicep (string). Available SKUs depend on `kind`. The
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 2 |
 | Max Length | 64 |
 | Allowed Characters | Alphanumerics, hyphens, periods, underscores |
@@ -86,7 +82,6 @@ resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `kind` | Cognitive service type (set at creation) | See Subtypes table |
 | `properties.customSubDomainName` | Custom subdomain for endpoint | Globally unique, lowercase alphanumeric + hyphens |
 | `properties.publicNetworkAccess` | Public network access | `Enabled`, `Disabled` |
@@ -102,7 +97,6 @@ resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Azure OpenAI Deployments** | When `kind: 'OpenAI'` or `kind: 'AIServices'`, create model deployments as child resource `accounts/deployments`. |
 | **Microsoft Entra ID Auth** | Requires `customSubDomainName` to be set. Without it, only API key auth works. |
 | **Private Endpoint** | Requires `customSubDomainName`. Set `publicNetworkAccess: 'Disabled'` and configure private DNS zone. |
@@ -115,7 +109,6 @@ resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Deployments | `Microsoft.CognitiveServices/accounts/deployments` | Model deployments (OpenAI, etc.) |
 | Commitment Plans | `Microsoft.CognitiveServices/accounts/commitmentPlans` | Reserved capacity plans |
 | RAI Blocklists | `Microsoft.CognitiveServices/accounts/raiBlocklists` | Responsible AI content blocklists |

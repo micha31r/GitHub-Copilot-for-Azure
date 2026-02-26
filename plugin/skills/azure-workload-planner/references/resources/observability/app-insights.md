@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Insights/components` |
 | Bicep API Version | `2020-02-02` |
 | CAF Prefix | `appi` |
@@ -21,7 +20,6 @@
 
 | Kind | Description |
 |------|-------------|
-
 | `web` | Web application — **most common** |
 | `ios` | iOS application |
 | `java` | Java application |
@@ -39,7 +37,6 @@ Application Insights does not use a `sku` block. Pricing is determined by the li
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 260 |
 | Allowed Characters | Any characters that are not: `%&\?/` or control characters |
@@ -65,7 +62,6 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `kind` | Application kind | `web`, `ios`, `java`, `phone`, `store`, `other` |
 | `properties.Application_Type` | Application type | `web`, `other` |
 | `properties.WorkspaceResourceId` | Log Analytics workspace ID | Resource ID (required for workspace-based) |
@@ -82,7 +78,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Log Analytics** | Workspace-based App Insights (recommended) requires `WorkspaceResourceId`. Classic (standalone) is being phased out. |
 | **Function App** | Set `APPLICATIONINSIGHTS_CONNECTION_STRING` or `APPINSIGHTS_INSTRUMENTATIONKEY` in function app settings. |
 | **App Service** | Set `APPLICATIONINSIGHTS_CONNECTION_STRING` in app settings. Enable auto-instrumentation for supported runtimes. |

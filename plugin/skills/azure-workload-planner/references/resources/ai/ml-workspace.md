@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.MachineLearningServices/workspaces` |
 | Bicep API Version | `2025-12-01` |
 | CAF Prefix | `mlw` (Default workspace), `hub` (Foundry Hub), `proj` (Foundry Project) |
@@ -19,7 +18,6 @@ The `kind` property is typed as `string` in the schema (not a strict enum). Know
 
 | Kind | Description | CAF Prefix |
 |------|-------------|------------|
-
 | *(omitted / Default)* | Standard ML workspace | `mlw` |
 | `Hub` | Azure AI Foundry hub — central governance, shared resources | `hub` |
 | `Project` | Azure AI Foundry project — child of a Hub, scoped work area | `proj` |
@@ -33,7 +31,6 @@ Exact `sku.name` values for Bicep (string). The `sku.tier` enum values are: `Bas
 
 | SKU Name | Tier | Notes |
 |----------|------|-------|
-
 | `Basic` | `Basic` | Default for standard ML workspaces |
 | `Standard` | `Standard` | Used for Hub/Project workspaces |
 | `Free` | `Free` | Limited-feature tier |
@@ -45,7 +42,6 @@ Exact `sku.name` values for Bicep (string). The `sku.tier` enum values are: `Bas
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 3 |
 | Max Length | 33 |
 | Allowed Characters | Alphanumerics, hyphens, underscores |
@@ -82,7 +78,6 @@ resource mlWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-12-01' =
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `identity.type` | Managed identity type | `None`, `SystemAssigned`, `UserAssigned`, `SystemAssigned,UserAssigned` |
 | `properties.storageAccount` | Linked Storage Account resource ID | ARM resource ID (cannot change after creation) |
 | `properties.keyVault` | Linked Key Vault resource ID | ARM resource ID (cannot change after creation) |
@@ -100,7 +95,6 @@ resource mlWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-12-01' =
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Storage Account** | Must be linked via `properties.storageAccount`. Cannot change after creation. Use `StorageV2` kind with standard SKU. |
 | **Key Vault** | Must be linked via `properties.keyVault`. Cannot change after creation. Requires soft-delete enabled. |
 | **Application Insights** | Linked via `properties.applicationInsights`. Should use workspace-based App Insights (backed by Log Analytics). |
@@ -112,7 +106,6 @@ resource mlWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-12-01' =
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Computes | `Microsoft.MachineLearningServices/workspaces/computes` | Compute targets (clusters, instances) |
 | Connections | `Microsoft.MachineLearningServices/workspaces/connections` | Service connections (Azure OpenAI, etc.) |
 | Datastores | `Microsoft.MachineLearningServices/workspaces/datastores` | Data source references |

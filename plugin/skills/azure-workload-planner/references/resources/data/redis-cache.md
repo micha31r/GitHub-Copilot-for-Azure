@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Cache/redis` |
 | Bicep API Version | `2024-11-01` |
 | CAF Prefix | `redis` |
@@ -25,7 +24,6 @@ All three SKU fields are **required**:
 
 | SKU Name | SKU Family | Capacity Range | Description |
 |----------|------------|----------------|-------------|
-
 | `Basic` | `C` | `0` – `6` | Basic — no SLA, no replication, dev/test |
 | `Standard` | `C` | `0` – `6` | Standard — SLA, replication, 2 nodes |
 | `Premium` | `P` | `1` – `5` | Premium — clustering, VNet, persistence, geo-replication |
@@ -34,7 +32,6 @@ All three SKU fields are **required**:
 
 | Capacity | Cache Size |
 |----------|------------|
-
 | `0` | 250 MB |
 | `1` | 1 GB |
 | `2` | 2.5 GB |
@@ -47,7 +44,6 @@ All three SKU fields are **required**:
 
 | Capacity | Cache Size (per shard) |
 |----------|------------------------|
-
 | `1` | 6 GB |
 | `2` | 13 GB |
 | `3` | 26 GB |
@@ -60,7 +56,6 @@ All three SKU fields are **required**:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 63 |
 | Allowed Characters | Alphanumerics and hyphens. Must start and end with alphanumeric. No consecutive hyphens. |
@@ -88,7 +83,6 @@ resource redisCache 'Microsoft.Cache/redis@2024-11-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.sku.name` | SKU tier | `Basic`, `Standard`, `Premium` |
 | `properties.sku.family` | SKU family | `C` (Basic/Standard), `P` (Premium) |
 | `properties.sku.capacity` | Cache size | `0`–`6` (C) or `1`–`5` (P) |
@@ -107,7 +101,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet** | Only Premium SKU supports VNet injection via `subnetId`. Basic/Standard use firewall rules only. |
 | **Private Endpoint** | Available for Standard and Premium. Set `publicNetworkAccess: 'Disabled'` when using private endpoints. |
 | **Clustering** | Only Premium SKU supports `shardCount`. Basic and Standard are single-node/two-node only. |
@@ -119,7 +112,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Firewall Rules | `Microsoft.Cache/redis/firewallRules` | IP-based access rules |
 | Linked Servers | `Microsoft.Cache/redis/linkedServers` | Geo-replication links |
 | Patch Schedules | `Microsoft.Cache/redis/patchSchedules` | Maintenance windows |

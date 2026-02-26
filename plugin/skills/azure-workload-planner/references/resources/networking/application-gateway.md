@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/applicationGateways` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `agw` |
@@ -21,7 +20,6 @@ Application Gateway does not use `kind`.
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `Standard_v2` | `Standard_v2` | Standard v2 — **recommended**, zone-aware, autoscaling |
 | `WAF_v2` | `WAF_v2` | WAF v2 — Standard_v2 + Web Application Firewall |
 | `Basic` | `Basic` | Basic App Gateway (limited scenarios) |
@@ -35,7 +33,6 @@ Application Gateway does not use `kind`.
 
 | Family | Description |
 |--------|-------------|
-
 | `Generation_1` | Gen1 hardware |
 | `Generation_2` | Gen2 hardware |
 
@@ -45,7 +42,6 @@ Application Gateway does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -131,7 +127,6 @@ resource appGw 'Microsoft.Network/applicationGateways@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.sku.name` | SKU name | See SKU Names table |
 | `properties.sku.tier` | SKU tier | Must match SKU name |
 | `properties.autoscaleConfiguration.minCapacity` | Min instances (v2) | Integer (`0` to `125`) |
@@ -146,7 +141,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Subnet** | Requires a dedicated subnet — no other resources allowed in the subnet (except other App Gateways). |
 | **Public IP** | v2 SKU requires Standard SKU public IP with Static allocation. |
 | **NSG** | NSG on App Gateway subnet must allow `GatewayManager` service tag on ports `65200–65535` (v2) or `65503–65534` (v1). |
@@ -158,7 +152,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Private Endpoint Connections | `Microsoft.Network/applicationGateways/privateEndpointConnections` | Private link connections |
 
 ## References

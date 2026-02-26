@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/networkSecurityGroups` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `nsg` |
@@ -25,7 +24,6 @@ NSG does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -65,7 +63,6 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2025-05-01' = {
 
 | Property | Values |
 |----------|--------|
-
 | `access` | `Allow`, `Deny` |
 | `direction` | `Inbound`, `Outbound` |
 | `protocol` | `*`, `Ah`, `Esp`, `Icmp`, `Tcp`, `Udp` |
@@ -74,7 +71,6 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `priority` | Rule evaluation order (lower = first) | `100` to `4096` |
 | `sourceAddressPrefix` | Source CIDR or tag | CIDR, `*`, `Internet`, `VirtualNetwork`, `AzureLoadBalancer` |
 | `destinationAddressPrefix` | Destination CIDR or tag | CIDR, `*`, `Internet`, `VirtualNetwork` |
@@ -87,7 +83,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **GatewaySubnet** | Cannot attach NSG to `GatewaySubnet`. |
 | **AzureBastionSubnet** | NSG on Bastion subnet requires specific inbound/outbound rules (see [Azure Bastion NSG](https://learn.microsoft.com/azure/bastion/bastion-nsg)). |
 | **Application Gateway** | NSG on App Gateway subnet must allow `GatewayManager` service tag on ports `65200–65535` (v2) and health probe traffic. |
@@ -98,7 +93,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Security Rules | `Microsoft.Network/networkSecurityGroups/securityRules` | Individual security rules (alternative to inline) |
 
 ## References

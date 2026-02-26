@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/bastionHosts` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `bas` |
@@ -23,7 +22,6 @@ Azure Bastion does not use `kind`.
 
 | SKU Name | Description |
 |----------|-------------|
-
 | `Developer` | Dev/test only — single VM, no scaling, limited features |
 | `Basic` | Basic — RDP/SSH, 2 instances, manual |
 | `Standard` | Standard — Basic + host scaling, native client, IP-based, file transfer |
@@ -35,7 +33,6 @@ Azure Bastion does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -74,7 +71,6 @@ resource bastion 'Microsoft.Network/bastionHosts@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | SKU tier | `Developer`, `Basic`, `Standard`, `Premium` |
 | `properties.scaleUnits` | Instance count (Standard/Premium) | `2` to `50` (default: `2`) |
 | `properties.enableTunneling` | Native client support | `true`, `false` (Standard/Premium only) |
@@ -89,7 +85,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet** | Requires a subnet named exactly `AzureBastionSubnet` with minimum /26 prefix. |
 | **Developer SKU** | Does NOT require `AzureBastionSubnet` or public IP. Deploys as shared infrastructure. Only connects to VMs in the same VNet. |
 | **Public IP** | Requires Standard SKU public IP with Static allocation. |

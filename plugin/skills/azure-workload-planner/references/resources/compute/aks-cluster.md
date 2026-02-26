@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.ContainerService/managedClusters` |
 | Bicep API Version | `2025-10-01` |
 | CAF Prefix | `aks` |
@@ -21,7 +20,6 @@
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `Base` | `Free` | Free tier — no SLA, no uptime guarantee |
 | `Base` | `Standard` | Standard — production, 99.95% SLA with availability zones |
 | `Base` | `Premium` | Premium — Standard + long-term support, mission-critical |
@@ -32,7 +30,6 @@
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 63 |
 | Allowed Characters | Alphanumerics, underscores, and hyphens. Must start and end with alphanumeric. |
@@ -71,7 +68,6 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-10-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.dnsPrefix` | DNS prefix for API server | String (globally unique in region) |
 | `properties.kubernetesVersion` | Kubernetes version | String (e.g., `1.30`, `1.31`) |
 | `properties.agentPoolProfiles[].name` | Node pool name | Max 12 chars, lowercase alphanumeric |
@@ -97,7 +93,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet / Subnet** | With Azure CNI, subnet must have enough IPs for nodes + pods (30 pods/node default × node count). Subnet cannot have other delegations. |
 | **kubenet** | Kubenet uses NAT — subnet only needs IPs for nodes. Less IP pressure but no direct pod-to-VNet connectivity. |
 | **Key Vault** | Enable `azureKeyvaultSecretsProvider` addon. Use `enableRbacAuthorization: true` on Key Vault with managed identity. |
@@ -110,7 +105,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Agent Pools | `Microsoft.ContainerService/managedClusters/agentPools` | Additional node pools |
 | Maintenance | `Microsoft.ContainerService/managedClusters/maintenanceConfigurations` | Maintenance windows |
 

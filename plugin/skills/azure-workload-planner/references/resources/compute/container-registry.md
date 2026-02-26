@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.ContainerRegistry/registries` |
 | Bicep API Version | `2025-11-01` |
 | CAF Prefix | `cr` |
@@ -25,7 +24,6 @@ Exact `sku.name` values for Bicep:
 
 | SKU | Storage | Geo-Replication | Private Link | CMK | Zone Redundancy |
 |-----|---------|-----------------|--------------|-----|-----------------|
-
 | `Basic` | 10 GiB | No | No | No | No |
 | `Standard` | 100 GiB | No | No | No | No |
 | `Premium` | 500 GiB | Yes | Yes | Yes | Yes |
@@ -36,7 +34,6 @@ Exact `sku.name` values for Bicep:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 5 |
 | Max Length | 50 |
 | Allowed Characters | Alphanumerics only (`^[a-zA-Z0-9]*$`) — **no hyphens, underscores, or periods** |
@@ -60,7 +57,6 @@ resource acr 'Microsoft.ContainerRegistry/registries@2025-11-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.adminUserEnabled` | Admin user access | `true`, `false` (default: `false`; prefer managed identity) |
 | `properties.publicNetworkAccess` | Public access | `Enabled`, `Disabled` |
 | `properties.networkRuleSet.defaultAction` | Network rule | `Allow`, `Deny` (Premium only) |
@@ -75,7 +71,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **AKS** | AKS needs `acrPull` role assignment on the registry. Use managed identity (attach via `az aks update --attach-acr`). |
 | **Container App** | Reference in `configuration.registries[]`. Use managed identity or admin credentials. |
 | **ML Workspace** | Referenced as `containerRegistry` property. Used for custom training/inference images. |
@@ -87,7 +82,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Replications | `Microsoft.ContainerRegistry/registries/replications` | Geo-replication targets |
 | Webhooks | `Microsoft.ContainerRegistry/registries/webhooks` | Event notifications |
 | Tasks | `Microsoft.ContainerRegistry/registries/tasks` | Automated image builds |

@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Compute/disks` |
 | Bicep API Version | `2025-01-02` |
 | CAF Prefix | `osdisk` (OS) / `disk` (data) |
@@ -23,7 +22,6 @@ Exact `sku.name` values for Bicep:
 
 | SKU | Description | Zone Redundancy |
 |-----|-------------|-----------------|
-
 | `Standard_LRS` | Standard HDD, locally redundant | No |
 | `StandardSSD_LRS` | Standard SSD, locally redundant | No |
 | `StandardSSD_ZRS` | Standard SSD, zone-redundant | Yes |
@@ -38,7 +36,6 @@ Exact `sku.name` values for Bicep:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, and hyphens |
@@ -68,7 +65,6 @@ resource disk 'Microsoft.Compute/disks@2025-01-02' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.creationData.createOption` | Disk creation method | `Empty`, `FromImage`, `Attach`, `Copy`, `Import`, `Restore`, `Upload` |
 | `properties.diskSizeGB` | Disk size in GiB | Integer |
 | `properties.osType` | OS type (for OS disks) | `Linux`, `Windows` |
@@ -83,7 +79,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Virtual Machine** | Attach via `storageProfile.osDisk` or `storageProfile.dataDisks`. Disk must be in same region. |
 | **Availability Zone** | `PremiumV2_LRS` and `UltraSSD_LRS` require zone specification. |
 | **Key Vault (CMK)** | Requires a Disk Encryption Set pointing to Key Vault key. Key Vault must have purge protection enabled. |

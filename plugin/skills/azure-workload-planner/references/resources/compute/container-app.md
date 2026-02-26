@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.App/containerApps` |
 | Bicep API Version | `2025-07-01` |
 | CAF Prefix | `ca` |
@@ -19,7 +18,6 @@
 
 | Kind | Description |
 |------|-------------|
-
 | *(omitted)* | Standard container app — **default** |
 | `functionapp` | Function App on Container Apps environment |
 | `workflowapp` | Logic App (Standard) on Container Apps environment |
@@ -32,7 +30,6 @@ Container Apps do not use a `sku` block. Billing is based on the Container Apps 
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 2 |
 | Max Length | 32 |
 | Allowed Characters | Lowercase letters, numbers, and hyphens. Must start with letter, end with alphanumeric. |
@@ -68,7 +65,6 @@ resource containerApp 'Microsoft.App/containerApps@2025-07-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.environmentId` | Container Apps Environment | Resource ID of `Microsoft.App/managedEnvironments` |
 | `properties.template.containers[].image` | Container image | Registry/image:tag string |
 | `properties.template.containers[].resources.cpu` | CPU cores | Decimal (e.g., `0.25`, `0.5`, `1`, `2`, `4`) |
@@ -88,7 +84,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Container Apps Environment** | Must reference `environmentId`. Environment must exist in the same region. |
 | **VNet** | VNet integration is configured on the **Environment**, not the individual app. Environment needs a dedicated subnet with minimum /23 prefix. |
 | **Container Registry** | Requires registry credentials in `configuration.registries[]` or managed identity-based pull. |
@@ -104,7 +99,6 @@ Container Apps do not have significant Bicep child resources — configuration i
 
 | Resource | ARM Type | Purpose |
 |----------|----------|---------|
-
 | Container Apps Environment | `Microsoft.App/managedEnvironments` | Hosting environment (required) |
 | Environment Storage | `Microsoft.App/managedEnvironments/storages` | Persistent storage mounts |
 | Dapr Components | `Microsoft.App/managedEnvironments/daprComponents` | Dapr integration |
