@@ -121,7 +121,7 @@ resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
 
 ## References
 
-- [Bicep resource reference (2024-10-01)](https://learn.microsoft.com/azure/templates/microsoft.cognitiveservices/accounts?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-06-01)](https://learn.microsoft.com/azure/templates/microsoft.cognitiveservices/accounts?pivots=deployment-language-bicep)
 - [All API versions](https://learn.microsoft.com/azure/templates/microsoft.cognitiveservices/allversions)
 - [Azure naming rules — Cognitive Services](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcognitiveservices)
 - [Custom subdomain names](https://learn.microsoft.com/azure/ai-services/cognitive-services-custom-subdomains)
