@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/privateDnsZones` |
 | Bicep API Version | `2024-06-01` |
 | CAF Prefix | *(none — name is the DNS domain, e.g., `privatelink.database.windows.net`)* |
@@ -27,7 +26,6 @@ Private DNS Zone does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 (per label) |
 | Max Length | 63 characters per label, up to 34 labels, total max 253 characters |
 | Allowed Characters | Alphanumerics, hyphens, and underscores per label, separated by periods. Labels cannot start or end with hyphen. |
@@ -39,7 +37,6 @@ Private DNS Zone does not use a `sku` block.
 
 | Service | Zone Name |
 |---------|-----------|
-
 | Azure SQL / SQL Server | `privatelink.database.windows.net` |
 | Storage — Blob | `privatelink.blob.core.windows.net` |
 | Storage — File | `privatelink.file.core.windows.net` |
@@ -67,7 +64,6 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `location` | Must be `'global'` | `global` |
 | `tags` | Resource tags | Object of key/value pairs |
 
@@ -79,7 +75,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Virtual Network** | Must create a `virtualNetworkLinks` child resource to link the DNS zone to each VNet that needs resolution. |
 | **Private Endpoint** | Use a `privateDnsZoneGroups` child on the Private Endpoint to auto-register A records, or manually create A record sets. |
 | **VNet Link (auto-registration)** | Only one Private DNS Zone with `registrationEnabled: true` can be linked per VNet. Auto-registration creates DNS records for VMs in the VNet. |
@@ -91,7 +86,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Virtual Network Links | `Microsoft.Network/privateDnsZones/virtualNetworkLinks` | Link DNS zone to a VNet for resolution |
 | A Records | `Microsoft.Network/privateDnsZones/A` | IPv4 address records |
 | AAAA Records | `Microsoft.Network/privateDnsZones/AAAA` | IPv6 address records |

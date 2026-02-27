@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.EventGrid/topics` |
 | Bicep API Version | `2025-02-15` |
 | CAF Prefix | `evgt` |
@@ -19,7 +18,6 @@
 
 | Kind | Description |
 |------|-------------|
-
 | `Azure` | Standard Azure Event Grid topic — **default** |
 | `AzureArc` | Event Grid on Azure Arc (Kubernetes) |
 
@@ -27,7 +25,6 @@
 
 | SKU Name | Description |
 |----------|-------------|
-
 | `Basic` | Basic — standard event routing, no private endpoints |
 | `Premium` | Premium — adds private endpoints, managed identity, IP filtering |
 
@@ -37,7 +34,6 @@
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 3 |
 | Max Length | 50 |
 | Allowed Characters | Alphanumerics and hyphens. Must start with letter, end with alphanumeric. |
@@ -58,7 +54,6 @@ resource eventGridTopic 'Microsoft.EventGrid/topics@2025-02-15' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | Pricing tier | `Basic`, `Premium` |
 | `properties.inputSchema` | Event schema | `EventGridSchema` (default), `CloudEventSchemaV1_0`, `CustomEventSchema` |
 | `properties.publicNetworkAccess` | Public access | `Enabled`, `Disabled`, `SecuredByPerimeter` |
@@ -71,7 +66,6 @@ resource eventGridTopic 'Microsoft.EventGrid/topics@2025-02-15' = {
 
 | Property | Description |
 |----------|-------------|
-
 | `properties.endpoint` | Topic endpoint URL for publishing events |
 | `properties.provisioningState` | Deployment state |
 
@@ -81,7 +75,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Event Subscriptions** | Subscriptions are child resources. Delivery endpoints include: Webhook, Azure Function, Event Hub, Service Bus Queue/Topic, Storage Queue, Hybrid Connection. |
 | **Private Endpoint** | Only available with `Premium` SKU. Set `publicNetworkAccess: 'Disabled'` when using private endpoints exclusively. |
 | **Managed Identity** | Required for dead-letter destinations and delivery to Azure resources that require authentication (Event Hub, Service Bus, Storage). |
@@ -94,7 +87,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Event Subscriptions | `Microsoft.EventGrid/topics/eventSubscriptions` | Event delivery subscriptions |
 | Private Endpoint Connections | `Microsoft.EventGrid/topics/privateEndpointConnections` | Private link connections |
 

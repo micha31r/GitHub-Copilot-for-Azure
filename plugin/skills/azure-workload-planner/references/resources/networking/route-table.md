@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/routeTables` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `rt` |
@@ -25,7 +24,6 @@ Route Table does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -58,7 +56,6 @@ resource routeTable 'Microsoft.Network/routeTables@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.disableBgpRoutePropagation` | Disable BGP route propagation | `true`, `false` (default: `false`) |
 | `properties.routes[].properties.addressPrefix` | Destination CIDR | CIDR string (e.g., `0.0.0.0/0`, `10.1.0.0/16`) |
 | `properties.routes[].properties.nextHopType` | Next hop type | `Internet`, `VirtualAppliance`, `VnetLocal`, `VirtualNetworkGateway`, `None` |
@@ -69,7 +66,6 @@ resource routeTable 'Microsoft.Network/routeTables@2025-05-01' = {
 
 | Next Hop Type | Description |
 |---------------|-------------|
-
 | `Internet` | Route traffic to the internet |
 | `VirtualAppliance` | Route to a network virtual appliance (e.g., Azure Firewall NVA IP) |
 | `VnetLocal` | Route within the virtual network |
@@ -82,7 +78,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Subnet** | Route table is associated on the subnet side: set `subnet.properties.routeTable.id` to the route table resource ID. Each subnet can have at most one route table. |
 | **Azure Firewall** | For forced tunneling, create a default route (`0.0.0.0/0`) with `nextHopType: 'VirtualAppliance'` pointing to the firewall private IP. |
 | **VPN Gateway** | Set `disableBgpRoutePropagation: true` to prevent BGP routes from overriding UDRs on the subnet. |
@@ -94,7 +89,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Routes | `Microsoft.Network/routeTables/routes` | Individual route entries (alternative to inline) |
 
 ## References

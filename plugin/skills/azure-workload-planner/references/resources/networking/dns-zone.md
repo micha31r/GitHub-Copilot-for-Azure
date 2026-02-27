@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/dnsZones` |
 | Bicep API Version | `2018-05-01` |
 | CAF Prefix | *(none — name is the DNS domain, e.g., `contoso.com`)* |
@@ -19,7 +18,6 @@
 
 | Kind | Description |
 |------|-------------|
-
 | `Public` | Public DNS zone — **default** |
 | `Private` | Private DNS zone (use `Microsoft.Network/privateDnsZones` instead) |
 
@@ -33,7 +31,6 @@ DNS Zone does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 (per label) |
 | Max Length | 63 characters per label, up to 34 labels, total max 253 characters |
 | Allowed Characters | Alphanumerics, hyphens per label, separated by periods. Labels cannot start or end with hyphen. |
@@ -54,7 +51,6 @@ resource dnsZone 'Microsoft.Network/dnsZones@2018-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `location` | Must be `'global'` | `global` |
 | `properties.zoneType` | Zone type | `Public` (default), `Private` |
 | `tags` | Resource tags | Object of key/value pairs |
@@ -65,7 +61,6 @@ resource dnsZone 'Microsoft.Network/dnsZones@2018-05-01' = {
 
 | Property | Description |
 |----------|-------------|
-
 | `properties.nameServers` | Azure-assigned name servers (NS records) |
 | `properties.numberOfRecordSets` | Count of record sets in the zone |
 | `properties.maxNumberOfRecordSets` | Maximum allowed record sets |
@@ -76,7 +71,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Domain Registrar** | NS records from `properties.nameServers` must be configured at your domain registrar to delegate the domain to Azure DNS. |
 | **App Service** | Create a CNAME record pointing to `{app-name}.azurewebsites.net` for custom domains. Add a TXT verification record. |
 | **Front Door** | Create a CNAME record pointing to the Front Door endpoint. Add a `_dnsauth` TXT record for domain validation. |
@@ -88,7 +82,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | A Records | `Microsoft.Network/dnsZones/A` | IPv4 address records |
 | AAAA Records | `Microsoft.Network/dnsZones/AAAA` | IPv6 address records |
 | CNAME Records | `Microsoft.Network/dnsZones/CNAME` | Canonical name (alias) records |

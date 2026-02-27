@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/privateEndpoints` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `pep` |
@@ -25,7 +24,6 @@ Private Endpoint does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 2 |
 | Max Length | 64 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -62,7 +60,6 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.subnet.id` | Subnet hosting the PE NIC | Resource ID of a subnet |
 | `properties.privateLinkServiceConnections[].properties.privateLinkServiceId` | Target resource | Resource ID of the private-link-enabled resource |
 | `properties.privateLinkServiceConnections[].properties.groupIds` | Sub-resource type | Array of strings (e.g., `['blob']`, `['vault']`, `['sqlServer']`, `['sites']`) |
@@ -77,7 +74,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Subnet** | The subnet must not have NSG rules that block private endpoint traffic. Subnet must have `privateEndpointNetworkPolicies` set to `Disabled` (default) for network policies to be bypassed. |
 | **Private DNS Zone** | Create a `Microsoft.Network/privateDnsZones/virtualNetworkLinks` to link the DNS zone to the VNet. Create an A record or use a private DNS zone group to auto-register DNS. |
 | **Private DNS Zone Group** | Use `privateEndpoint/privateDnsZoneGroups` child resource to auto-register DNS records in the Private DNS Zone. |
@@ -90,7 +86,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Private DNS Zone Groups | `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | Auto-register DNS records in Private DNS Zones |
 
 ## References

@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Cdn/profiles` |
 | Bicep API Version | `2025-04-15` |
 | CAF Prefix | `afd` |
@@ -25,7 +24,6 @@ Exact `sku.name` values for Bicep:
 
 | SKU Name | Description |
 |----------|-------------|
-
 | `Standard_AzureFrontDoor` | Standard Front Door — global load balancing, SSL offload, WAF (managed rules) |
 | `Premium_AzureFrontDoor` | Premium Front Door — adds Private Link origins, bot protection, enhanced WAF |
 | `Standard_Microsoft` | Microsoft CDN Standard (not Front Door) |
@@ -38,7 +36,6 @@ Exact `sku.name` values for Bicep:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 260 |
 | Allowed Characters | Alphanumerics and hyphens. Must start and end with alphanumeric. |
@@ -62,7 +59,6 @@ resource frontDoor 'Microsoft.Cdn/profiles@2025-04-15' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | Profile tier | `Standard_AzureFrontDoor`, `Premium_AzureFrontDoor` |
 | `properties.originResponseTimeoutSeconds` | Origin timeout | Integer (default: `60`, range: `16`–`240`) |
 | `identity.type` | Managed identity | `SystemAssigned`, `UserAssigned`, `SystemAssigned,UserAssigned` |
@@ -75,7 +71,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Origins (backends)** | Origins are defined in child `originGroups/origins`. Supported origin types: App Service, Storage, Application Gateway, Public IP, custom hostname. |
 | **Private Link Origins** | Only available with `Premium_AzureFrontDoor` SKU. Enable private origin connections to App Service, Storage, Internal Load Balancer, etc. |
 | **WAF Policy** | WAF policies are separate `Microsoft.Network/FrontDoorWebApplicationFirewallPolicies` resources. Linked via security policy child resource on the profile. |
@@ -87,7 +82,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Endpoints | `Microsoft.Cdn/profiles/afdEndpoints` | Front Door endpoint (generates `{name}.z01.azurefd.net` hostname) |
 | Origin Groups | `Microsoft.Cdn/profiles/originGroups` | Group of backends with health probing and load balancing |
 | Origins | `Microsoft.Cdn/profiles/originGroups/origins` | Individual backend servers |

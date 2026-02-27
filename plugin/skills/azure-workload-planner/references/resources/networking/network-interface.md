@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/networkInterfaces` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `nic` |
@@ -25,7 +24,6 @@ Network Interface does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -59,7 +57,6 @@ resource nic 'Microsoft.Network/networkInterfaces@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.ipConfigurations[].properties.subnet.id` | Subnet reference | Resource ID |
 | `properties.ipConfigurations[].properties.privateIPAllocationMethod` | IP allocation | `Dynamic`, `Static` |
 | `properties.ipConfigurations[].properties.privateIPAddress` | Static private IP | IP address string (required when allocation is `Static`) |
@@ -76,7 +73,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Virtual Machine** | Each VM requires at least one NIC. NIC must be in the same region and subscription as the VM. |
 | **Subnet** | NIC must reference a subnet. The subnet determines the VNet, NSG, and route table that apply. |
 | **NSG** | NSG can be associated at the NIC level or at the subnet level (or both). NIC-level NSG is evaluated after subnet-level NSG. |

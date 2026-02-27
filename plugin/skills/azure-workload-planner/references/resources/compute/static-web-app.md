@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Web/staticSites` |
 | Bicep API Version | `2024-04-01` |
 | CAF Prefix | `stapp` |
@@ -23,7 +22,6 @@ Static Web App does not use `kind` in standard deployments.
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `Free` | `Free` | Free tier — hobby/personal projects, 2 custom domains, 0.5 GB storage |
 | `Standard` | `Standard` | Standard tier — production workloads, 5 custom domains, 2 GB storage, SLA, private endpoints |
 
@@ -31,7 +29,6 @@ Static Web App does not use `kind` in standard deployments.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 40 |
 | Allowed Characters | Alphanumerics, hyphens. Cannot start or end with hyphen. |
@@ -66,7 +63,6 @@ resource staticWebApp 'Microsoft.Web/staticSites@2024-04-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | Pricing tier | `Free`, `Standard` |
 | `sku.tier` | Tier (matches name) | `Free`, `Standard` |
 | `properties.repositoryUrl` | Source repo URL | GitHub or Azure DevOps URL |
@@ -84,7 +80,6 @@ resource staticWebApp 'Microsoft.Web/staticSites@2024-04-01' = {
 
 | Property | Description |
 |----------|-------------|
-
 | `properties.defaultHostname` | Default hostname (e.g., `{name}.azurestaticapps.net`) |
 | `properties.customDomains` | Configured custom domains |
 
@@ -94,7 +89,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **GitHub Repository** | Provide `repositoryUrl`, `branch`, and `repositoryToken`. A GitHub Actions workflow is auto-created in the repo. |
 | **Azure DevOps** | Set `provider: 'DevOps'`. Provide `repositoryUrl` and `branch`. Pipeline is configured separately. |
 | **Azure Functions (managed)** | API location in `buildProperties.apiLocation` deploys a managed Functions backend. Limited to HTTP triggers, C#, JavaScript, Python, Java. |
@@ -107,7 +101,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Custom Domains | `Microsoft.Web/staticSites/customDomains` | Custom domain bindings |
 | Config | `Microsoft.Web/staticSites/config` | App settings, function app settings |
 | Linked Backends | `Microsoft.Web/staticSites/linkedBackends` | External API backend connections |

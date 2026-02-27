@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.ApiManagement/service` |
 | Bicep API Version | `2024-05-01` |
 | CAF Prefix | `apim` |
@@ -25,7 +24,6 @@ Exact `sku` values for Bicep — both `name` and `capacity` are required:
 
 | SKU Name | Description | VNet Support |
 |----------|-------------|--------------|
-
 | `Consumption` | Serverless, pay-per-call, no capacity setting | None |
 | `Developer` | Development/test, no SLA | External, Internal |
 | `Basic` | Entry-level production | None |
@@ -42,7 +40,6 @@ Exact `sku` values for Bicep — both `name` and `capacity` are required:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 50 |
 | Allowed Characters | Alphanumerics and hyphens. Must start with a letter, end with alphanumeric. |
@@ -71,7 +68,6 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | Pricing tier | `Consumption`, `Developer`, `Basic`, `BasicV2`, `Standard`, `StandardV2`, `Premium`, `PremiumV2`, `Isolated` |
 | `sku.capacity` | Scale units | Integer (`0` for Consumption, `1`+ for others) |
 | `properties.publisherEmail` | Publisher email | Email string (required) |
@@ -89,7 +85,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet (External)** | Only available with `Developer`, `Premium`, or `Isolated` SKU. Subnet must be dedicated with an NSG allowing APIM management traffic. |
 | **VNet (Internal)** | Same as External but no public gateway endpoint. Requires Private DNS or custom DNS for resolution. |
 | **Application Gateway** | Common pattern: App Gateway in front of Internal-mode APIM. App Gateway uses the APIM private IP as backend. |
@@ -101,7 +96,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | APIs | `Microsoft.ApiManagement/service/apis` | API definitions |
 | Products | `Microsoft.ApiManagement/service/products` | API product groupings |
 | Subscriptions | `Microsoft.ApiManagement/service/subscriptions` | API access subscriptions |

@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.ManagedIdentity/userAssignedIdentities` |
 | Bicep API Version | `2023-01-31` |
 | CAF Prefix | `id` |
@@ -25,7 +24,6 @@ User Assigned Managed Identity does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 3 |
 | Max Length | 128 |
 | Allowed Characters | Alphanumerics, hyphens, and underscores. Must start with a letter or number. |
@@ -46,7 +44,6 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `location` | Azure region | Region string |
 | `tags` | Resource tags | Object of key/value pairs |
 
@@ -56,7 +53,6 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-
 
 | Output | Description |
 |--------|-------------|
-
 | `properties.principalId` | Object ID of the service principal in Azure AD |
 | `properties.clientId` | Application (client) ID of the service principal |
 | `properties.tenantId` | Azure AD tenant ID |
@@ -67,7 +63,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Any Resource (identity assignment)** | Reference the identity resource ID in the resource's `identity.userAssignedIdentities` object as `{ '${managedIdentity.id}': {} }`. |
 | **Key Vault (CMK)** | Storage accounts using CMK at creation require a user-assigned identity — system-assigned only works for existing accounts. |
 | **Container Registry (ACR pull)** | Assign `AcrPull` role to the identity's `principalId`. Reference the identity in the pulling resource (AKS, Container App, etc.). |
@@ -79,7 +74,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Federated Identity Credentials | `Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials` | Workload identity federation (GitHub Actions, Kubernetes OIDC, etc.) |
 
 ## References

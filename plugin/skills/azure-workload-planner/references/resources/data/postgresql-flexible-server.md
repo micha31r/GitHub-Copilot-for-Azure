@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.DBforPostgreSQL/flexibleServers` |
 | Bicep API Version | `2024-08-01` |
 | CAF Prefix | `psql` |
@@ -27,7 +26,6 @@ The `sku` block requires both `name` and `tier`:
 
 | Tier | Description |
 |------|-------------|
-
 | `Burstable` | Cost-effective for low-utilization workloads. B-series VMs. |
 | `GeneralPurpose` | Balanced compute and memory. D-series VMs. |
 | `MemoryOptimized` | Memory-heavy workloads. E-series VMs. |
@@ -36,7 +34,6 @@ The `sku` block requires both `name` and `tier`:
 
 | SKU Name | Tier | vCores | Memory |
 |----------|------|--------|--------|
-
 | `Standard_B1ms` | Burstable | 1 | 2 GiB |
 | `Standard_B2s` | Burstable | 2 | 4 GiB |
 | `Standard_B2ms` | Burstable | 2 | 8 GiB |
@@ -51,7 +48,6 @@ The `sku` block requires both `name` and `tier`:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 3 |
 | Max Length | 63 |
 | Allowed Characters | Lowercase letters, numbers, and hyphens. Cannot start or end with hyphen. |
@@ -84,7 +80,6 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2024-08-01' =
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | VM SKU | See Common SKU Names table |
 | `sku.tier` | SKU tier | `Burstable`, `GeneralPurpose`, `MemoryOptimized` |
 | `properties.version` | PostgreSQL version | `13`, `14`, `15`, `16`, `17`, `18` |
@@ -107,7 +102,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **VNet (private access)** | Requires a dedicated subnet delegated to `Microsoft.DBforPostgreSQL/flexibleServers`. Subnet must have no other resources. |
 | **Private DNS Zone** | Must provide `privateDnsZoneArmResourceId` referencing `privatelink.postgres.database.azure.com`. DNS zone must be linked to the VNet. |
 | **High Availability** | `ZoneRedundant` HA requires `GeneralPurpose` or `MemoryOptimized` tier. Not available with `Burstable`. |
@@ -119,7 +113,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Databases | `Microsoft.DBforPostgreSQL/flexibleServers/databases` | Individual databases |
 | Configurations | `Microsoft.DBforPostgreSQL/flexibleServers/configurations` | Server parameter settings |
 | Firewall Rules | `Microsoft.DBforPostgreSQL/flexibleServers/firewallRules` | Public access IP allow rules |

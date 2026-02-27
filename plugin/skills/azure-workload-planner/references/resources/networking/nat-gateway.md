@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/natGateways` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `ng` |
@@ -21,7 +20,6 @@ NAT Gateway does not use `kind`.
 
 | SKU Name | Description |
 |----------|-------------|
-
 | `Standard` | Standard NAT Gateway — production workloads |
 
 > **Note:** Only `Standard` SKU is available. Basic SKU does not exist for NAT Gateway.
@@ -30,7 +28,6 @@ NAT Gateway does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -61,7 +58,6 @@ resource natGateway 'Microsoft.Network/natGateways@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | SKU tier | `Standard` |
 | `properties.idleTimeoutInMinutes` | Idle timeout | `4` to `120` (default: `4`) |
 | `properties.publicIpAddresses` | Public IP associations | Array of `{ id: 'resourceId' }` |
@@ -76,7 +72,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Subnet** | NAT Gateway is associated on the subnet side: set `subnet.properties.natGateway.id` to the NAT Gateway resource ID. A subnet can have at most one NAT Gateway. |
 | **Public IP** | Public IP must use `Standard` SKU and `Static` allocation. Public IP and NAT Gateway must be in the same region. |
 | **Public IP Prefix** | Public IP prefix must use `Standard` SKU. Provides contiguous outbound IPs. |
