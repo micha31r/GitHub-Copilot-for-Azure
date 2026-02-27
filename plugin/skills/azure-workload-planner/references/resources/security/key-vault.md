@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.KeyVault/vaults` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `kv` |
@@ -23,7 +22,6 @@ Exact `sku` values for Bicep — both `name` and `family` are required:
 
 | SKU Name | SKU Family | Description |
 |----------|------------|-------------|
-
 | `standard` | `A` | Software-protected keys, secrets, and certificates |
 | `premium` | `A` | Adds HSM-protected keys |
 
@@ -33,7 +31,6 @@ Exact `sku` values for Bicep — both `name` and `family` are required:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 3 |
 | Max Length | 24 |
 | Allowed Characters | Alphanumerics and hyphens. Must start with a letter, end with a letter or digit. No consecutive hyphens. |
@@ -61,7 +58,6 @@ resource vault 'Microsoft.KeyVault/vaults@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.enableSoftDelete` | Soft delete protection | `true` (default, cannot be disabled once enabled) |
 | `properties.enablePurgeProtection` | Prevent purge during retention | `true`, `false` (cannot be disabled once enabled) |
 | `properties.enableRbacAuthorization` | Use RBAC instead of access policies | `true`, `false` |
@@ -78,7 +74,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Storage Account (CMK)** | Must have `enableSoftDelete: true` AND `enablePurgeProtection: true`. |
 | **Storage Account (CMK at creation)** | Storage must use user-assigned managed identity — system-assigned only works for existing accounts. |
 | **SQL Server (TDE)** | Must enable `enablePurgeProtection`. Key Vault and SQL Server must be in the same Azure AD tenant. |
@@ -90,7 +85,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Secrets | `Microsoft.KeyVault/vaults/secrets` | Store secret values |
 | Keys | `Microsoft.KeyVault/vaults/keys` | Cryptographic keys |
 | Key Versions | `Microsoft.KeyVault/vaults/keys/versions` | Key version management |

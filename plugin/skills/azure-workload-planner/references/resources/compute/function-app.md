@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Web/sites` |
 | Bicep API Version | `2025-03-01` |
 | CAF Prefix | `func` |
@@ -21,7 +20,6 @@ The `kind` property is a free-form string (not an enum). Use these exact values 
 
 | Kind | Description |
 |------|-------------|
-
 | `functionapp` | Windows Consumption or Dedicated function app |
 | `functionapp,linux` | Linux Consumption or Dedicated function app |
 | `functionapp,workflowapp` | Logic App (Standard) on Functions runtime |
@@ -36,7 +34,6 @@ Function Apps inherit SKU from the parent **App Service Plan** (see [app-service
 
 | Plan | Plan SKU | Description |
 |------|----------|-------------|
-
 | Consumption | `Y1` | Pay-per-execution, auto-scale, 5-min timeout default |
 | Flex Consumption | `FC1` | Consumption with VNet, larger instances |
 | Premium (EP) | `EP1`, `EP2`, `EP3` | Always-warm, VNet, no cold start |
@@ -46,7 +43,6 @@ Function Apps inherit SKU from the parent **App Service Plan** (see [app-service
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 2 |
 | Max Length | 60 |
 | Allowed Characters | Alphanumerics and hyphens. Cannot start or end with hyphen. |
@@ -78,7 +74,6 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.serverFarmId` | App Service Plan ID | Resource ID |
 | `properties.siteConfig.linuxFxVersion` | Linux runtime stack | `DOTNET-ISOLATED\|8.0`, `Node\|20`, `Python\|3.11`, `Java\|17` |
 | `properties.siteConfig.netFrameworkVersion` | .NET version (Windows) | `v6.0`, `v8.0` |
@@ -94,7 +89,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Storage Account** | Must use `StorageV2` or `Storage` kind. `BlobStorage`, `BlockBlobStorage`, `FileStorage` not supported (need Queue + Table). |
 | **Storage (Consumption)** | Consumption plan cannot use VNet-secured storage. Only Premium/Dedicated support VNet-restricted storage. |
 | **Storage (ZRS)** | Zone-redundant functions require `Standard_ZRS` storage SKU. |
@@ -107,7 +101,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Config | `Microsoft.Web/sites/config` | Site configuration (appSettings, connectionStrings, etc.) |
 | Functions | `Microsoft.Web/sites/functions` | Individual function definitions |
 | Slots | `Microsoft.Web/sites/slots` | Deployment slots |

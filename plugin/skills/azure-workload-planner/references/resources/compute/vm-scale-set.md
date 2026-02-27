@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Compute/virtualMachineScaleSets` |
 | Bicep API Version | `2025-04-01` |
 | CAF Prefix | `vmss` |
@@ -21,7 +20,6 @@ VM Scale Set does not use `kind`.
 
 | Field | Description | Value |
 |-------|-------------|-------|
-
 | `sku.name` | VM size | Any valid size string (e.g. `Standard_D2s_v5`) |
 | `sku.tier` | SKU tier | `Standard`, `Basic` |
 | `sku.capacity` | Instance count | Integer (initial number of VMs) |
@@ -30,7 +28,6 @@ VM Scale Set does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 15 (Windows) / 64 (Linux) |
 | Allowed Characters | Alphanumerics, hyphens, underscores. Cannot start with underscore. Cannot end with period or hyphen. |
@@ -89,7 +86,6 @@ resource vmss 'Microsoft.Compute/virtualMachineScaleSets@2025-04-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.orchestrationMode` | Orchestration mode | `Flexible` (recommended), `Uniform` (legacy) |
 | `properties.upgradePolicy.mode` | Upgrade policy | `Automatic`, `Manual`, `Rolling` |
 | `properties.virtualMachineProfile.priority` | VM priority | `Regular`, `Spot`, `Low` |
@@ -103,7 +99,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Subnet** | Network interfaces defined inline in `virtualMachineProfile.networkProfile`. Subnet must be in same region. |
 | **Load Balancer** | Reference backend pool ID in NIC IP configuration. |
 | **Orchestration Mode** | `Flexible` is the modern default. `Uniform` requires `upgradePolicy`. |
@@ -113,7 +108,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Extensions | `Microsoft.Compute/virtualMachineScaleSets/extensions` | VM agents and scripts |
 | Virtual Machines | `Microsoft.Compute/virtualMachineScaleSets/virtualMachines` | Individual instances |
 | Rolling Upgrades | `Microsoft.Compute/virtualMachineScaleSets/rollingUpgrades` | Upgrade orchestration |

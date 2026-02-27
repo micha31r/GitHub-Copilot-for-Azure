@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/loadBalancers` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `lbi` (internal) / `lbe` (external) |
@@ -21,7 +20,6 @@ Load Balancer does not use `kind`.
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-
 | `Basic` | `Regional` | Basic — limited features, **being retired** |
 | `Standard` | `Regional` | Standard — zone-redundant, recommended |
 | `Standard` | `Global` | Global cross-region load balancer |
@@ -33,7 +31,6 @@ Load Balancer does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -69,7 +66,6 @@ resource lb 'Microsoft.Network/loadBalancers@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.frontendIPConfigurations[].properties.publicIPAddress.id` | Public IP for external LB | Resource ID |
 | `properties.frontendIPConfigurations[].properties.subnet.id` | Subnet for internal LB | Resource ID |
 | `properties.frontendIPConfigurations[].properties.privateIPAllocationMethod` | Private IP method | `Dynamic`, `Static` |
@@ -85,7 +81,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Public IP** | Public IP SKU must match LB SKU (Standard ↔ Standard). Basic LB accepts Basic or Standard public IP. |
 | **Standard SKU** | Backend pool VMs must be in the same VNet. No VMs from different VNets. |
 | **Basic SKU** | Backend pool VMs must be in the same availability set or VMSS. |
@@ -97,7 +92,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Backend Pools | `Microsoft.Network/loadBalancers/backendAddressPools` | Backend address pools |
 | Inbound NAT Rules | `Microsoft.Network/loadBalancers/inboundNatRules` | Port forwarding rules |
 

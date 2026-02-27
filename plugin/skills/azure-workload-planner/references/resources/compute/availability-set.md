@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Compute/availabilitySets` |
 | Bicep API Version | `2025-04-01` |
 | CAF Prefix | `avail` |
@@ -21,7 +20,6 @@ Availability Set does not use `kind`.
 
 | SKU Name | Description |
 |----------|-------------|
-
 | `Aligned` | For managed disks — **required for modern deployments** |
 | `Classic` | For unmanaged disks (legacy) — avoid for new deployments |
 
@@ -29,7 +27,6 @@ Availability Set does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, and hyphens. Must start with alphanumeric. Must end with alphanumeric or underscore. |
@@ -57,7 +54,6 @@ resource availSet 'Microsoft.Compute/availabilitySets@2025-04-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | Disk alignment | `Aligned` (managed disks), `Classic` (unmanaged) |
 | `properties.platformFaultDomainCount` | Fault domains | Integer, max `3` (region-dependent) |
 | `properties.platformUpdateDomainCount` | Update domains | Integer, default `5`, max `20` |
@@ -69,7 +65,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Virtual Machine** | VMs must be in the same resource group. Set `vm.properties.availabilitySet.id`. |
 | **Availability Zones** | Cannot combine with zones — availability zones supersede availability sets for zone-redundant architectures. |
 | **Managed Disks** | `sku.name` must be `Aligned` when VMs use managed disks. |

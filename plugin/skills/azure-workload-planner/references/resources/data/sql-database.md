@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Sql/servers/databases` |
 | Bicep API Version | `2023-08-01` |
 | CAF Prefix | `sqldb` |
@@ -26,7 +25,6 @@ The `sku.name` is a free-form string, but must match one of the recognized patte
 
 | Tier | Description |
 |------|-------------|
-
 | `Basic` | Basic DTU tier |
 | `Standard` | Standard DTU tier |
 | `Premium` | Premium DTU tier |
@@ -38,7 +36,6 @@ The `sku.name` is a free-form string, but must match one of the recognized patte
 
 | SKU Name | Tier | Model | Description |
 |----------|------|-------|-------------|
-
 | `Basic` | Basic | DTU | 5 DTU |
 | `S0` – `S12` | Standard | DTU | 10–3000 DTU |
 | `P1` – `P15` | Premium | DTU | 125–4000 DTU |
@@ -53,7 +50,6 @@ The `sku.name` is a free-form string, but must match one of the recognized patte
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 128 |
 | Allowed Characters | Cannot use `<>*%&:\/?` or end with `.` or space |
@@ -80,7 +76,6 @@ resource sqlDb 'Microsoft.Sql/servers/databases@2023-08-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | SKU name | See Common SKU Names table |
 | `sku.tier` | Service tier | `Basic`, `Standard`, `Premium`, `GeneralPurpose`, `BusinessCritical`, `Hyperscale` |
 | `properties.createMode` | Creation mode | `Default`, `Copy`, `Secondary`, `PointInTimeRestore`, `Restore`, `Recovery`, `RestoreExternalBackup`, `RestoreLongTermRetentionBackup`, `OnlineSecondary` |
@@ -98,7 +93,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **SQL Server** | Must be deployed as child of the parent SQL Server. Location must match. |
 | **Elastic Pool** | `elasticPoolId` must reference a pool on the same server. Cannot set `sku` when using elastic pool (it inherits pool SKU). |
 | **Zone Redundancy** | Only available in `GeneralPurpose`, `BusinessCritical`, and `Hyperscale` tiers. Not available in DTU tiers. |

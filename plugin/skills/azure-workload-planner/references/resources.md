@@ -8,7 +8,6 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
-
 | App Service | `Microsoft.Web/sites` | [app-service.md](resources/compute/app-service.md) | `app` | Global | Mainstream |
 | App Service Plan | `Microsoft.Web/serverfarms` | [app-service-plan.md](resources/compute/app-service-plan.md) | `asp` | Resource group | Mainstream |
 | Function App | `Microsoft.Web/sites` | [function-app.md](resources/compute/function-app.md) | `func` | Global | Mainstream |
@@ -24,7 +23,6 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
-
 | Storage Account | `Microsoft.Storage/storageAccounts` | [storage-account.md](resources/data/storage-account.md) | `st` | Global | Foundational |
 | Cosmos DB | `Microsoft.DocumentDB/databaseAccounts` | [cosmos-db.md](resources/data/cosmos-db.md) | `cosmos` | Global | Foundational |
 | SQL Server | `Microsoft.Sql/servers` | [sql-server.md](resources/data/sql-server.md) | `sql` | Global | Foundational |
@@ -37,7 +35,6 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
-
 | Virtual Network | `Microsoft.Network/virtualNetworks` | [virtual-network.md](resources/networking/virtual-network.md) | `vnet` | Resource group | Foundational |
 | Subnet | `Microsoft.Network/virtualNetworks/subnets` | [subnet.md](resources/networking/subnet.md) | `snet` | Parent VNet | Foundational |
 | NSG | `Microsoft.Network/networkSecurityGroups` | [nsg.md](resources/networking/nsg.md) | `nsg` | Resource group | Foundational |
@@ -52,7 +49,6 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
-
 | Service Bus | `Microsoft.ServiceBus/namespaces` | [service-bus.md](resources/messaging/service-bus.md) | `sbns` | Global | Foundational |
 | Event Hub | `Microsoft.EventHub/namespaces` | [event-hub.md](resources/messaging/event-hub.md) | `evhns` | Global | Foundational |
 
@@ -60,7 +56,6 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
-
 | Log Analytics | `Microsoft.OperationalInsights/workspaces` | [log-analytics.md](resources/observability/log-analytics.md) | `log` | Resource group | Mainstream |
 | App Insights | `Microsoft.Insights/components` | [app-insights.md](resources/observability/app-insights.md) | `appi` | Resource group | Mainstream |
 
@@ -68,7 +63,6 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
-
 | ML Workspace | `Microsoft.MachineLearningServices/workspaces` | [ml-workspace.md](resources/ai/ml-workspace.md) | `mlw`/`hub`/`proj` | Resource group | Mainstream |
 | Cognitive Services | `Microsoft.CognitiveServices/accounts` | [cognitive-services.md](resources/ai/cognitive-services.md) | varies by kind | Resource group | Mainstream |
 | AI Search | `Microsoft.Search/searchServices` | [search-service.md](resources/ai/search-service.md) | `srch` | Global | Mainstream |
@@ -77,7 +71,6 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
-
 | Key Vault | `Microsoft.KeyVault/vaults` | [key-vault.md](resources/security/key-vault.md) | `kv` | Global | Foundational |
 
 ## Region Categories
@@ -86,7 +79,6 @@ Categories from [Available services by region types and categories](https://lear
 
 | Category | Region Availability |
 |----------|---------------------|
-
 | **Foundational** | Available in all recommended and alternate regions — no verification needed |
 | **Mainstream** | Available in all recommended regions; demand-driven in alternate regions — verify if targeting alternate region |
 | **Strategic** | Demand-driven across regions — always verify before planning |
@@ -112,7 +104,6 @@ These resources require globally unique names (DNS-based):
 
 | Resource | DNS Pattern |
 |----------|-------------|
-
 | Storage Account | `{name}.blob.core.windows.net` |
 | Key Vault | `{name}.vault.azure.net` |
 | Cosmos DB | `{name}.documents.azure.com` |
@@ -133,7 +124,6 @@ Some resource types share the same ARM type and are distinguished by `kind`:
 
 | ARM Type | `kind` Value | Resource |
 |----------|--------------|----------|
-
 | `Microsoft.Web/sites` | `app` / `app,linux` | App Service |
 | `Microsoft.Web/sites` | `functionapp` / `functionapp,linux` | Function App |
 | `Microsoft.MachineLearningServices/workspaces` | _(omitted)_ / `Default` | ML Workspace |

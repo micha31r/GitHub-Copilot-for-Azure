@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Web/serverfarms` |
 | Bicep API Version | `2025-03-01` |
 | CAF Prefix | `asp` |
@@ -21,7 +20,6 @@ The `kind` property is a free-form string:
 
 | Kind | Description |
 |------|-------------|
-
 | `linux` | Linux App Service Plan |
 | `windows` | Windows App Service Plan (default if omitted) |
 | `elastic` | Premium Functions (Elastic Premium) plan |
@@ -38,7 +36,6 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 
 | SKU Name | Tier | Description |
 |----------|------|-------------|
-
 | `F1` | `Free` | Free tier — 1 GB, 60 min/day compute |
 | `D1` | `Shared` | Shared — custom domains, 240 min/day |
 
@@ -46,7 +43,6 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 
 | SKU Name | Tier | Cores | RAM | Description |
 |----------|------|-------|-----|-------------|
-
 | `B1` | `Basic` | 1 | 1.75 GB | Basic small |
 | `B2` | `Basic` | 2 | 3.5 GB | Basic medium |
 | `B3` | `Basic` | 4 | 7 GB | Basic large |
@@ -55,7 +51,6 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 
 | SKU Name | Tier | Cores | RAM | Description |
 |----------|------|-------|-----|-------------|
-
 | `S1` | `Standard` | 1 | 1.75 GB | Standard small — slots, autoscale |
 | `S2` | `Standard` | 2 | 3.5 GB | Standard medium |
 | `S3` | `Standard` | 4 | 7 GB | Standard large |
@@ -64,7 +59,6 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 
 | SKU Name | Tier | Cores | RAM | Description |
 |----------|------|-------|-----|-------------|
-
 | `P0v3` | `PremiumV3` | 1 | 4 GB | Premium v3 extra-small |
 | `P1v3` | `PremiumV3` | 2 | 8 GB | Premium v3 small |
 | `P2v3` | `PremiumV3` | 4 | 16 GB | Premium v3 medium |
@@ -79,7 +73,6 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 
 | SKU Name | Tier | Cores | RAM | Description |
 |----------|------|-------|-----|-------------|
-
 | `I1v2` | `IsolatedV2` | 2 | 8 GB | Isolated v2 small (ASE) |
 | `I2v2` | `IsolatedV2` | 4 | 16 GB | Isolated v2 medium |
 | `I3v2` | `IsolatedV2` | 8 | 32 GB | Isolated v2 large |
@@ -91,7 +84,6 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 
 | SKU Name | Tier | Description |
 |----------|------|-------------|
-
 | `Y1` | `Dynamic` | Consumption plan — pay-per-execution |
 | `FC1` | `FlexConsumption` | Flex Consumption — VNet support |
 | `EP1` | `ElasticPremium` | Elastic Premium small — always-warm |
@@ -102,7 +94,6 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 40 |
 | Allowed Characters | Alphanumerics and hyphens |
@@ -132,7 +123,6 @@ resource plan 'Microsoft.Web/serverfarms@2025-03-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `sku.name` | SKU name | See SKU Names tables |
 | `sku.tier` | SKU tier | Derived from SKU name pattern |
 | `sku.capacity` | Instance count | Integer |
@@ -148,7 +138,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Function App** | Consumption (`Y1`) and Flex (`FC1`) plans cannot be shared with web apps. EP plans can host both functions and web apps. |
 | **Linux Apps** | Linux plan (`reserved: true`) cannot host Windows apps and vice versa. |
 | **Zone Redundancy** | Requires Premium v3 (`P1v3`+) or Isolated v2. Minimum 3 instances. |

@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/virtualNetworks/subnets` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `snet` |
@@ -26,7 +25,6 @@ Subnet does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 1 |
 | Max Length | 80 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -40,7 +38,6 @@ Certain Azure services require exact subnet names:
 
 | Service | Required Subnet Name | Minimum Prefix |
 |---------|----------------------|----------------|
-
 | Azure Firewall | `AzureFirewallSubnet` | /26 |
 | Azure Firewall Management | `AzureFirewallManagementSubnet` | /26 |
 | Azure Bastion | `AzureBastionSubnet` | /26 |
@@ -63,7 +60,6 @@ resource subnet 'Microsoft.Network/virtualNetworks/subnets@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.addressPrefix` | CIDR block for the subnet | CIDR string |
 | `properties.networkSecurityGroup.id` | Associated NSG | Resource ID |
 | `properties.routeTable.id` | Associated route table | Resource ID |
@@ -79,7 +75,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **NSG** | Cannot attach NSG to `GatewaySubnet`. NSG on `AzureBastionSubnet` requires specific required rules. |
 | **Delegations** | A subnet can only be delegated to one service. Delegated subnets cannot host other resource types. |
 | **Service Endpoints** | Must match the service being accessed (e.g., `Microsoft.Sql` for SQL Server VNet rules). |

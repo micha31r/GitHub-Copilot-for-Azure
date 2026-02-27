@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.DataFactory/factories` |
 | Bicep API Version | `2018-06-01` |
 | CAF Prefix | `adf` |
@@ -25,7 +24,6 @@ Does not use `sku`. Azure Data Factory does not have SKU tiers — pricing is ba
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 3 |
 | Max Length | 63 |
 | Allowed Characters | Alphanumerics and hyphens. Must start and end with alphanumeric. Every dash must be preceded and followed by a letter or number. No consecutive dashes. |
@@ -48,7 +46,6 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.publicNetworkAccess` | Allow public network access | `'Enabled'`, `'Disabled'` |
 | `properties.repoConfiguration.type` | Git repo type | `'FactoryGitHubConfiguration'`, `'FactoryVSTSConfiguration'` |
 | `properties.repoConfiguration.accountName` | Git account name | string (required when repo configured) |
@@ -65,7 +62,6 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Storage Account** | Linked service requires `Storage Blob Data Contributor` role on the storage account for the ADF managed identity. For ADLS Gen2, also requires `Storage Blob Data Reader` at minimum. |
 | **Key Vault** | For CMK encryption, Key Vault must have `softDeleteEnabled: true` and `enablePurgeProtection: true`. ADF managed identity needs `Key Vault Crypto Service Encryption User` role or equivalent access policy. |
 | **Managed VNet** | When `managedVirtualNetworks` is configured, all outbound connections must use managed private endpoints (`factories/managedVirtualNetworks/managedPrivateEndpoints`). |
@@ -77,7 +73,6 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Change Data Capture | `Microsoft.DataFactory/factories/adfcdcs` | CDC configurations |
 | Credentials | `Microsoft.DataFactory/factories/credentials` | Managed identity credentials |
 | Data Flows | `Microsoft.DataFactory/factories/dataflows` | Mapping data flows |

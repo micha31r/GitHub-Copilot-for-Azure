@@ -8,7 +8,6 @@ Property-specific configuration incompatibilities between Azure resources when p
 
 | Constraint | Detail |
 |------------|--------|
-
 | Public IP SKU must match Load Balancer SKU | Cannot mix Basic and Standard SKU resources |
 | Standard Public IP = static allocation only | Dynamic allocation not available with Standard SKU |
 | Standard LB blocks outbound by default | Requires outbound rules, NAT gateway, or instance-level public IPs |
@@ -21,7 +20,6 @@ Property-specific configuration incompatibilities between Azure resources when p
 
 | Constraint | Detail |
 |------------|--------|
-
 | Cannot mix v1 and v2 on same subnet | Separate subnets required for each SKU |
 | Requires dedicated subnet | No other resources allowed in the App Gateway subnet |
 | v1 does not support: autoscaling, zone redundancy, Key Vault integration, mTLS, Private Link, WAF custom rules, header rewrite | Must use v2 for these features |
@@ -34,7 +32,6 @@ Property-specific configuration incompatibilities between Azure resources when p
 
 | Constraint | Detail |
 |------------|--------|
-
 | Basic VPN Gateway SKU: no BGP, no IPv6, no RADIUS, no IKEv2 P2S, no ExpressRoute coexistence | Max 10 S2S tunnels; 1 tunnel for policy-based |
 | ExpressRoute/VPN coexistence not supported with Basic SKU | Must use Generation1+ or AZ SKUs |
 | GatewaySubnet must be /27 or larger | /26+ for 16 ExpressRoute circuits; /27+ for coexistence |
@@ -50,7 +47,6 @@ Different services require contradictory subnet configurations. A single subnet 
 
 | Service | Subnet Delegation | Min Size | Exclusive? | Notes |
 |---------|-------------------|----------|------------|-------|
-
 | App Service (VNet Integration) | `Microsoft.Web/serverFarms` | /28 (MPSJ: /26) | Yes | Cannot share subnet with private endpoints |
 | App Service (Private Endpoint) | None | — | No | Must be a different subnet than VNet integration |
 | Container Apps (Workload Profiles) | `Microsoft.App/environments` | /27 | Yes | Subnet MUST be delegated |
@@ -69,7 +65,6 @@ Different services require contradictory subnet configurations. A single subnet 
 
 | Constraint | Detail |
 |------------|--------|
-
 | Azure Functions requires StorageV2 or Storage kind | BlobStorage, BlockBlobStorage, FileStorage kinds NOT supported (missing Queue/Table) |
 | Functions Consumption plan cannot use network-secured storage | VNet-restricted storage only works with Premium/Dedicated plans |
 | Functions with AZ enabled require zone-redundant storage (ZRS) | LRS/GRS not sufficient |
@@ -83,7 +78,6 @@ Different services require contradictory subnet configurations. A single subnet 
 
 | Constraint | Detail |
 |------------|--------|
-
 | Premium SSD requires compatible VM series | Not all VM sizes support Premium storage; check size docs |
 | Ultra Disk requires `--ultra-ssd-enabled` flag on VM | Only available in specific regions/zones |
 | Ultra Disk requires VM stop/deallocate to enable after creation | Cannot enable on running VM |
@@ -97,7 +91,6 @@ Different services require contradictory subnet configurations. A single subnet 
 
 | Constraint | Detail |
 |------------|--------|
-
 | Multi-region writes + Strong consistency = NOT supported | System auto-defaults to single-region writes with Strong |
 | Strong consistency with regions >5000 miles apart blocked by default | Requires support ticket to enable |
 | Strong/Bounded Staleness reads cost 2× RU/s | Compared to Session/Consistent Prefix/Eventual |
@@ -111,7 +104,6 @@ Different services require contradictory subnet configurations. A single subnet 
 
 | Constraint | Detail |
 |------------|--------|
-
 | Basic/Standard DTU tiers: no zone redundancy | Must use Premium, Business Critical, General Purpose (vCore), or Hyperscale |
 | General Purpose zone redundancy: only in selected regions | Not all AZ regions support GP zone redundancy |
 | Hyperscale zone redundancy: can only be set at creation | Cannot modify after provisioning; must recreate via copy/restore/geo-replica |
@@ -125,7 +117,6 @@ Different services require contradictory subnet configurations. A single subnet 
 
 | Constraint | Detail |
 |------------|--------|
-
 | VNet injection: Premium tier only | Must be set at creation; cannot inject existing cache into VNet |
 | VNet injection + private endpoint = mutually exclusive | Cannot use both on same cache |
 | Premium with clustering: max 1 private link | Non-clustered: up to 100 private links |
@@ -141,7 +132,6 @@ Different services require contradictory subnet configurations. A single subnet 
 
 | Constraint | Detail |
 |------------|--------|
-
 | Reserved CIDR ranges cannot be used | 169.254.0.0/16, 172.30.0.0/16, 172.31.0.0/16, 192.0.2.0/24 |
 | AKS subnet cannot be a delegated subnet | Unlike App Service which requires delegation |
 | CNI Overlay: no VM availability sets | Must use VMSS-based node pools |
@@ -158,7 +148,6 @@ When any Azure service uses customer-managed keys (CMK) from Key Vault:
 
 | Constraint | Detail |
 |------------|--------|
-
 | Key Vault must have soft-delete AND purge protection enabled | Required by: Storage, SQL, Cosmos DB, Backup, DICOM, and more |
 | Key Vault firewall: must enable "Allow trusted Microsoft services" | Unless using private endpoints to Key Vault |
 | Key must be RSA or RSA-HSM, 2048/3072/4096-bit | Other key types not supported for CMK |
@@ -169,7 +158,6 @@ When any Azure service uses customer-managed keys (CMK) from Key Vault:
 
 | Feature | Minimum SKU Required |
 |---------|----------------------|
-
 | Private Endpoints | Basic |
 | VNet Integration | Basic |
 | Deployment Slots | Standard |
@@ -185,7 +173,6 @@ When any Azure service uses customer-managed keys (CMK) from Key Vault:
 
 | Feature | Workload Profiles | Consumption-only |
 |---------|-------------------|------------------|
-
 | Subnet delegation | Required (`Microsoft.App/environments`) | Must NOT delegate |
 | Min subnet size | /27 | /23 |
 | UDR support | Yes | No |

@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Network/virtualNetworks` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `vnet` |
@@ -25,7 +24,6 @@ Virtual Network does not use a `sku` block.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 2 |
 | Max Length | 64 |
 | Allowed Characters | Alphanumerics, underscores, periods, hyphens. Must start with alphanumeric, end with alphanumeric or underscore. |
@@ -53,7 +51,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.addressSpace.addressPrefixes` | CIDR address blocks | Array of CIDR strings |
 | `properties.dhcpOptions.dnsServers` | Custom DNS servers | Array of IP strings |
 | `properties.enableDdosProtection` | DDoS protection | `true`, `false` |
@@ -67,7 +64,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Subnets** | Address prefixes of all subnets must fall within the VNet address space. Subnet CIDRs cannot overlap. |
 | **VNet Peering** | Peered VNets cannot have overlapping address spaces. |
 | **Azure Firewall** | Requires a subnet named exactly `AzureFirewallSubnet` with minimum /26 prefix. |
@@ -80,7 +76,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Subnets | `Microsoft.Network/virtualNetworks/subnets` | Network segments (see [subnet.md](subnet.md)) |
 | VNet Peerings | `Microsoft.Network/virtualNetworks/virtualNetworkPeerings` | Cross-VNet connectivity |
 

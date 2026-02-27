@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Search/searchServices` |
 | Bicep API Version | `2025-05-01` |
 | CAF Prefix | `srch` |
@@ -23,7 +22,6 @@ Exact `sku.name` values for Bicep:
 
 | SKU | Description | Max Partitions | Max Replicas |
 |-----|-------------|----------------|--------------|
-
 | `free` | Free tier — 1 index, 50 MB storage | 1 | 1 |
 | `basic` | Basic tier — 15 indexes, 2 GB storage | 1 | 3 |
 | `standard` | Standard S1 — 50 indexes, 25 GB/partition | 12 | 12 |
@@ -38,7 +36,6 @@ Exact `sku.name` values for Bicep:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 2 |
 | Max Length | 60 |
 | Allowed Characters | Lowercase letters, numbers, and hyphens only |
@@ -68,7 +65,6 @@ resource searchService 'Microsoft.Search/searchServices@2025-05-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.replicaCount` | Number of replicas | 1–12 (standard); 1–3 (basic); minimum 2 for read HA, 3 for read/write HA |
 | `properties.partitionCount` | Number of partitions | 1, 2, 3, 4, 6, or 12 (must be a factor of 12) |
 | `properties.hostingMode` | Hosting mode | `Default`, `HighDensity` (HighDensity only for `standard3` SKU) |
@@ -85,7 +81,6 @@ resource searchService 'Microsoft.Search/searchServices@2025-05-01' = {
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Cognitive Services (AI Enrichment)** | For AI enrichment pipelines (skillsets), attach a Cognitive Services account. Must be `kind: 'CognitiveServices'` or `kind: 'AIServices'` and in the same region as the search service. |
 | **Storage Account (Indexers)** | Indexer data sources support Blob, Table, and File storage. Storage must be accessible (same VNet or public). For managed identity access, assign `Storage Blob Data Reader` role. |
 | **Cosmos DB (Indexers)** | Indexer data source for Cosmos DB. Requires connection string or managed identity with `Cosmos DB Account Reader Role`. |
@@ -98,7 +93,6 @@ resource searchService 'Microsoft.Search/searchServices@2025-05-01' = {
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Private Endpoint Connections | `Microsoft.Search/searchServices/privateEndpointConnections` | Private networking |
 | Shared Private Link Resources | `Microsoft.Search/searchServices/sharedPrivateLinkResources` | Outbound private connections to data sources |
 | Network Security Perimeter | `Microsoft.Search/searchServices/networkSecurityPerimeterConfigurations` | NSP configuration |

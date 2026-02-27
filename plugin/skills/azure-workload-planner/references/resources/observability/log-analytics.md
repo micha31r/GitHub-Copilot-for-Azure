@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.OperationalInsights/workspaces` |
 | Bicep API Version | `2025-07-01` |
 | CAF Prefix | `log` |
@@ -23,7 +22,6 @@ Log Analytics does not use `kind`.
 
 | SKU Name | Description |
 |----------|-------------|
-
 | `PerGB2018` | Pay-as-you-go per GB — **recommended default** |
 | `CapacityReservation` | Committed tier with reserved capacity (100+ GB/day) |
 | `Free` | Free tier — 500 MB/day limit, 7-day retention |
@@ -39,7 +37,6 @@ Log Analytics does not use `kind`.
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 4 |
 | Max Length | 63 |
 | Allowed Characters | Alphanumerics and hyphens. Must start with letter or number, end with letter or number. |
@@ -66,7 +63,6 @@ resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.sku.name` | Pricing tier | See SKU Names table |
 | `properties.retentionInDays` | Data retention | `30` to `730` (default: `30`; Free: `7`) |
 | `properties.sku.capacityReservationLevel` | Reserved GB/day | `100`, `200`, `300`, `400`, `500`, `1000`, `2000`, `5000` |
@@ -81,7 +77,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Application Insights** | App Insights `WorkspaceResourceId` must reference this workspace. Both should be in the same region for optimal performance. |
 | **AKS (Container Insights)** | AKS `omsagent` addon references workspace via `logAnalyticsWorkspaceResourceID`. |
 | **Diagnostic Settings** | Multiple resources can send diagnostics to the same workspace. Configure via `Microsoft.Insights/diagnosticSettings` on each resource. |
@@ -92,7 +87,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Data Sources | `Microsoft.OperationalInsights/workspaces/dataSources` | Data collection config |
 | Linked Services | `Microsoft.OperationalInsights/workspaces/linkedServices` | Service links (e.g., automation) |
 | Saved Searches | `Microsoft.OperationalInsights/workspaces/savedSearches` | Saved KQL queries |

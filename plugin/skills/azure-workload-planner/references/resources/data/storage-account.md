@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Storage/storageAccounts` |
 | Bicep API Version | `2025-06-01` |
 | CAF Prefix | `st` |
@@ -19,7 +18,6 @@ These are the exact `kind` values accepted in Bicep. Using any other value cause
 
 | Kind | Description | Access Tier Support |
 |------|-------------|---------------------|
-
 | `StorageV2` | General-purpose v2 — **recommended default** | Hot, Cool, Cold |
 | `Storage` | General-purpose v1 (legacy) | N/A |
 | `BlobStorage` | Blob-only (legacy, use StorageV2 instead) | Hot, Cool |
@@ -32,7 +30,6 @@ Exact `sku.name` values for Bicep:
 
 | SKU | Redundancy | Compatible Kinds |
 |-----|------------|------------------|
-
 | `Standard_LRS` | Locally redundant | StorageV2, Storage, BlobStorage |
 | `Standard_GRS` | Geo-redundant | StorageV2, Storage, BlobStorage |
 | `Standard_RAGRS` | Read-access geo-redundant | StorageV2, Storage, BlobStorage |
@@ -54,7 +51,6 @@ Exact `sku.name` values for Bicep:
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 3 |
 | Max Length | 24 |
 | Allowed Characters | Lowercase letters and numbers only (no hyphens, no underscores) |
@@ -82,7 +78,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.accessTier` | Billing tier for blobs | `Hot`, `Cool`, `Cold`, `Premium` |
 | `properties.allowBlobPublicAccess` | Allow anonymous blob access | `true`, `false` (default: `false`) |
 | `properties.supportsHttpsTrafficOnly` | Require HTTPS | `true` (recommended), `false` |
@@ -96,7 +91,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **Azure Functions** | Must use `StorageV2` or `Storage` kind. `BlobStorage`, `BlockBlobStorage`, `FileStorage` not supported (missing Queue/Table). |
 | **Functions (Consumption plan)** | Cannot use network-secured storage (VNet rules). Only Premium/Dedicated plans support VNet-restricted storage. |
 | **Functions (zone-redundant)** | Must use ZRS SKU (`Standard_ZRS`). LRS/GRS not sufficient. |
@@ -109,7 +103,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Blob Services | `Microsoft.Storage/storageAccounts/blobServices` | Configure blob-specific settings |
 | Containers | `Microsoft.Storage/storageAccounts/blobServices/containers` | Blob containers |
 | File Services | `Microsoft.Storage/storageAccounts/fileServices` | File share settings |

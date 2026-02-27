@@ -4,7 +4,6 @@
 
 | Field | Value |
 |-------|-------|
-
 | ARM Type | `Microsoft.Web/sites` |
 | Bicep API Version | `2025-03-01` |
 | CAF Prefix | `app` |
@@ -21,7 +20,6 @@ The `kind` property is a free-form string. Use these exact values for web apps:
 
 | Kind | Description |
 |------|-------------|
-
 | `app` | Windows web app — **default** |
 | `app,linux` | Linux web app |
 | `app,linux,container` | Linux container web app |
@@ -37,7 +35,6 @@ App Service inherits SKU from the parent **App Service Plan** (see [app-service-
 
 | Constraint | Value |
 |------------|-------|
-
 | Min Length | 2 |
 | Max Length | 60 |
 | Allowed Characters | Alphanumerics and hyphens. Cannot start or end with hyphen. |
@@ -63,7 +60,6 @@ resource webApp 'Microsoft.Web/sites@2025-03-01' = {
 
 | Property | Description | Values |
 |----------|-------------|--------|
-
 | `properties.serverFarmId` | App Service Plan ID | Resource ID |
 | `properties.siteConfig.linuxFxVersion` | Linux runtime stack | `DOTNETCORE\|8.0`, `NODE\|20-lts`, `PYTHON\|3.12`, `JAVA\|17-java17` |
 | `properties.siteConfig.netFrameworkVersion` | .NET version (Windows) | `v6.0`, `v8.0` |
@@ -81,7 +77,6 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-
 | **App Service Plan** | Must be in the same region. Linux apps need Linux plan (`reserved: true`). Windows apps need Windows plan. |
 | **Deployment Slots** | Only available on Standard or higher plan tiers. Free and Basic do not support slots. |
 | **VNet Integration** | Requires Basic or higher plan tier. Subnet must be delegated to `Microsoft.Web/serverFarms`. |
@@ -94,7 +89,6 @@ When connected to other resources, enforce these rules:
 
 | Child Type | ARM Type | Purpose |
 |------------|----------|---------|
-
 | Config | `Microsoft.Web/sites/config` | Site configuration |
 | Slots | `Microsoft.Web/sites/slots` | Deployment slots |
 | VNet Connections | `Microsoft.Web/sites/virtualNetworkConnections` | VNet integration |
