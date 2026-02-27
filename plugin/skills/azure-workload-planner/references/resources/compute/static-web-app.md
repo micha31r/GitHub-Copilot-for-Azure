@@ -22,7 +22,7 @@ Static Web App does not use `kind` in standard deployments.
 
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
-| `Free` | `Free` | Free tier — hobby/personal projects, 2 custom domains, 0.5 GB storage |
+| `Free` | `Free` | Free tier — hobby/personal projects, 2 custom domains, 500 MB total storage (250 MB per environment) |
 | `Standard` | `Standard` | Standard tier — production workloads, 5 custom domains, 2 GB storage, SLA, private endpoints |
 
 ## Naming

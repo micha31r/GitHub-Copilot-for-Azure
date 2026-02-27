@@ -26,7 +26,7 @@
 | SKU Name | Description |
 |----------|-------------|
 | `Basic` | Basic — standard event routing, no private endpoints |
-| `Premium` | Premium — adds private endpoints, managed identity, IP filtering |
+| `Premium` | Premium — adds private endpoints |
 
 > **Note:** `sku` is set as `{ name: 'Basic' }` or `{ name: 'Premium' }`. No `tier` or `capacity` needed.
 
@@ -37,7 +37,7 @@
 | Min Length | 3 |
 | Max Length | 50 |
 | Allowed Characters | Alphanumerics and hyphens. Must start with letter, end with alphanumeric. |
-| Scope | Region (unique within resource group in the same region) |
+| Scope | Region (unique across all resource groups within the same region) |
 | Pattern | `evgt-{workload}-{env}-{instance}` |
 | Example | `evgt-datapipeline-prod-001` |
 

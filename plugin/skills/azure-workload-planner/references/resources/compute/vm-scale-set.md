@@ -30,7 +30,7 @@ VM Scale Set does not use `kind`.
 |------------|-------|
 | Min Length | 1 |
 | Max Length | 15 (Windows) / 64 (Linux) |
-| Allowed Characters | Alphanumerics, hyphens, underscores. Cannot start with underscore. Cannot end with period or hyphen. |
+| Allowed Characters | Alphanumerics and hyphens. Cannot start with underscore. Cannot end with period or hyphen. Note: ARM resource name max is 64; OS hostname max is 15 (Windows) / 64 (Linux). |
 | Scope | Resource group |
 | Pattern | `vmss-{workload}-{env}-{instance}` |
 | Example | `vmss-webfrontend-prod-001` |

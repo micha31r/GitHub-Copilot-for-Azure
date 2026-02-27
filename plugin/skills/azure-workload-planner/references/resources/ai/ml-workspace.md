@@ -36,7 +36,7 @@ Exact `sku.name` values for Bicep (string). The `sku.tier` enum values are: `Bas
 | `Free` | `Free` | Limited-feature tier |
 | `Premium` | `Premium` | Advanced features |
 
-> **Guidance:** Most ML workspaces use `Basic`/`Basic`. Hub and Project workspaces typically use `Basic`/`Basic` as well.
+> **Guidance:** Most ML workspaces use `Basic`/`Basic`. Hub and Project workspaces typically use `Basic`/`Basic` as well. `Free` and `Premium` appear in the ARM schema enum but are not distinct ML pricing tiers — use `Basic` or `Standard` for production.
 
 ## Naming
 

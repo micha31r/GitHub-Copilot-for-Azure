@@ -37,7 +37,7 @@ VM does not use a top-level `sku` block. VM size is set via `properties.hardware
 |------------|-------|
 | Min Length | 1 |
 | Max Length | 15 (Windows hostname) / 64 (Linux / resource name) |
-| Allowed Characters | Alphanumerics, hyphens, underscores. Windows: no periods at end, no trailing hyphens. Linux: no trailing periods or hyphens. |
+| Allowed Characters | Alphanumerics, hyphens, underscores. Linux: periods allowed (not at end). Windows: no periods at all. |
 | Scope | Resource group |
 | Pattern | `vm-{workload}-{env}-{instance}` |
 | Example | `vm-webserver-prod-001` |

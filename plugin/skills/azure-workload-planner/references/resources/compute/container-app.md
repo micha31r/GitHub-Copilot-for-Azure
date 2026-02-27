@@ -33,7 +33,7 @@ Container Apps do not use a `sku` block. Billing is based on the Container Apps 
 | Min Length | 2 |
 | Max Length | 32 |
 | Allowed Characters | Lowercase letters, numbers, and hyphens. Must start with letter, end with alphanumeric. |
-| Scope | Container Apps Environment (unique within the environment) |
+| Scope | Resource group |
 | Pattern | `ca-{workload}-{env}-{instance}` |
 | Example | `ca-datapipeline-prod-001` |
 
@@ -85,7 +85,7 @@ When connected to other resources, enforce these rules:
 | Paired With | Constraint |
 |-------------|------------|
 | **Container Apps Environment** | Must reference `environmentId`. Environment must exist in the same region. |
-| **VNet** | VNet integration is configured on the **Environment**, not the individual app. Environment needs a dedicated subnet with minimum /23 prefix. |
+| **VNet** | VNet integration is configured on the **Environment**, not the individual app. Environment needs a dedicated subnet with minimum /23 prefix for Consumption-only environments or /27 for workload profiles environments. |
 | **Container Registry** | Requires registry credentials in `configuration.registries[]` or managed identity-based pull. |
 | **Dapr** | Enable via `configuration.dapr.enabled: true`. Dapr components are configured on the Environment. |
 | **CPU/Memory** | CPU and memory must follow valid combinations: 0.25 cores/0.5Gi, 0.5/1Gi, 1/2Gi, 2/4Gi, 4/8Gi (consumption). |

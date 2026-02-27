@@ -69,7 +69,7 @@ resource webApp 'Microsoft.Web/sites@2025-03-01' = {
 | `properties.virtualNetworkSubnetId` | VNet integration subnet | Resource ID |
 | `properties.clientAffinityEnabled` | Session affinity (ARR) | `true`, `false` |
 | `properties.siteConfig.alwaysOn` | Always On (prevent idle) | `true`, `false` (not available on Free/Shared) |
-| `properties.siteConfig.minTlsVersion` | Minimum TLS | `1.0`, `1.1`, `1.2` |
+| `properties.siteConfig.minTlsVersion` | Minimum TLS | `1.0`, `1.1`, `1.2`, `1.3` |
 
 ## Pairing Constraints
 
@@ -80,7 +80,7 @@ When connected to other resources, enforce these rules:
 | **App Service Plan** | Must be in the same region. Linux apps need Linux plan (`reserved: true`). Windows apps need Windows plan. |
 | **Deployment Slots** | Only available on Standard or higher plan tiers. Free and Basic do not support slots. |
 | **VNet Integration** | Requires Basic or higher plan tier. Subnet must be delegated to `Microsoft.Web/serverFarms`. |
-| **Custom Domain** | Requires Basic or higher tier. Free tier only supports `*.azurewebsites.net`. |
+| **Custom Domain** | Requires Shared (D1) or higher tier for custom domains. Free tier only supports `*.azurewebsites.net`. Managed certificates require Basic or higher. |
 | **Application Insights** | Set `APPLICATIONINSIGHTS_CONNECTION_STRING` in app settings. |
 | **Key Vault References** | Use `@Microsoft.KeyVault(SecretUri=...)` in app settings. Requires managed identity with Key Vault access. |
 | **Managed Identity** | Enable `identity.type: 'SystemAssigned'` or `'UserAssigned'` for passwordless auth to other Azure resources. |

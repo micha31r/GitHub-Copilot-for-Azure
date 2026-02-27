@@ -55,8 +55,8 @@ Exact `sku.name` values for Bicep (string). Available SKUs depend on `kind`. The
 |------------|-------|
 | Min Length | 2 |
 | Max Length | 64 |
-| Allowed Characters | Alphanumerics, hyphens, periods, underscores |
-| Pattern (regex) | `^[a-zA-Z0-9][a-zA-Z0-9_.-]*$` |
+| Allowed Characters | Alphanumerics and hyphens |
+| Pattern (regex) | `^[a-zA-Z0-9][a-zA-Z0-9-]*$` |
 | Scope | Resource group |
 | Example | `oai-chatbot-prod-001` |
 

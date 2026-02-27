@@ -26,7 +26,7 @@ SQL Server (logical server) does not use SKU. SKU is configured on the child **d
 |------------|-------|
 | Min Length | 1 |
 | Max Length | 63 |
-| Allowed Characters | Lowercase letters, numbers, and hyphens. Must start with a letter, end with a letter or number. |
+| Allowed Characters | Lowercase letters, numbers, and hyphens. Can't start or end with hyphen. |
 | Scope | Global (must be globally unique as DNS name `{name}.database.windows.net`) |
 | Pattern | `sql-{workload}-{env}-{instance}` |
 | Example | `sql-datapipeline-prod-001` |

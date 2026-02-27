@@ -70,7 +70,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-10-01' = {
 |----------|-------------|--------|
 | `properties.dnsPrefix` | DNS prefix for API server | String (globally unique in region) |
 | `properties.kubernetesVersion` | Kubernetes version | String (e.g., `1.30`, `1.31`) |
-| `properties.agentPoolProfiles[].name` | Node pool name | Max 12 chars, lowercase alphanumeric |
+| `properties.agentPoolProfiles[].name` | Node pool name | Linux: max 12 chars; Windows: max 6 chars. Lowercase alphanumeric only. |
 | `properties.agentPoolProfiles[].mode` | Pool mode | `System` (required, at least 1), `User` |
 | `properties.agentPoolProfiles[].vmSize` | Node VM size | Azure VM SKU string |
 | `properties.agentPoolProfiles[].count` | Node count | Integer |

@@ -14,10 +14,12 @@
 
 > **Note:** DNS Zones use `location: 'global'` — they are not region-scoped.
 
-## Subtypes (kind)
+## Subtypes (`properties.zoneType`)
 
-| Kind | Description |
-|------|-------------|
+DNS Zone uses `properties.zoneType` (not `kind`) to distinguish zone types:
+
+| zoneType | Description |
+|----------|-------------|
 | `Public` | Public DNS zone — **default** |
 | `Private` | Private DNS zone (use `Microsoft.Network/privateDnsZones` instead) |
 

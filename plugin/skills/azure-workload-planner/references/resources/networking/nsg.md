@@ -83,7 +83,7 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-| **GatewaySubnet** | Cannot attach NSG to `GatewaySubnet`. |
+| **GatewaySubnet** | NSGs are supported on `GatewaySubnet` for VPN gateways but not for ExpressRoute gateways. |
 | **AzureBastionSubnet** | NSG on Bastion subnet requires specific inbound/outbound rules (see [Azure Bastion NSG](https://learn.microsoft.com/azure/bastion/bastion-nsg)). |
 | **Application Gateway** | NSG on App Gateway subnet must allow `GatewayManager` service tag on ports `65200–65535` (v2) and health probe traffic. |
 | **Load Balancer** | Must allow `AzureLoadBalancer` service tag for health probes. |

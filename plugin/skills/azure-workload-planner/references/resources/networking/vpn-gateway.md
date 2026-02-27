@@ -114,7 +114,7 @@ When connected to other resources, enforce these rules:
 | **Public IP** | Basic VPN SKU requires Basic public IP. VpnGw1+ requires Standard public IP. |
 | **Active-Active** | Requires 2 public IPs and 2 IP configurations. Only supported with VpnGw1+. |
 | **Zone-Redundant** | Must use `AZ` SKU variant (e.g., `VpnGw1AZ`). Requires Standard SKU public IPs. |
-| **ExpressRoute** | Cannot coexist with VPN gateway on the same `GatewaySubnet` — use separate subnets or VPN+ER coexistence configurations. |
+| **ExpressRoute** | Can coexist with VPN gateway on the same `GatewaySubnet` (requires /27 or larger). Not supported with Basic SKU. Route-based VPN required. |
 | **PolicyBased** | Limited to 1 S2S tunnel, no P2S, no VNet-to-VNet. Use `RouteBased` for most scenarios. |
 
 ## Child Resources

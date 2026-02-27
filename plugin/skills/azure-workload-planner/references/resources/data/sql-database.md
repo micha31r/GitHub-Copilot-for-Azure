@@ -97,7 +97,7 @@ When connected to other resources, enforce these rules:
 | **Elastic Pool** | `elasticPoolId` must reference a pool on the same server. Cannot set `sku` when using elastic pool (it inherits pool SKU). |
 | **Zone Redundancy** | Only available in `GeneralPurpose`, `BusinessCritical`, and `Hyperscale` tiers. Not available in DTU tiers. |
 | **Serverless** | Only available in `GeneralPurpose` tier. SKU name uses `GP_S_Gen5_*` pattern. |
-| **Hyperscale** | Cannot move from Hyperscale to other tiers. One-way migration. |
+| **Hyperscale** | Reverse migration from Hyperscale to General Purpose is supported within 45 days of the original migration. Databases originally created as Hyperscale cannot reverse migrate. |
 | **Backup Redundancy** | `GeoZone` only available in select regions. `Local` not available in all regions. |
 
 ## Child Resources

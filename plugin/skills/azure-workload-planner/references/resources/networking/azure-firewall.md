@@ -23,7 +23,7 @@ Azure Firewall does not use `kind`. The deployment mode is determined by `sku.na
 | SKU Name | SKU Tier | Description |
 |----------|----------|-------------|
 | `AZFW_VNet` | `Basic` | Basic — for SMB, limited features |
-| `AZFW_VNet` | `Standard` | Standard — threat intelligence, TLS inspection |
+| `AZFW_VNet` | `Standard` | Standard — threat intelligence, DNS proxy, web categories |
 | `AZFW_VNet` | `Premium` | Premium — Standard + IDPS, URL filtering, TLS inspection |
 | `AZFW_Hub` | `Basic` | Basic in Virtual WAN hub |
 | `AZFW_Hub` | `Standard` | Standard in Virtual WAN hub |

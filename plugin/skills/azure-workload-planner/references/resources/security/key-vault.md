@@ -87,7 +87,6 @@ When connected to other resources, enforce these rules:
 |------------|----------|---------|
 | Secrets | `Microsoft.KeyVault/vaults/secrets` | Store secret values |
 | Keys | `Microsoft.KeyVault/vaults/keys` | Cryptographic keys |
-| Key Versions | `Microsoft.KeyVault/vaults/keys/versions` | Key version management |
 | Access Policies | `Microsoft.KeyVault/vaults/accessPolicies` | Vault-level access (legacy; prefer RBAC) |
 | Private Endpoints | `Microsoft.KeyVault/vaults/privateEndpointConnections` | Private link connections |
 

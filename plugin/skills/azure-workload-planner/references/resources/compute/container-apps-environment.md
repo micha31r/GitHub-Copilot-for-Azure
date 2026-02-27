@@ -65,7 +65,7 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-07-01' = {
 |----------|-------------|--------|
 | `properties.appLogsConfiguration.destination` | Log destination | `log-analytics`, `azure-monitor`, `''` (none) |
 | `properties.appLogsConfiguration.logAnalyticsConfiguration.customerId` | Log Analytics workspace ID | Workspace customer ID string |
-| `properties.vnetConfiguration.infrastructureSubnetId` | VNet subnet | Resource ID — subnet must have minimum /23 prefix |
+| `properties.vnetConfiguration.infrastructureSubnetId` | VNet subnet | Resource ID — subnet must have minimum /23 prefix for Consumption-only or /27 for workload profiles |
 | `properties.vnetConfiguration.internal` | Internal-only environment | `true`, `false` |
 | `properties.zoneRedundant` | Zone redundancy | `true`, `false` |
 | `properties.workloadProfiles[].workloadProfileType` | Workload profile type | `Consumption`, `D4`, `D8`, `D16`, `D32`, `E4`, `E8`, `E16`, `E32` |
@@ -82,7 +82,7 @@ When connected to other resources, enforce these rules:
 |-------------|------------|
 | **Container App** | Container Apps reference the environment via `properties.environmentId`. Apps and environment must be in the same region. |
 | **Log Analytics Workspace** | Provide `customerId` and `sharedKey` in `appLogsConfiguration`. Workspace must exist before the environment. |
-| **VNet / Subnet** | Subnet must have a minimum /23 prefix. Subnet must be dedicated to the Container Apps Environment (no other resources). Subnet must be delegated to `Microsoft.App/environments`. |
+| **VNet / Subnet** | Subnet must have a minimum /23 prefix for Consumption-only environments or /27 for workload profiles environments. Subnet must be dedicated to the Container Apps Environment (no other resources). Subnet must be delegated to `Microsoft.App/environments`. |
 | **Zone Redundancy** | Requires VNet integration. Zone-redundant environments need a /23 subnet in a region with availability zones. |
 | **Internal Environment** | When `internal: true`, no public endpoint is created. Requires custom DNS or Private DNS Zone and a VNet with connectivity to clients. |
 | **Workload Profiles** | At least one `Consumption` profile must be defined when using workload profiles. Dedicated profiles require `minimumCount` and `maximumCount`. |
