@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Web/serverfarms` |
-| Bicep API Version | `2024-11-01` |
+| Bicep API Version | `2025-03-01` |
 | CAF Prefix | `asp` |
 
 ## Region Availability
@@ -104,7 +104,7 @@ Exact `sku.name` values for Bicep. The `sku.tier` is derived but can be set expl
 ## Required Properties (Bicep)
 
 ```bicep
-resource plan 'Microsoft.Web/serverfarms@2024-11-01' = {
+resource plan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: 'string'       // required
   location: 'string'   // required
   kind: 'string'       // recommended — 'linux', 'windows', 'elastic', 'functionapp'
@@ -151,7 +151,7 @@ App Service Plan has no significant Bicep child resources — apps and functions
 
 ## References
 
-- [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.web/serverfarms?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-03-01)](https://learn.microsoft.com/azure/templates/microsoft.web/serverfarms?pivots=deployment-language-bicep)
 - [App Service plan overview](https://learn.microsoft.com/azure/app-service/overview-hosting-plans)
 - [Azure naming rules — Web](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftweb)
 - [App Service pricing](https://azure.microsoft.com/pricing/details/app-service/)
