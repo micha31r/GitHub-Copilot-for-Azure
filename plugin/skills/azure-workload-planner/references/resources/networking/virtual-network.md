@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/virtualNetworks` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `vnet` |
 
 ## Region Availability
@@ -34,7 +34,7 @@ Virtual Network does not use a `sku` block.
 ## Required Properties (Bicep)
 
 ```bicep
-resource vnet 'Microsoft.Network/virtualNetworks@2025-05-01' = {
+resource vnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -81,7 +81,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/virtualnetworks?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/virtualnetworks?pivots=deployment-language-bicep)
 - [Virtual Network overview](https://learn.microsoft.com/azure/virtual-network/virtual-networks-overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [VNet planning](https://learn.microsoft.com/azure/virtual-network/virtual-network-vnet-plan-design-arm)

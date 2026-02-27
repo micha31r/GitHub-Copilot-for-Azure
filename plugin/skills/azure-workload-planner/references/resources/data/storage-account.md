@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Storage/storageAccounts` |
-| Bicep API Version | `2025-06-01` |
+| Bicep API Version | `2025-01-01` |
 | CAF Prefix | `st` |
 
 ## Region Availability
@@ -33,7 +33,7 @@ Exact `sku.name` values for Bicep:
 | `Standard_LRS` | Locally redundant | StorageV2, Storage, BlobStorage |
 | `Standard_GRS` | Geo-redundant | StorageV2, Storage, BlobStorage |
 | `Standard_RAGRS` | Read-access geo-redundant | StorageV2, Storage, BlobStorage |
-| `Standard_ZRS` | Zone-redundant | StorageV2, Storage |
+| `Standard_ZRS` | Zone-redundant | StorageV2 |
 | `Standard_GZRS` | Geo-zone-redundant | StorageV2 |
 | `Standard_RAGZRS` | Read-access geo-zone-redundant | StorageV2 |
 | `Premium_LRS` | Premium locally redundant | BlockBlobStorage, FileStorage |
@@ -61,7 +61,7 @@ Exact `sku.name` values for Bicep:
 ## Required Properties (Bicep)
 
 ```bicep
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'string'       // required, globally unique
   location: 'string'   // required
   kind: 'string'       // required — see Subtypes table
@@ -94,7 +94,7 @@ When connected to other resources, enforce these rules:
 | **Azure Functions** | Must use `StorageV2` or `Storage` kind. `BlobStorage`, `BlockBlobStorage`, `FileStorage` not supported (missing Queue/Table). |
 | **Functions (Consumption plan)** | Cannot use network-secured storage (VNet rules). Only Premium/Dedicated plans support VNet-restricted storage. |
 | **Functions (zone-redundant)** | Must use ZRS SKU (`Standard_ZRS`). LRS/GRS not sufficient. |
-| **VM Boot Diagnostics** | Cannot use Premium storage or ZRS. Use `Standard_LRS` or `Standard_GRS`. |
+| **VM Boot Diagnostics** | Cannot use Premium storage or ZRS. Use `Standard_LRS` or `Standard_GRS`. Managed boot diagnostics (no storage account required) is also available. |
 | **CMK Encryption** | Key Vault must have `softDeleteEnabled: true` AND `enablePurgeProtection: true`. |
 | **CMK at creation** | Requires user-assigned managed identity (system-assigned only works for existing accounts). |
 | **Geo-redundant failover** | Certain features (SFTP, NFS 3.0, etc.) block GRS/GZRS failover. |
@@ -114,7 +114,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-06-01)](https://learn.microsoft.com/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-01-01)](https://learn.microsoft.com/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep)
 - [Storage account overview](https://learn.microsoft.com/azure/storage/common/storage-account-overview)
 - [Azure naming rules — Storage](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftstorage)
 - [Storage redundancy](https://learn.microsoft.com/azure/storage/common/storage-redundancy)

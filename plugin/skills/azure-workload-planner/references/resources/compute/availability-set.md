@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Compute/availabilitySets` |
-| Bicep API Version | `2025-04-01` |
+| Bicep API Version | `2024-11-01` |
 | CAF Prefix | `avail` |
 
 ## Region Availability
@@ -37,7 +37,7 @@ Availability Set does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource availSet 'Microsoft.Compute/availabilitySets@2025-04-01' = {
+resource availSet 'Microsoft.Compute/availabilitySets@2024-11-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -76,6 +76,6 @@ Availability Set has no Bicep child resource types.
 
 ## References
 
-- [Bicep resource reference (2025-04-01)](https://learn.microsoft.com/azure/templates/microsoft.compute/availabilitysets?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.compute/availabilitysets?pivots=deployment-language-bicep)
 - [Availability sets overview](https://learn.microsoft.com/azure/virtual-machines/availability-set-overview)
 - [Azure naming rules — Compute](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute)

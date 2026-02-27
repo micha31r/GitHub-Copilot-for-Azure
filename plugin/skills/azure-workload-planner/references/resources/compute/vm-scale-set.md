@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Compute/virtualMachineScaleSets` |
-| Bicep API Version | `2025-04-01` |
+| Bicep API Version | `2024-11-01` |
 | CAF Prefix | `vmss` |
 
 ## Region Availability
@@ -30,7 +30,7 @@ VM Scale Set does not use `kind`.
 |------------|-------|
 | Min Length | 1 |
 | Max Length | 15 (Windows) / 64 (Linux) |
-| Allowed Characters | Alphanumerics, hyphens, underscores. Cannot start with underscore. Cannot end with period or hyphen. |
+| Allowed Characters | Alphanumerics and hyphens. Cannot start with underscore. Cannot end with period or hyphen. Note: ARM resource name max is 64; OS hostname max is 15 (Windows) / 64 (Linux). |
 | Scope | Resource group |
 | Pattern | `vmss-{workload}-{env}-{instance}` |
 | Example | `vmss-webfrontend-prod-001` |
@@ -38,7 +38,7 @@ VM Scale Set does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource vmss 'Microsoft.Compute/virtualMachineScaleSets@2025-04-01' = {
+resource vmss 'Microsoft.Compute/virtualMachineScaleSets@2024-11-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -114,6 +114,6 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-04-01)](https://learn.microsoft.com/azure/templates/microsoft.compute/virtualmachinescalesets?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.compute/virtualmachinescalesets?pivots=deployment-language-bicep)
 - [VM Scale Sets overview](https://learn.microsoft.com/azure/virtual-machine-scale-sets/overview)
 - [Azure naming rules — Compute](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute)

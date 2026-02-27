@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/networkSecurityGroups` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `nsg` |
 
 ## Region Availability
@@ -34,7 +34,7 @@ NSG does not use a `sku` block.
 ## Required Properties (Bicep)
 
 ```bicep
-resource nsg 'Microsoft.Network/networkSecurityGroups@2025-05-01' = {
+resource nsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -83,7 +83,7 @@ When connected to other resources, enforce these rules:
 
 | Paired With | Constraint |
 |-------------|------------|
-| **GatewaySubnet** | Cannot attach NSG to `GatewaySubnet`. |
+| **GatewaySubnet** | NSGs are supported on `GatewaySubnet` for VPN gateways but not for ExpressRoute gateways. |
 | **AzureBastionSubnet** | NSG on Bastion subnet requires specific inbound/outbound rules (see [Azure Bastion NSG](https://learn.microsoft.com/azure/bastion/bastion-nsg)). |
 | **Application Gateway** | NSG on App Gateway subnet must allow `GatewayManager` service tag on ports `65200–65535` (v2) and health probe traffic. |
 | **Load Balancer** | Must allow `AzureLoadBalancer` service tag for health probes. |
@@ -97,7 +97,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/networksecuritygroups?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/networksecuritygroups?pivots=deployment-language-bicep)
 - [NSG overview](https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [NSG security rules](https://learn.microsoft.com/azure/virtual-network/network-security-group-how-it-works)

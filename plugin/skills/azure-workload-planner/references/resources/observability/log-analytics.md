@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.OperationalInsights/workspaces` |
-| Bicep API Version | `2025-07-01` |
+| Bicep API Version | `2025-02-01` |
 | CAF Prefix | `log` |
 
 ## Region Availability
@@ -42,13 +42,13 @@ Log Analytics does not use `kind`.
 | Allowed Characters | Alphanumerics and hyphens. Must start with letter or number, end with letter or number. |
 | Scope | Resource group |
 | Pattern | `log-{workload}-{env}-{instance}` |
-| Regex | `^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$` |
+| Regex | `^[A-Za-z0-9][A-Za-z0-9-]{2,61}[A-Za-z0-9]$` |
 | Example | `log-datapipeline-prod-001` |
 
 ## Required Properties (Bicep)
 
 ```bicep
-resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
+resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -81,7 +81,7 @@ When connected to other resources, enforce these rules:
 | **AKS (Container Insights)** | AKS `omsagent` addon references workspace via `logAnalyticsWorkspaceResourceID`. |
 | **Diagnostic Settings** | Multiple resources can send diagnostics to the same workspace. Configure via `Microsoft.Insights/diagnosticSettings` on each resource. |
 | **Retention** | Free tier is limited to 7-day retention. PerGB2018 supports 30–730 days. Archive tier available for longer retention. |
-| **Private Link** | Use Azure Monitor Private Link Scope (AMPLS) for private ingestion/query. A workspace can only be linked to one AMPLS. |
+| **Private Link** | Use Azure Monitor Private Link Scope (AMPLS) for private ingestion/query. A workspace can be linked to up to 100 AMPLS resources (a VNet can connect to only one AMPLS). |
 
 ## Child Resources
 
@@ -95,7 +95,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-07-01)](https://learn.microsoft.com/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-02-01)](https://learn.microsoft.com/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep)
 - [Log Analytics overview](https://learn.microsoft.com/azure/azure-monitor/logs/log-analytics-overview)
 - [Azure naming rules — OperationalInsights](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftoperationalinsights)
 - [Log Analytics pricing](https://learn.microsoft.com/azure/azure-monitor/logs/cost-logs)

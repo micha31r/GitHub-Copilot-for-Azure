@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/virtualNetworks/subnets` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `snet` |
 | Parent Resource | `Microsoft.Network/virtualNetworks` (see [virtual-network.md](virtual-network.md)) |
 
@@ -47,7 +47,7 @@ Certain Azure services require exact subnet names:
 ## Required Properties (Bicep)
 
 ```bicep
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2025-05-01' = {
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   name: 'string'       // required
   parent: vnet          // required — reference to VNet
   properties: {
@@ -89,7 +89,7 @@ Subnet has no child resource types.
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/virtualnetworks/subnets?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/virtualnetworks/subnets?pivots=deployment-language-bicep)
 - [Virtual Network subnets](https://learn.microsoft.com/azure/virtual-network/virtual-network-manage-subnet)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Subnet delegation](https://learn.microsoft.com/azure/virtual-network/subnet-delegation-overview)

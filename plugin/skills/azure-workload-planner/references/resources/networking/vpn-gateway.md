@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/virtualNetworkGateways` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `vpng` |
 
 ## Region Availability
@@ -70,7 +70,7 @@ VPN Gateway does not use `kind`. The gateway type is set via `properties.gateway
 ## Required Properties (Bicep)
 
 ```bicep
-resource vpnGw 'Microsoft.Network/virtualNetworkGateways@2025-05-01' = {
+resource vpnGw 'Microsoft.Network/virtualNetworkGateways@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -114,7 +114,7 @@ When connected to other resources, enforce these rules:
 | **Public IP** | Basic VPN SKU requires Basic public IP. VpnGw1+ requires Standard public IP. |
 | **Active-Active** | Requires 2 public IPs and 2 IP configurations. Only supported with VpnGw1+. |
 | **Zone-Redundant** | Must use `AZ` SKU variant (e.g., `VpnGw1AZ`). Requires Standard SKU public IPs. |
-| **ExpressRoute** | Cannot coexist with VPN gateway on the same `GatewaySubnet` — use separate subnets or VPN+ER coexistence configurations. |
+| **ExpressRoute** | Can coexist with VPN gateway on the same `GatewaySubnet` (requires /27 or larger). Not supported with Basic SKU. Route-based VPN required. |
 | **PolicyBased** | Limited to 1 S2S tunnel, no P2S, no VNet-to-VNet. Use `RouteBased` for most scenarios. |
 
 ## Child Resources
@@ -125,7 +125,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/virtualnetworkgateways?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/virtualnetworkgateways?pivots=deployment-language-bicep)
 - [VPN Gateway overview](https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-about-vpngateways)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [VPN Gateway SKUs](https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-about-vpn-gateway-settings#gwsku)

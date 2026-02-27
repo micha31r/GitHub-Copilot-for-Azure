@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.ContainerService/managedClusters` |
-| Bicep API Version | `2025-10-01` |
+| Bicep API Version | `2025-05-01` |
 | CAF Prefix | `aks` |
 
 ## Region Availability
@@ -40,7 +40,7 @@
 ## Required Properties (Bicep)
 
 ```bicep
-resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-10-01' = {
+resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -70,7 +70,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-10-01' = {
 |----------|-------------|--------|
 | `properties.dnsPrefix` | DNS prefix for API server | String (globally unique in region) |
 | `properties.kubernetesVersion` | Kubernetes version | String (e.g., `1.30`, `1.31`) |
-| `properties.agentPoolProfiles[].name` | Node pool name | Max 12 chars, lowercase alphanumeric |
+| `properties.agentPoolProfiles[].name` | Node pool name | Linux: max 12 chars; Windows: max 6 chars. Lowercase alphanumeric only. |
 | `properties.agentPoolProfiles[].mode` | Pool mode | `System` (required, at least 1), `User` |
 | `properties.agentPoolProfiles[].vmSize` | Node VM size | Azure VM SKU string |
 | `properties.agentPoolProfiles[].count` | Node count | Integer |
@@ -110,7 +110,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-10-01)](https://learn.microsoft.com/azure/templates/microsoft.containerservice/managedclusters?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.containerservice/managedclusters?pivots=deployment-language-bicep)
 - [AKS overview](https://learn.microsoft.com/azure/aks/intro-kubernetes)
 - [Azure naming rules — ContainerService](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcontainerservice)
 - [AKS networking concepts](https://learn.microsoft.com/azure/aks/concepts-network)

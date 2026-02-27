@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.CognitiveServices/accounts` |
-| Bicep API Version | `2024-10-01` |
+| Bicep API Version | `2025-06-01` |
 | CAF Prefix | Varies by kind — see Subtypes table |
 
 ## Region Availability
@@ -55,8 +55,8 @@ Exact `sku.name` values for Bicep (string). Available SKUs depend on `kind`. The
 |------------|-------|
 | Min Length | 2 |
 | Max Length | 64 |
-| Allowed Characters | Alphanumerics, hyphens, periods, underscores |
-| Pattern (regex) | `^[a-zA-Z0-9][a-zA-Z0-9_.-]*$` |
+| Allowed Characters | Alphanumerics and hyphens |
+| Pattern (regex) | `^[a-zA-Z0-9][a-zA-Z0-9-]*$` |
 | Scope | Resource group |
 | Example | `oai-chatbot-prod-001` |
 
@@ -65,7 +65,7 @@ Exact `sku.name` values for Bicep (string). Available SKUs depend on `kind`. The
 ## Required Properties (Bicep)
 
 ```bicep
-resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
   name: 'string'        // required, 2-64 chars
   location: 'string'    // required
   kind: 'string'        // required — see Subtypes table
@@ -121,7 +121,7 @@ resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
 
 ## References
 
-- [Bicep resource reference (2024-10-01)](https://learn.microsoft.com/azure/templates/microsoft.cognitiveservices/accounts?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-06-01)](https://learn.microsoft.com/azure/templates/microsoft.cognitiveservices/accounts?pivots=deployment-language-bicep)
 - [All API versions](https://learn.microsoft.com/azure/templates/microsoft.cognitiveservices/allversions)
 - [Azure naming rules — Cognitive Services](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcognitiveservices)
 - [Custom subdomain names](https://learn.microsoft.com/azure/ai-services/cognitive-services-custom-subdomains)

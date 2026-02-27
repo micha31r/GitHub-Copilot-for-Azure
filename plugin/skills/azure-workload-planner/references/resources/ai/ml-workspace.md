@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.MachineLearningServices/workspaces` |
-| Bicep API Version | `2025-12-01` |
+| Bicep API Version | `2025-06-01` |
 | CAF Prefix | `mlw` (Default workspace), `hub` (Foundry Hub), `proj` (Foundry Project) |
 
 ## Region Availability
@@ -36,7 +36,7 @@ Exact `sku.name` values for Bicep (string). The `sku.tier` enum values are: `Bas
 | `Free` | `Free` | Limited-feature tier |
 | `Premium` | `Premium` | Advanced features |
 
-> **Guidance:** Most ML workspaces use `Basic`/`Basic`. Hub and Project workspaces typically use `Basic`/`Basic` as well.
+> **Guidance:** Most ML workspaces use `Basic`/`Basic`. Hub and Project workspaces typically use `Basic`/`Basic` as well. `Free` and `Premium` appear in the ARM schema enum but are not distinct ML pricing tiers — use `Basic` or `Standard` for production.
 
 ## Naming
 
@@ -54,7 +54,7 @@ Exact `sku.name` values for Bicep (string). The `sku.tier` enum values are: `Bas
 ## Required Properties (Bicep)
 
 ```bicep
-resource mlWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-12-01' = {
+resource mlWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-06-01' = {
   name: 'string'         // required, 3-33 chars
   location: 'string'     // required
   identity: {
@@ -119,7 +119,7 @@ resource mlWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-12-01' =
 
 ## References
 
-- [Bicep resource reference (2025-12-01)](https://learn.microsoft.com/azure/templates/microsoft.machinelearningservices/workspaces?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-06-01)](https://learn.microsoft.com/azure/templates/microsoft.machinelearningservices/workspaces?pivots=deployment-language-bicep)
 - [All API versions](https://learn.microsoft.com/azure/templates/microsoft.machinelearningservices/allversions)
 - [Azure naming rules — ML Services](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftmachinelearningservices)
 - [CAF abbreviations](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations)

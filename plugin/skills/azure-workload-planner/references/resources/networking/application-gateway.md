@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/applicationGateways` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `agw` |
 
 ## Region Availability
@@ -52,7 +52,7 @@ Application Gateway does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource appGw 'Microsoft.Network/applicationGateways@2025-05-01' = {
+resource appGw 'Microsoft.Network/applicationGateways@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -156,7 +156,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/applicationgateways?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/applicationgateways?pivots=deployment-language-bicep)
 - [Application Gateway overview](https://learn.microsoft.com/azure/application-gateway/overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [App Gateway v2 features](https://learn.microsoft.com/azure/application-gateway/application-gateway-autoscaling-zone-redundant)

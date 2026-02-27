@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Compute/virtualMachines` |
-| Bicep API Version | `2025-04-01` |
+| Bicep API Version | `2024-11-01` |
 | CAF Prefix | `vm` |
 
 ## Region Availability
@@ -37,7 +37,7 @@ VM does not use a top-level `sku` block. VM size is set via `properties.hardware
 |------------|-------|
 | Min Length | 1 |
 | Max Length | 15 (Windows hostname) / 64 (Linux / resource name) |
-| Allowed Characters | Alphanumerics, hyphens, underscores. Windows: no periods at end, no trailing hyphens. Linux: no trailing periods or hyphens. |
+| Allowed Characters | Alphanumerics, hyphens, underscores. Linux: periods allowed (not at end). Windows: no periods at all. |
 | Scope | Resource group |
 | Pattern | `vm-{workload}-{env}-{instance}` |
 | Example | `vm-webserver-prod-001` |
@@ -45,7 +45,7 @@ VM does not use a top-level `sku` block. VM size is set via `properties.hardware
 ## Required Properties (Bicep)
 
 ```bicep
-resource vm 'Microsoft.Compute/virtualMachines@2025-04-01' = {
+resource vm 'Microsoft.Compute/virtualMachines@2024-11-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -109,7 +109,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-04-01)](https://learn.microsoft.com/azure/templates/microsoft.compute/virtualmachines?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.compute/virtualmachines?pivots=deployment-language-bicep)
 - [Virtual Machines overview](https://learn.microsoft.com/azure/virtual-machines/overview)
 - [Azure naming rules — Compute](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute)
 - [VM sizes](https://learn.microsoft.com/azure/virtual-machines/sizes/overview)

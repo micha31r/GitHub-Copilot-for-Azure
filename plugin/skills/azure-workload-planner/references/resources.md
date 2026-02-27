@@ -12,12 +12,14 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 | App Service Plan | `Microsoft.Web/serverfarms` | [app-service-plan.md](resources/compute/app-service-plan.md) | `asp` | Resource group | Mainstream |
 | Function App | `Microsoft.Web/sites` | [function-app.md](resources/compute/function-app.md) | `func` | Global | Mainstream |
 | Container App | `Microsoft.App/containerApps` | [container-app.md](resources/compute/container-app.md) | `ca` | Environment | Strategic |
+| Container Apps Environment | `Microsoft.App/managedEnvironments` | [container-apps-environment.md](resources/compute/container-apps-environment.md) | `cae` | Resource group | Strategic |
 | AKS Cluster | `Microsoft.ContainerService/managedClusters` | [aks-cluster.md](resources/compute/aks-cluster.md) | `aks` | Resource group | Foundational |
 | Virtual Machine | `Microsoft.Compute/virtualMachines` | [virtual-machine.md](resources/compute/virtual-machine.md) | `vm` | Resource group | Foundational |
 | VM Scale Set | `Microsoft.Compute/virtualMachineScaleSets` | [vm-scale-set.md](resources/compute/vm-scale-set.md) | `vmss` | Resource group | Foundational |
 | Managed Disk | `Microsoft.Compute/disks` | [managed-disk.md](resources/compute/managed-disk.md) | `osdisk`/`disk` | Resource group | Foundational |
 | Availability Set | `Microsoft.Compute/availabilitySets` | [availability-set.md](resources/compute/availability-set.md) | `avail` | Resource group | Foundational |
 | Container Registry | `Microsoft.ContainerRegistry/registries` | [container-registry.md](resources/compute/container-registry.md) | `cr` | Global | Mainstream |
+| Static Web App | `Microsoft.Web/staticSites` | [static-web-app.md](resources/compute/static-web-app.md) | `stapp` | Resource group | Mainstream |
 
 ### Data
 
@@ -30,6 +32,8 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 | Redis Cache | `Microsoft.Cache/redis` | [redis-cache.md](resources/data/redis-cache.md) | `redis` | Global | Mainstream |
 | Data Factory | `Microsoft.DataFactory/factories` | [data-factory.md](resources/data/data-factory.md) | `adf` | Global | Mainstream |
 | Synapse Workspace | `Microsoft.Synapse/workspaces` | [synapse-workspace.md](resources/data/synapse-workspace.md) | `synw` | Global | Strategic |
+| PostgreSQL Flexible Server | `Microsoft.DBforPostgreSQL/flexibleServers` | [postgresql-flexible-server.md](resources/data/postgresql-flexible-server.md) | `psql` | Global | Mainstream |
+| MySQL Flexible Server | `Microsoft.DBforMySQL/flexibleServers` | [mysql-flexible-server.md](resources/data/mysql-flexible-server.md) | `mysql` | Global | Mainstream |
 
 ### Networking
 
@@ -44,6 +48,14 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 | VPN Gateway | `Microsoft.Network/virtualNetworkGateways` | [vpn-gateway.md](resources/networking/vpn-gateway.md) | `vpng` | Resource group | Foundational |
 | Azure Firewall | `Microsoft.Network/azureFirewalls` | [azure-firewall.md](resources/networking/azure-firewall.md) | `afw` | Resource group | Mainstream |
 | Azure Bastion | `Microsoft.Network/bastionHosts` | [azure-bastion.md](resources/networking/azure-bastion.md) | `bas` | Resource group | Mainstream |
+| Private Endpoint | `Microsoft.Network/privateEndpoints` | [private-endpoint.md](resources/networking/private-endpoint.md) | `pep` | Resource group | Foundational |
+| Private DNS Zone | `Microsoft.Network/privateDnsZones` | [private-dns-zone.md](resources/networking/private-dns-zone.md) | *(domain)* | Resource group | Foundational |
+| Network Interface | `Microsoft.Network/networkInterfaces` | [network-interface.md](resources/networking/network-interface.md) | `nic` | Resource group | Foundational |
+| NAT Gateway | `Microsoft.Network/natGateways` | [nat-gateway.md](resources/networking/nat-gateway.md) | `ng` | Resource group | Foundational |
+| Route Table | `Microsoft.Network/routeTables` | [route-table.md](resources/networking/route-table.md) | `rt` | Resource group | Foundational |
+| DNS Zone | `Microsoft.Network/dnsZones` | [dns-zone.md](resources/networking/dns-zone.md) | *(domain)* | Resource group | Foundational |
+| Front Door | `Microsoft.Cdn/profiles` | [front-door.md](resources/networking/front-door.md) | `afd` | Resource group | Foundational |
+| API Management | `Microsoft.ApiManagement/service` | [api-management.md](resources/networking/api-management.md) | `apim` | Global | Mainstream |
 
 ### Messaging
 
@@ -51,6 +63,7 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 |----------|----------|------|------------|--------------|-----------------|
 | Service Bus | `Microsoft.ServiceBus/namespaces` | [service-bus.md](resources/messaging/service-bus.md) | `sbns` | Global | Foundational |
 | Event Hub | `Microsoft.EventHub/namespaces` | [event-hub.md](resources/messaging/event-hub.md) | `evhns` | Global | Foundational |
+| Event Grid Topic | `Microsoft.EventGrid/topics` | [event-grid.md](resources/messaging/event-grid.md) | `evgt` | Region | Mainstream |
 
 ### Observability
 
@@ -72,6 +85,7 @@ Quick-lookup table mapping Azure resource types to their reference files. Each f
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|
 | Key Vault | `Microsoft.KeyVault/vaults` | [key-vault.md](resources/security/key-vault.md) | `kv` | Global | Foundational |
+| Managed Identity | `Microsoft.ManagedIdentity/userAssignedIdentities` | [managed-identity.md](resources/security/managed-identity.md) | `id` | Resource group | Foundational |
 
 ## Region Categories
 
@@ -117,6 +131,9 @@ These resources require globally unique names (DNS-based):
 | Synapse Workspace | `{name}.dev.azuresynapse.net` |
 | Container Registry | `{name}.azurecr.io` |
 | AI Search | `{name}.search.windows.net` |
+| API Management | `{name}.azure-api.net` |
+| PostgreSQL Flexible Server | `{name}.postgres.database.azure.com` |
+| MySQL Flexible Server | `{name}.mysql.database.azure.com` |
 
 ## Shared ARM Types
 

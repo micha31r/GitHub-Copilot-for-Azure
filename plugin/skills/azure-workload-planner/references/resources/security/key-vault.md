@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.KeyVault/vaults` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-11-01` |
 | CAF Prefix | `kv` |
 
 ## Region Availability
@@ -41,7 +41,7 @@ Exact `sku` values for Bicep — both `name` and `family` are required:
 ## Required Properties (Bicep)
 
 ```bicep
-resource vault 'Microsoft.KeyVault/vaults@2025-05-01' = {
+resource vault 'Microsoft.KeyVault/vaults@2024-11-01' = {
   name: 'string'       // required, globally unique
   location: 'string'   // required
   properties: {
@@ -87,13 +87,12 @@ When connected to other resources, enforce these rules:
 |------------|----------|---------|
 | Secrets | `Microsoft.KeyVault/vaults/secrets` | Store secret values |
 | Keys | `Microsoft.KeyVault/vaults/keys` | Cryptographic keys |
-| Key Versions | `Microsoft.KeyVault/vaults/keys/versions` | Key version management |
 | Access Policies | `Microsoft.KeyVault/vaults/accessPolicies` | Vault-level access (legacy; prefer RBAC) |
 | Private Endpoints | `Microsoft.KeyVault/vaults/privateEndpointConnections` | Private link connections |
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep)
 - [Key Vault overview](https://learn.microsoft.com/azure/key-vault/general/overview)
 - [Azure naming rules — Key Vault](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftkeyvault)
 - [Key Vault soft-delete](https://learn.microsoft.com/azure/key-vault/general/soft-delete-overview)
