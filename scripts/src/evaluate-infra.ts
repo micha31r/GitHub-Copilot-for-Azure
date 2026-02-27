@@ -7,9 +7,11 @@
  *   1. Resource types
  *   2. Resource subtypes
  *   3. SKUs
- *   4. API versions
- *   5. Properties
- *   6. Dependencies
+ *   4. Properties
+ *   5. Dependencies
+ * 
+ * Other useful data
+ *  - Bicep API versions
  *
  * Usage: npm run eval-bicep
  */
@@ -297,16 +299,8 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
     console.log('  No SKUs to compare.');
   }
 
-  // 4. API versions
-  heading(4, 'API VERSIONS');
-  const versionTable = new Table({ head: ['Resource Type', 'Version', 'File'] });
-  for (const br of bicepResources) {
-    versionTable.push([shortType(br.type), br.version, br.file]);
-  }
-  console.log(versionTable.toString());
-
-  // 5. Properties
-  heading(5, 'PROPERTIES');
+  // 4. Properties
+  heading(4, 'PROPERTIES');
   const propTable = new Table({ head: ['Resource Type', 'Property', 'Plan', 'Bicep', ''] });
   let propsCompared = false;
 
@@ -359,8 +353,8 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
     console.log('  No properties to compare.');
   }
 
-  // 6. Dependencies
-  heading(6, 'DEPENDENCIES');
+  // 5. Dependencies
+  heading(5, 'DEPENDENCIES');
   const bicepModules = parseBicepModules();
 
   const symbolToType = new Map<string, string>();
@@ -421,6 +415,15 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
   } else {
     console.log('  No dependencies to compare.');
   }
+
+  // 6. API versions
+  heading(6, 'API VERSIONS');
+  const versionTable = new Table({ head: ['Resource Type', 'Version', 'File'] });
+  for (const br of bicepResources) {
+    versionTable.push([shortType(br.type), br.version, br.file]);
+  }
+  console.log(versionTable.toString());
+
 
   // Summary
   console.log();
