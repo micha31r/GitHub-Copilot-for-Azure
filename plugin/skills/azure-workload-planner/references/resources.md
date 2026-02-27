@@ -1,91 +1,18 @@
 # Resource Reference Index
 
-Quick-lookup table mapping Azure resource types to their reference files. Each file contains verified Bicep types, subtypes, SKUs, naming rules, required properties, pairing constraints, and source URLs.
+Quick-lookup table mapping Azure resource types to their reference files. Each resource lives in a subdirectory containing the main file plus `bicep.md`, `constraints.md`, and optional `skus.md`/`properties.md`.
 
-## Resource Files
+## Resource Categories (48 resources)
 
-### Compute
-
-| Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
-|----------|----------|------|------------|--------------|-----------------|
-| App Service | `Microsoft.Web/sites` | [app-service.md](resources/compute/app-service.md) | `app` | Global | Mainstream |
-| App Service Plan | `Microsoft.Web/serverfarms` | [app-service-plan.md](resources/compute/app-service-plan.md) | `asp` | Resource group | Mainstream |
-| Function App | `Microsoft.Web/sites` | [function-app.md](resources/compute/function-app.md) | `func` | Global | Mainstream |
-| Container App | `Microsoft.App/containerApps` | [container-app.md](resources/compute/container-app.md) | `ca` | Environment | Strategic |
-| Container Apps Environment | `Microsoft.App/managedEnvironments` | [container-apps-environment.md](resources/compute/container-apps-environment.md) | `cae` | Resource group | Strategic |
-| AKS Cluster | `Microsoft.ContainerService/managedClusters` | [aks-cluster.md](resources/compute/aks-cluster.md) | `aks` | Resource group | Foundational |
-| Virtual Machine | `Microsoft.Compute/virtualMachines` | [virtual-machine.md](resources/compute/virtual-machine.md) | `vm` | Resource group | Foundational |
-| VM Scale Set | `Microsoft.Compute/virtualMachineScaleSets` | [vm-scale-set.md](resources/compute/vm-scale-set.md) | `vmss` | Resource group | Foundational |
-| Managed Disk | `Microsoft.Compute/disks` | [managed-disk.md](resources/compute/managed-disk.md) | `osdisk`/`disk` | Resource group | Foundational |
-| Availability Set | `Microsoft.Compute/availabilitySets` | [availability-set.md](resources/compute/availability-set.md) | `avail` | Resource group | Foundational |
-| Container Registry | `Microsoft.ContainerRegistry/registries` | [container-registry.md](resources/compute/container-registry.md) | `cr` | Global | Mainstream |
-| Static Web App | `Microsoft.Web/staticSites` | [static-web-app.md](resources/compute/static-web-app.md) | `stapp` | Resource group | Mainstream |
-
-### Data
-
-| Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
-|----------|----------|------|------------|--------------|-----------------|
-| Storage Account | `Microsoft.Storage/storageAccounts` | [storage-account.md](resources/data/storage-account.md) | `st` | Global | Foundational |
-| Cosmos DB | `Microsoft.DocumentDB/databaseAccounts` | [cosmos-db.md](resources/data/cosmos-db.md) | `cosmos` | Global | Foundational |
-| SQL Server | `Microsoft.Sql/servers` | [sql-server.md](resources/data/sql-server.md) | `sql` | Global | Foundational |
-| SQL Database | `Microsoft.Sql/servers/databases` | [sql-database.md](resources/data/sql-database.md) | `sqldb` | Parent server | Foundational |
-| Redis Cache | `Microsoft.Cache/redis` | [redis-cache.md](resources/data/redis-cache.md) | `redis` | Global | Mainstream |
-| Data Factory | `Microsoft.DataFactory/factories` | [data-factory.md](resources/data/data-factory.md) | `adf` | Global | Mainstream |
-| Synapse Workspace | `Microsoft.Synapse/workspaces` | [synapse-workspace.md](resources/data/synapse-workspace.md) | `synw` | Global | Strategic |
-| PostgreSQL Flexible Server | `Microsoft.DBforPostgreSQL/flexibleServers` | [postgresql-flexible-server.md](resources/data/postgresql-flexible-server.md) | `psql` | Global | Mainstream |
-| MySQL Flexible Server | `Microsoft.DBforMySQL/flexibleServers` | [mysql-flexible-server.md](resources/data/mysql-flexible-server.md) | `mysql` | Global | Mainstream |
-
-### Networking
-
-| Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
-|----------|----------|------|------------|--------------|-----------------|
-| Virtual Network | `Microsoft.Network/virtualNetworks` | [virtual-network.md](resources/networking/virtual-network.md) | `vnet` | Resource group | Foundational |
-| Subnet | `Microsoft.Network/virtualNetworks/subnets` | [subnet.md](resources/networking/subnet.md) | `snet` | Parent VNet | Foundational |
-| NSG | `Microsoft.Network/networkSecurityGroups` | [nsg.md](resources/networking/nsg.md) | `nsg` | Resource group | Foundational |
-| Public IP | `Microsoft.Network/publicIPAddresses` | [public-ip.md](resources/networking/public-ip.md) | `pip` | Resource group | Foundational |
-| Load Balancer | `Microsoft.Network/loadBalancers` | [load-balancer.md](resources/networking/load-balancer.md) | `lbi`/`lbe` | Resource group | Foundational |
-| Application Gateway | `Microsoft.Network/applicationGateways` | [application-gateway.md](resources/networking/application-gateway.md) | `agw` | Resource group | Foundational |
-| VPN Gateway | `Microsoft.Network/virtualNetworkGateways` | [vpn-gateway.md](resources/networking/vpn-gateway.md) | `vpng` | Resource group | Foundational |
-| Azure Firewall | `Microsoft.Network/azureFirewalls` | [azure-firewall.md](resources/networking/azure-firewall.md) | `afw` | Resource group | Mainstream |
-| Azure Bastion | `Microsoft.Network/bastionHosts` | [azure-bastion.md](resources/networking/azure-bastion.md) | `bas` | Resource group | Mainstream |
-| Private Endpoint | `Microsoft.Network/privateEndpoints` | [private-endpoint.md](resources/networking/private-endpoint.md) | `pep` | Resource group | Foundational |
-| Private DNS Zone | `Microsoft.Network/privateDnsZones` | [private-dns-zone.md](resources/networking/private-dns-zone.md) | *(domain)* | Resource group | Foundational |
-| Network Interface | `Microsoft.Network/networkInterfaces` | [network-interface.md](resources/networking/network-interface.md) | `nic` | Resource group | Foundational |
-| NAT Gateway | `Microsoft.Network/natGateways` | [nat-gateway.md](resources/networking/nat-gateway.md) | `ng` | Resource group | Foundational |
-| Route Table | `Microsoft.Network/routeTables` | [route-table.md](resources/networking/route-table.md) | `rt` | Resource group | Foundational |
-| DNS Zone | `Microsoft.Network/dnsZones` | [dns-zone.md](resources/networking/dns-zone.md) | *(domain)* | Resource group | Foundational |
-| Front Door | `Microsoft.Cdn/profiles` | [front-door.md](resources/networking/front-door.md) | `afd` | Resource group | Foundational |
-| API Management | `Microsoft.ApiManagement/service` | [api-management.md](resources/networking/api-management.md) | `apim` | Global | Mainstream |
-
-### Messaging
-
-| Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
-|----------|----------|------|------------|--------------|-----------------|
-| Service Bus | `Microsoft.ServiceBus/namespaces` | [service-bus.md](resources/messaging/service-bus.md) | `sbns` | Global | Foundational |
-| Event Hub | `Microsoft.EventHub/namespaces` | [event-hub.md](resources/messaging/event-hub.md) | `evhns` | Global | Foundational |
-| Event Grid Topic | `Microsoft.EventGrid/topics` | [event-grid.md](resources/messaging/event-grid.md) | `evgt` | Region | Mainstream |
-
-### Observability
-
-| Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
-|----------|----------|------|------------|--------------|-----------------|
-| Log Analytics | `Microsoft.OperationalInsights/workspaces` | [log-analytics.md](resources/observability/log-analytics.md) | `log` | Resource group | Mainstream |
-| App Insights | `Microsoft.Insights/components` | [app-insights.md](resources/observability/app-insights.md) | `appi` | Resource group | Mainstream |
-
-### AI & Machine Learning
-
-| Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
-|----------|----------|------|------------|--------------|-----------------|
-| ML Workspace | `Microsoft.MachineLearningServices/workspaces` | [ml-workspace.md](resources/ai/ml-workspace.md) | `mlw`/`hub`/`proj` | Resource group | Mainstream |
-| Cognitive Services | `Microsoft.CognitiveServices/accounts` | [cognitive-services.md](resources/ai/cognitive-services.md) | varies by kind | Resource group | Mainstream |
-| AI Search | `Microsoft.Search/searchServices` | [search-service.md](resources/ai/search-service.md) | `srch` | Global | Mainstream |
-
-### Security
-
-| Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
-|----------|----------|------|------------|--------------|-----------------|
-| Key Vault | `Microsoft.KeyVault/vaults` | [key-vault.md](resources/security/key-vault.md) | `kv` | Global | Foundational |
-| Managed Identity | `Microsoft.ManagedIdentity/userAssignedIdentities` | [managed-identity.md](resources/security/managed-identity.md) | `id` | Resource group | Foundational |
+| Category | Count | Index |
+|----------|-------|-------|
+| Compute | 12 | [resources/compute/index.md](resources/compute/index.md) |
+| Data | 9 | [resources/data/index.md](resources/data/index.md) |
+| Networking | 17 | [resources/networking/index.md](resources/networking/index.md) |
+| Messaging | 3 | [resources/messaging/index.md](resources/messaging/index.md) |
+| Observability | 2 | [resources/observability/index.md](resources/observability/index.md) |
+| AI & ML | 3 | [resources/ai/index.md](resources/ai/index.md) |
+| Security | 2 | [resources/security/index.md](resources/security/index.md) |
 
 ## Region Categories
 
@@ -103,13 +30,13 @@ Categories from [Available services by region types and categories](https://lear
 
 During Phase 2 (Plan Generation), for each resource being added to the plan:
 
-1. Look up the resource type in this index
-2. Load the corresponding `.md` file
+1. Identify the resource category and load its [category index](resources/) (e.g., `resources/compute/index.md`)
+2. Find the resource in the category table and load its main `.md` file
 3. Use the file's **Identity** section for ARM type and API version
 4. Use **Subtypes** and **SKU Names** to select valid `kind` and `sku` values
 5. Use **Naming** to generate a compliant name
-6. Use **Required Properties** as the Bicep template skeleton
-7. Use **Pairing Constraints** to validate against already-planned resources
+6. Load `bicep.md` from the same subdirectory for the Bicep template skeleton
+7. Load `constraints.md` from the same subdirectory to validate against already-planned resources
 8. Run verification checks from [verification.md](verification.md)
 
 ## Globally-Unique Names
