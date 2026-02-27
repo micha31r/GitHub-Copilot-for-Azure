@@ -56,9 +56,8 @@ Gather all information needed to make correct resource decisions.
 | 1 | **Identify Requirements** — Gather user workload description and repository context if applicable | — |
 | 2 | **Research Architecture** — Search Learn docs for architecture patterns and recommendations | [research.md](references/research.md) |
 | 3 | **Check SKUs & Regions** — Each resource file has a Region Availability category. Foundational resources are available everywhere — no check needed. For Mainstream or Strategic resources, fetch `https://learn.microsoft.com/azure/reliability/availability-service-by-category` to confirm the target region supports the service. | [research.md](references/research.md) |
-| 4 | **Apply Naming Conventions** — Validate names against hard constraints | [naming-conventions.md](references/naming-conventions.md) |
-| 5 | **Load Resource References** — For each planned resource type, load the per-resource file for verified types, SKUs, naming rules, and pairing constraints | [resources.md](references/resources.md) |
-| 6 | **Research Resource Details** — Fetch specific Learn doc pages for any resource not covered by reference files | [research.md](references/research.md) |
+| 4 | **Load Resource References** — For each planned resource type, load the per-resource file for verified types, SKUs, naming rules, and pairing constraints | [resources.md](references/resources.md) |
+| 5 | **Research Resource Details** — Fetch specific Learn doc pages for any resource not covered by reference files | [research.md](references/research.md) |
 
 ## Phase 2: Plan Generation
 

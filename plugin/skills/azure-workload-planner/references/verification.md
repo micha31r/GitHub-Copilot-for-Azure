@@ -10,7 +10,7 @@ Validate the resource name just written:
 
 | # | Check | Fix |
 |---|-------|-----|
-| 1 | Name follows CAF pattern `{prefix}-{workload}-{env}-{region}-{instance}` | Rewrite name using correct CAF abbreviation from the resource file Identity section or [naming-conventions.md](naming-conventions.md) |
+| 1 | Name follows CAF pattern `{prefix}-{workload}-{env}-{region}-{instance}` | Rewrite name using correct CAF abbreviation from the resource file Identity section or use the naming conventions outline in resource's resource file |
 | 2 | Name length is within min/max for that resource type (see resource file Naming section) | Truncate or restructure name to fit constraints |
 | 3 | Name uses only allowed characters for that resource type (see resource file Naming section) | Strip or replace disallowed characters |
 | 4 | Globally-unique names (Storage, Key Vault, Function App, etc.) avoid predictable collisions | Add distinguishing suffix if needed |

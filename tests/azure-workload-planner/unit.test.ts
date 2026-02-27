@@ -76,11 +76,7 @@ describe(`${SKILL_NAME} - Unit Tests`, () => {
       expect(skill.content).toContain("approved");
       expect(skill.content).toContain("deployed");
     });
-
-    test("documents naming conventions reference", () => {
-      expect(skill.content).toContain("naming-conventions.md");
-    });
-
+    
     test("documents plan-first workflow gate", () => {
       expect(skill.content).toContain("PLAN-FIRST WORKFLOW");
       expect(skill.content).toContain("STOP HERE");
