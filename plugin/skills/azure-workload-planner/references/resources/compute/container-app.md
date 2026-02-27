@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.App/containerApps` |
-| Bicep API Version | `2025-07-01` |
+| Bicep API Version | `2025-01-01` |
 | CAF Prefix | `ca` |
 
 ## Region Availability
@@ -40,7 +40,7 @@ Container Apps do not use a `sku` block. Billing is based on the Container Apps 
 ## Required Properties (Bicep)
 
 ```bicep
-resource containerApp 'Microsoft.App/containerApps@2025-07-01' = {
+resource containerApp 'Microsoft.App/containerApps@2025-01-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -105,7 +105,7 @@ Container Apps do not have significant Bicep child resources — configuration i
 
 ## References
 
-- [Bicep resource reference (2025-07-01)](https://learn.microsoft.com/azure/templates/microsoft.app/containerapps?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-01-01)](https://learn.microsoft.com/azure/templates/microsoft.app/containerapps?pivots=deployment-language-bicep)
 - [Container Apps overview](https://learn.microsoft.com/azure/container-apps/overview)
 - [Azure naming rules — App](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftapp)
 - [Container Apps environments](https://learn.microsoft.com/azure/container-apps/environment)

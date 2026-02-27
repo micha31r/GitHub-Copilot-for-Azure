@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/azureFirewalls` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `afw` |
 
 ## Region Availability
@@ -45,7 +45,7 @@ Azure Firewall does not use `kind`. The deployment mode is determined by `sku.na
 ## Required Properties (Bicep)
 
 ```bicep
-resource firewall 'Microsoft.Network/azureFirewalls@2025-05-01' = {
+resource firewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
   name: 'string'       // required, 1–56 chars
   location: 'string'   // required
   properties: {
@@ -100,7 +100,7 @@ Azure Firewall does not have significant Bicep child resources — rules are man
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/azurefirewalls?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/azurefirewalls?pivots=deployment-language-bicep)
 - [Azure Firewall overview](https://learn.microsoft.com/azure/firewall/overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Azure Firewall SKU comparison](https://learn.microsoft.com/azure/firewall/choose-firewall-sku)

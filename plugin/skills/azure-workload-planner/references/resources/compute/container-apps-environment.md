@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.App/managedEnvironments` |
-| Bicep API Version | `2025-07-01` |
+| Bicep API Version | `2025-01-01` |
 | CAF Prefix | `cae` |
 
 ## Region Availability
@@ -44,7 +44,7 @@ Container Apps Environment does not use a `sku` block. Billing is determined by 
 ## Required Properties (Bicep)
 
 ```bicep
-resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-07-01' = {
+resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-01-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -98,7 +98,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-07-01)](https://learn.microsoft.com/azure/templates/microsoft.app/managedenvironments?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-01-01)](https://learn.microsoft.com/azure/templates/microsoft.app/managedenvironments?pivots=deployment-language-bicep)
 - [Container Apps environments overview](https://learn.microsoft.com/azure/container-apps/environment)
 - [Azure naming rules — App](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftapp)
 - [Workload profiles overview](https://learn.microsoft.com/azure/container-apps/workload-profiles-overview)

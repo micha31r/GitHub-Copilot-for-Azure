@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.ContainerRegistry/registries` |
-| Bicep API Version | `2025-11-01` |
+| Bicep API Version | `2025-04-01` |
 | CAF Prefix | `cr` |
 
 ## Region Availability
@@ -44,7 +44,7 @@ Exact `sku.name` values for Bicep:
 ## Required Properties (Bicep)
 
 ```bicep
-resource acr 'Microsoft.ContainerRegistry/registries@2025-11-01' = {
+resource acr 'Microsoft.ContainerRegistry/registries@2025-04-01' = {
   name: 'string'       // required, globally unique
   location: 'string'   // required
   sku: {
@@ -90,7 +90,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-11-01)](https://learn.microsoft.com/azure/templates/microsoft.containerregistry/registries?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-04-01)](https://learn.microsoft.com/azure/templates/microsoft.containerregistry/registries?pivots=deployment-language-bicep)
 - [Container Registry overview](https://learn.microsoft.com/azure/container-registry/container-registry-intro)
 - [Azure naming rules — Container Registry](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcontainerregistry)
 - [ACR SKU tiers](https://learn.microsoft.com/azure/container-registry/container-registry-skus)

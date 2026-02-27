@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/routeTables` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `rt` |
 
 ## Region Availability
@@ -34,7 +34,7 @@ Route Table does not use a `sku` block.
 ## Required Properties (Bicep)
 
 ```bicep
-resource routeTable 'Microsoft.Network/routeTables@2025-05-01' = {
+resource routeTable 'Microsoft.Network/routeTables@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -93,7 +93,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/routetables?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/routetables?pivots=deployment-language-bicep)
 - [Virtual network traffic routing](https://learn.microsoft.com/azure/virtual-network/virtual-networks-udr-overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Forced tunneling](https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-forced-tunneling-rm)

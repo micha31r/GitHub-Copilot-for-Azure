@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.OperationalInsights/workspaces` |
-| Bicep API Version | `2025-07-01` |
+| Bicep API Version | `2025-02-01` |
 | CAF Prefix | `log` |
 
 ## Region Availability
@@ -48,7 +48,7 @@ Log Analytics does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
+resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -95,7 +95,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-07-01)](https://learn.microsoft.com/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-02-01)](https://learn.microsoft.com/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep)
 - [Log Analytics overview](https://learn.microsoft.com/azure/azure-monitor/logs/log-analytics-overview)
 - [Azure naming rules — OperationalInsights](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftoperationalinsights)
 - [Log Analytics pricing](https://learn.microsoft.com/azure/azure-monitor/logs/cost-logs)

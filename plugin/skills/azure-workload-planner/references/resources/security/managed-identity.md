@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.ManagedIdentity/userAssignedIdentities` |
-| Bicep API Version | `2023-01-31` |
+| Bicep API Version | `2024-11-30` |
 | CAF Prefix | `id` |
 
 ## Region Availability
@@ -34,7 +34,7 @@ User Assigned Managed Identity does not use a `sku` block.
 ## Required Properties (Bicep)
 
 ```bicep
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
   name: 'string'       // required
   location: 'string'   // required
 }
@@ -78,7 +78,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2023-01-31)](https://learn.microsoft.com/azure/templates/microsoft.managedidentity/userassignedidentities?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-11-30)](https://learn.microsoft.com/azure/templates/microsoft.managedidentity/userassignedidentities?pivots=deployment-language-bicep)
 - [Managed identities overview](https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/overview)
 - [Azure naming rules — Managed Identity](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftmanagedidentity)
 - [Workload identity federation](https://learn.microsoft.com/entra/workload-id/workload-identity-federation)

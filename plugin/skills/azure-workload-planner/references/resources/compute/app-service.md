@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Web/sites` |
-| Bicep API Version | `2025-03-01` |
+| Bicep API Version | `2024-11-01` |
 | CAF Prefix | `app` |
 
 ## Region Availability
@@ -45,7 +45,7 @@ App Service inherits SKU from the parent **App Service Plan** (see [app-service-
 ## Required Properties (Bicep)
 
 ```bicep
-resource webApp 'Microsoft.Web/sites@2025-03-01' = {
+resource webApp 'Microsoft.Web/sites@2024-11-01' = {
   name: 'string'       // required, globally unique
   location: 'string'   // required
   kind: 'app'          // recommended — defaults to 'app'
@@ -96,7 +96,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-03-01)](https://learn.microsoft.com/azure/templates/microsoft.web/sites?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.web/sites?pivots=deployment-language-bicep)
 - [App Service overview](https://learn.microsoft.com/azure/app-service/overview)
 - [Azure naming rules — Web](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftweb)
 - [App Service plans](https://learn.microsoft.com/azure/app-service/overview-hosting-plans)

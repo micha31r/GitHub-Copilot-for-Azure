@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.ContainerService/managedClusters` |
-| Bicep API Version | `2025-10-01` |
+| Bicep API Version | `2025-05-01` |
 | CAF Prefix | `aks` |
 
 ## Region Availability
@@ -40,7 +40,7 @@
 ## Required Properties (Bicep)
 
 ```bicep
-resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-10-01' = {
+resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -110,7 +110,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-10-01)](https://learn.microsoft.com/azure/templates/microsoft.containerservice/managedclusters?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.containerservice/managedclusters?pivots=deployment-language-bicep)
 - [AKS overview](https://learn.microsoft.com/azure/aks/intro-kubernetes)
 - [Azure naming rules — ContainerService](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcontainerservice)
 - [AKS networking concepts](https://learn.microsoft.com/azure/aks/concepts-network)

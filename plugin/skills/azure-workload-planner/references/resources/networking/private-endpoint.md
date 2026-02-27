@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/privateEndpoints` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `pep` |
 
 ## Region Availability
@@ -34,7 +34,7 @@ Private Endpoint does not use a `sku` block.
 ## Required Properties (Bicep)
 
 ```bicep
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2025-05-01' = {
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -90,7 +90,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/privateendpoints?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/privateendpoints?pivots=deployment-language-bicep)
 - [Private Endpoint overview](https://learn.microsoft.com/azure/private-link/private-endpoint-overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Private DNS zone values](https://learn.microsoft.com/azure/private-link/private-endpoint-dns)

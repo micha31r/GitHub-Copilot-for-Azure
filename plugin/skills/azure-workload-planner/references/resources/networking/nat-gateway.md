@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/natGateways` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `ng` |
 
 ## Region Availability
@@ -38,7 +38,7 @@ NAT Gateway does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource natGateway 'Microsoft.Network/natGateways@2025-05-01' = {
+resource natGateway 'Microsoft.Network/natGateways@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -86,7 +86,7 @@ NAT Gateway has no Bicep child resources.
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/natgateways?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/natgateways?pivots=deployment-language-bicep)
 - [NAT Gateway overview](https://learn.microsoft.com/azure/nat-gateway/nat-overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [NAT Gateway and availability zones](https://learn.microsoft.com/azure/nat-gateway/nat-availability-zones)

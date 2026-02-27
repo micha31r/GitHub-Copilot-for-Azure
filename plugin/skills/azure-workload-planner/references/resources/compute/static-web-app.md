@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Web/staticSites` |
-| Bicep API Version | `2024-04-01` |
+| Bicep API Version | `2024-11-01` |
 | CAF Prefix | `stapp` |
 
 ## Region Availability
@@ -39,7 +39,7 @@ Static Web App does not use `kind` in standard deployments.
 ## Required Properties (Bicep)
 
 ```bicep
-resource staticWebApp 'Microsoft.Web/staticSites@2024-04-01' = {
+resource staticWebApp 'Microsoft.Web/staticSites@2024-11-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -109,7 +109,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2024-04-01)](https://learn.microsoft.com/azure/templates/microsoft.web/staticsites?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.web/staticsites?pivots=deployment-language-bicep)
 - [Static Web Apps overview](https://learn.microsoft.com/azure/static-web-apps/overview)
 - [Azure naming rules — Web](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftweb)
 - [Static Web Apps hosting plans](https://learn.microsoft.com/azure/static-web-apps/plans)

@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.CognitiveServices/accounts` |
-| Bicep API Version | `2024-10-01` |
+| Bicep API Version | `2025-06-01` |
 | CAF Prefix | Varies by kind — see Subtypes table |
 
 ## Region Availability
@@ -65,7 +65,7 @@ Exact `sku.name` values for Bicep (string). Available SKUs depend on `kind`. The
 ## Required Properties (Bicep)
 
 ```bicep
-resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
   name: 'string'        // required, 2-64 chars
   location: 'string'    // required
   kind: 'string'        // required — see Subtypes table

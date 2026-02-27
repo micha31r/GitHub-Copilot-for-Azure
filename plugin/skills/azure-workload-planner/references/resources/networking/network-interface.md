@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/networkInterfaces` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `nic` |
 
 ## Region Availability
@@ -34,7 +34,7 @@ Network Interface does not use a `sku` block.
 ## Required Properties (Bicep)
 
 ```bicep
-resource nic 'Microsoft.Network/networkInterfaces@2025-05-01' = {
+resource nic 'Microsoft.Network/networkInterfaces@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   properties: {
@@ -88,7 +88,7 @@ Network Interface has no significant Bicep child resources — IP configurations
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/networkinterfaces?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/networkinterfaces?pivots=deployment-language-bicep)
 - [Network interfaces overview](https://learn.microsoft.com/azure/virtual-network/virtual-network-network-interface)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Accelerated networking](https://learn.microsoft.com/azure/virtual-network/accelerated-networking-overview)

@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/loadBalancers` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `lbi` (internal) / `lbe` (external) |
 
 ## Region Availability
@@ -41,7 +41,7 @@ Load Balancer does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource lb 'Microsoft.Network/loadBalancers@2025-05-01' = {
+resource lb 'Microsoft.Network/loadBalancers@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -97,7 +97,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/loadbalancers?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/loadbalancers?pivots=deployment-language-bicep)
 - [Load Balancer overview](https://learn.microsoft.com/azure/load-balancer/load-balancer-overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Standard Load Balancer](https://learn.microsoft.com/azure/load-balancer/load-balancer-standard-overview)

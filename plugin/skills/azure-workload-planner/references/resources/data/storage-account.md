@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Storage/storageAccounts` |
-| Bicep API Version | `2025-06-01` |
+| Bicep API Version | `2025-01-01` |
 | CAF Prefix | `st` |
 
 ## Region Availability
@@ -61,7 +61,7 @@ Exact `sku.name` values for Bicep:
 ## Required Properties (Bicep)
 
 ```bicep
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'string'       // required, globally unique
   location: 'string'   // required
   kind: 'string'       // required — see Subtypes table
@@ -114,7 +114,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-06-01)](https://learn.microsoft.com/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-01-01)](https://learn.microsoft.com/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep)
 - [Storage account overview](https://learn.microsoft.com/azure/storage/common/storage-account-overview)
 - [Azure naming rules — Storage](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftstorage)
 - [Storage redundancy](https://learn.microsoft.com/azure/storage/common/storage-redundancy)

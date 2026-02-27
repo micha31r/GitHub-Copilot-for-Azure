@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/publicIPAddresses` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `pip` |
 
 ## Region Availability
@@ -41,7 +41,7 @@ Public IP does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource pip 'Microsoft.Network/publicIPAddresses@2025-05-01' = {
+resource pip 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -86,7 +86,7 @@ Public IP has no child resource types.
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/publicipaddresses?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/publicipaddresses?pivots=deployment-language-bicep)
 - [Public IP overview](https://learn.microsoft.com/azure/virtual-network/ip-services/public-ip-addresses)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Basic SKU retirement](https://learn.microsoft.com/azure/virtual-network/ip-services/public-ip-basic-upgrade-guidance)

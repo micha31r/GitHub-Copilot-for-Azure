@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Cdn/profiles` |
-| Bicep API Version | `2025-04-15` |
+| Bicep API Version | `2025-06-01` |
 | CAF Prefix | `afd` |
 
 ## Region Availability
@@ -46,7 +46,7 @@ Exact `sku.name` values for Bicep:
 ## Required Properties (Bicep)
 
 ```bicep
-resource frontDoor 'Microsoft.Cdn/profiles@2025-04-15' = {
+resource frontDoor 'Microsoft.Cdn/profiles@2025-06-01' = {
   name: 'string'       // required
   location: 'global'   // required — must be 'global'
   sku: {
@@ -94,7 +94,7 @@ When connected to other resources, enforce these rules:
 
 ## References
 
-- [Bicep resource reference (2025-04-15)](https://learn.microsoft.com/azure/templates/microsoft.cdn/profiles?pivots=deployment-language-bicep)
+- [Bicep resource reference (2025-06-01)](https://learn.microsoft.com/azure/templates/microsoft.cdn/profiles?pivots=deployment-language-bicep)
 - [Azure Front Door overview](https://learn.microsoft.com/azure/frontdoor/front-door-overview)
 - [Azure naming rules — CDN](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftcdn)
 - [Front Door routing architecture](https://learn.microsoft.com/azure/frontdoor/front-door-routing-architecture)

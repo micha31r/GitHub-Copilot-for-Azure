@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | ARM Type | `Microsoft.Network/bastionHosts` |
-| Bicep API Version | `2025-05-01` |
+| Bicep API Version | `2024-07-01` |
 | CAF Prefix | `bas` |
 
 ## Region Availability
@@ -43,7 +43,7 @@ Azure Bastion does not use `kind`.
 ## Required Properties (Bicep)
 
 ```bicep
-resource bastion 'Microsoft.Network/bastionHosts@2025-05-01' = {
+resource bastion 'Microsoft.Network/bastionHosts@2024-07-01' = {
   name: 'string'       // required
   location: 'string'   // required
   sku: {
@@ -97,7 +97,7 @@ Azure Bastion has no child resource types.
 
 ## References
 
-- [Bicep resource reference (2025-05-01)](https://learn.microsoft.com/azure/templates/microsoft.network/bastionhosts?pivots=deployment-language-bicep)
+- [Bicep resource reference (2024-07-01)](https://learn.microsoft.com/azure/templates/microsoft.network/bastionhosts?pivots=deployment-language-bicep)
 - [Azure Bastion overview](https://learn.microsoft.com/azure/bastion/bastion-overview)
 - [Azure naming rules — Network](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork)
 - [Bastion configuration settings](https://learn.microsoft.com/azure/bastion/configuration-settings)
