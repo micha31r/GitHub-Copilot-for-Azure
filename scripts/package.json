@@ -9,6 +9,7 @@
     "local": "node --import tsx src/local/cli.ts",
     "references": "node --import tsx src/references/cli.ts",
     "verify-local": "node --import tsx src/verify-local.ts",
+    "eval-bicep": "node --import tsx src/evaluate-infra.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
@@ -22,5 +23,9 @@
   },
   "engines": {
     "node": ">=20.19.0 || >=22.12.0"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "cli-table3": "^0.6.5"
   }
 }
