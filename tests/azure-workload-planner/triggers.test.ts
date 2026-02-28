@@ -63,6 +63,29 @@ describe(`${SKILL_NAME} - Trigger Tests`, () => {
     );
   });
 
+  describe("Boundary Cases - azure-prepare territory (keyword overlap expected)", () => {
+    // NOTE: These app-first prompts DO trigger the keyword matcher because they
+    // contain "Azure", "deployment", etc. This is expected behavior — the keyword
+    // matcher is intentionally broad. Skill disambiguation is handled by the LLM
+    // routing layer, not by the trigger matcher. These tests document that overlap.
+    const preparePrompts: string[] = [
+      "Add authentication to my existing Express app on Azure",
+      "Set up my Node.js app for Azure deployment",
+      "Modernize my legacy .NET application for Azure",
+      "Add Azure Key Vault to my existing application code",
+      "Help me migrate my app from Heroku to Azure",
+    ];
+
+    test.each(preparePrompts)(
+      'keyword matcher triggers on app-first prompt (expected overlap): "%s"',
+      (prompt) => {
+        const result = triggerMatcher.shouldTrigger(prompt);
+        // Keyword matcher WILL trigger — this is expected; LLM routing disambiguates
+        expect(result.triggered).toBe(true);
+      }
+    );
+  });
+
   describe("Trigger Keywords Snapshot", () => {
     test("skill keywords match snapshot", () => {
       expect(triggerMatcher.getKeywords()).toMatchSnapshot();

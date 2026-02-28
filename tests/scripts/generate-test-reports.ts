@@ -15,6 +15,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import { useAgentRunner, type AgentRunConfig } from "../utils/agent-runner";
+import { redactSecrets } from "../utils/redact";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,9 +61,12 @@ function filterSubdirectoriesBySkill(subdirectories: string[], skill: string): s
   return subdirectories.filter(subdir => {
     const subdirName = path.basename(subdir);
 
-    // Directory names for test reports are guaranteed to start with the skill name for the tests.
+    // Skill name in the subdirectory name ends at the first underscore character.
     // See tests/eslint-rules/integration-test-name.mjs for details.
-    return subdirName.startsWith(skill);
+    const terminatorIndex = subdirName.indexOf("_");
+    const skillName = subdirName.substring(0, terminatorIndex);
+
+    return skillName === skill;
   });
 }
 
@@ -114,6 +118,8 @@ async function processSubdirectory(subdirPath: string, reportTemplate: string): 
 
     consolidatedContent += `\n## ${fileName}\n\n${content}\n`;
   }
+
+  consolidatedContent = redactSecrets(consolidatedContent);
 
   console.log("    Generating report...");
 

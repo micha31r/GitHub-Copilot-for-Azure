@@ -59,7 +59,7 @@ For each resource in the plan, verify:
 1. **Type** — Correct `Microsoft.*` resource type
 2. **SKU** — Available in target region, appropriate for workload size
 3. **Region** — Service available, data residency requirements met
-4. **Name** — Complies with naming constraints (see [naming-conventions.md](naming-conventions.md))
+4. **Name** — Complies with naming constraints
 5. **Dependencies** — All prerequisite resources identified and ordered
 6. **Properties** — Required properties populated per resource schema
 7. **Alternatives** — At least one alternative considered with tradeoff documented
