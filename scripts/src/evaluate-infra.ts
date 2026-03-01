@@ -442,8 +442,22 @@ function main(): void {
   console.log(`  Plan:  .azure/infrastructure-plan.json`);
   console.log(`  Bicep: infra/`);
 
-  const planResources = loadPlan();
-  const bicepResources = loadBicepResources();
+  let planResources;
+  let bicepResources;
+
+  try {
+    planResources = loadPlan();
+  } catch (error) {
+    console.error(chalk.red("Failed to load plan file"));
+    throw error;
+  }
+
+  try {
+    bicepResources = loadBicepResources();
+  } catch (error) {
+    console.error(chalk.red("Failed to load Bicep files"));
+    throw error;
+  }
 
   console.log(`\n  Plan resources: ${planResources.length}  |  Bicep resources: ${bicepResources.length}`);
 
