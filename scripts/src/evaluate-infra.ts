@@ -16,11 +16,11 @@
  * Usage: npm run eval-bicep
  */
 
-import { readFileSync, readdirSync } from 'node:fs';
-import { resolve, dirname, basename } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import Table from 'cli-table3';
-import chalk from 'chalk';
+import { readFileSync, readdirSync } from "node:fs";
+import { resolve, dirname, basename } from "node:path";
+import { fileURLToPath } from "node:url";
+import Table from "cli-table3";
+import chalk from "chalk";
 
 /* Types */
 
@@ -48,21 +48,21 @@ interface BicepModule {
   deps: string[];
 }
 
-const PASS = chalk.green('✓');
-const FAIL = chalk.red('✗');
-const WARN = chalk.yellow('~');
+const PASS = chalk.green("✓");
+const FAIL = chalk.red("✗");
+const WARN = chalk.yellow("~");
 
 /* Paths */
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(scriptDir, '../..');
-const planPath = resolve(repoRoot, '.azure/infrastructure-plan.json');
-const infraDir = resolve(repoRoot, 'infra');
+const repoRoot = resolve(scriptDir, "../..");
+const planPath = resolve(repoRoot, ".azure/infrastructure-plan.json");
+const infraDir = resolve(repoRoot, "infra");
 
 /* Parsing */
 
 function loadPlan(): PlanResource[] {
-  const raw = JSON.parse(readFileSync(planPath, 'utf-8'));
+  const raw = JSON.parse(readFileSync(planPath, "utf-8"));
   return raw.plan.resources as PlanResource[];
 }
 
@@ -72,7 +72,7 @@ function loadPlan(): PlanResource[] {
  * Then collects property keys from the properties: { ... } block.
  */
 function parseBicepFile(filePath: string): BicepResource[] {
-  const content = readFileSync(filePath, 'utf-8');
+  const content = readFileSync(filePath, "utf-8");
   const resources: BicepResource[] = [];
   const fileName = basename(filePath);
 
@@ -123,12 +123,12 @@ function extractPropertyKeys(content: string, startOffset: number): string[] {
   const keys: string[] = [];
   const blockStart = propMatch.index + propMatch[0].length;
   let depth = 1;
-  const lines = after.slice(blockStart).split('\n');
+  const lines = after.slice(blockStart).split("\n");
 
   for (const line of lines) {
     for (const ch of line) {
-      if (ch === '{') depth++;
-      if (ch === '}') depth--;
+      if (ch === "{") depth++;
+      if (ch === "}") depth--;
     }
     if (depth <= 0) break;
     if (depth === 1) {
@@ -141,9 +141,9 @@ function extractPropertyKeys(content: string, startOffset: number): string[] {
 
 function loadBicepResources(): BicepResource[] {
   const resources: BicepResource[] = [];
-  resources.push(...parseBicepFile(resolve(infraDir, 'main.bicep')));
-  const modulesDir = resolve(infraDir, 'modules');
-  for (const f of readdirSync(modulesDir).filter(f => f.endsWith('.bicep'))) {
+  resources.push(...parseBicepFile(resolve(infraDir, "main.bicep")));
+  const modulesDir = resolve(infraDir, "modules");
+  for (const f of readdirSync(modulesDir).filter(f => f.endsWith(".bicep"))) {
     resources.push(...parseBicepFile(resolve(modulesDir, f)));
   }
   return resources;
@@ -157,7 +157,7 @@ function loadBicepResources(): BicepResource[] {
  *   }
  */
 function parseBicepModules(): BicepModule[] {
-  const content = readFileSync(resolve(infraDir, 'main.bicep'), 'utf-8');
+  const content = readFileSync(resolve(infraDir, "main.bicep"), "utf-8");
   const modules: BicepModule[] = [];
 
   const moduleRe = /module\s+(\w+)\s+'([^']+)'\s*=(?:\s*if\s*\([^)]*\))?\s*\{/g;
@@ -172,7 +172,7 @@ function parseBicepModules(): BicepModule[] {
     const refRe = /(\w+)\.outputs\./g;
     let ref: RegExpExecArray | null;
 
-    const blockEnd = after.indexOf('\n}\n', 10);
+    const blockEnd = after.indexOf("\n}\n", 10);
     const block = blockEnd > 0 ? after.slice(0, blockEnd) : after.slice(0, 500);
 
     while ((ref = refRe.exec(block)) !== null) {
@@ -180,13 +180,13 @@ function parseBicepModules(): BicepModule[] {
     }
 
     if (block.match(/scope\s*:\s*rg\b/)) {
-      deps.add('rg');
+      deps.add("rg");
     }
 
     const moduleFile = resolve(infraDir, modulePath);
     let type: string | null = null;
     try {
-      const moduleContent = readFileSync(moduleFile, 'utf-8');
+      const moduleContent = readFileSync(moduleFile, "utf-8");
       const typeMatch = moduleContent.match(/resource\s+\w+\s+'([^']+)@/);
       if (typeMatch) type = typeMatch[1];
     } catch { /* module file not found */ }
@@ -226,8 +226,8 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
   console.log(`\n  Coverage: ${coveredCount}/${planTypes.size} plan types covered in Bicep (${bicepTypes.size} total Bicep types)`);
 
   // 1. Resource types
-  heading(1, 'RESOURCE TYPES');
-  const typeTable = new Table({ head: ['Resource Type', 'Plan', 'Bicep', ''] });
+  heading(1, "RESOURCE TYPES");
+  const typeTable = new Table({ head: ["Resource Type", "Plan", "Bicep", ""] });
   const allTypes = new Set([...planTypes, ...bicepTypes]);
   for (const t of allTypes) {
     const inPlan = planTypes.has(t);
@@ -238,33 +238,33 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
     }
     typeTable.push([
       t,
-      inPlan ? 'Yes' : chalk.dim('No'),
-      inBicep ? 'Yes' : chalk.dim('No'),
+      inPlan ? "Yes" : chalk.dim("No"),
+      inBicep ? "Yes" : chalk.dim("No"),
       match ? PASS : (inBicep && !inPlan ? WARN : FAIL),
     ]);
   }
   console.log(typeTable.toString());
 
   // 2. Resource subtypes
-  heading(2, 'RESOURCE SUBTYPES');
+  heading(2, "RESOURCE SUBTYPES");
   const subtypes = planResources.filter(r => r.subtype);
   if (subtypes.length === 0) {
-    console.log('  No subtypes defined in plan.');
+    console.log("  No subtypes defined in plan.");
   } else {
-    const subTable = new Table({ head: ['Subtype', 'Resource Type', 'In Bicep', ''] });
+    const subTable = new Table({ head: ["Subtype", "Resource Type", "In Bicep", ""] });
     const subtypeMap = new Map<string, string>();
     for (const r of subtypes) subtypeMap.set(r.type, r.subtype!);
     for (const [type, subtype] of subtypeMap) {
       const inBicep = bicepTypes.has(type);
       if (!inBicep) issues++;
-      subTable.push([subtype, type, inBicep ? 'Yes' : 'No', inBicep ? PASS : FAIL]);
+      subTable.push([subtype, type, inBicep ? "Yes" : "No", inBicep ? PASS : FAIL]);
     }
     console.log(subTable.toString());
   }
 
   // 3. SKUs
-  heading(3, 'SKUS');
-  const skuTable = new Table({ head: ['Resource Type', 'Plan SKU', 'Bicep SKU', ''] });
+  heading(3, "SKUS");
+  const skuTable = new Table({ head: ["Resource Type", "Plan SKU", "Bicep SKU", ""] });
   let skusCompared = false;
 
   for (const br of bicepResources) {
@@ -272,14 +272,14 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
     if (!planGroup) continue;
 
     const planSkus = new Set(
-      planGroup.map(r => r.sku).filter(s => s && s !== 'N/A') as string[]
+      planGroup.map(r => r.sku).filter(s => s && s !== "N/A") as string[]
     );
     if (planSkus.size === 0 && !br.sku) continue;
 
-    const bicepSku = br.sku ?? '(none)';
-    const planSkuList = planSkus.size > 0 ? [...planSkus].join(', ') : '(none)';
+    const bicepSku = br.sku ?? "(none)";
+    const planSkuList = planSkus.size > 0 ? [...planSkus].join(", ") : "(none)";
 
-    const bicepSkuBase = bicepSku.replace(/\s*\(param:.*\)/, '').toLowerCase();
+    const bicepSkuBase = bicepSku.replace(/\s*\(param:.*\)/, "").toLowerCase();
     const mismatched = [...planSkus].filter(s => s.toLowerCase() !== bicepSkuBase);
     const match = mismatched.length === 0 && !(planSkus.size > 0 && !br.sku);
 
@@ -291,12 +291,12 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
   if (skusCompared) {
     console.log(skuTable.toString());
   } else {
-    console.log('  No SKUs to compare.');
+    console.log("  No SKUs to compare.");
   }
 
   // 4. Properties
-  heading(4, 'PROPERTIES');
-  const propTable = new Table({ head: ['Resource Type', 'Property', 'Plan', 'Bicep', ''] });
+  heading(4, "PROPERTIES");
+  const propTable = new Table({ head: ["Resource Type", "Property", "Plan", "Bicep", ""] });
   let propsCompared = false;
 
   for (const br of bicepResources) {
@@ -323,8 +323,8 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
       propTable.push([
         br.type,
         p,
-        inPlan ? 'Yes' : chalk.dim('No'),
-        inBicep ? 'Yes' : chalk.dim('No'),
+        inPlan ? "Yes" : chalk.dim("No"),
+        inBicep ? "Yes" : chalk.dim("No"),
         match ? PASS : (inBicep && !inPlan ? WARN : FAIL),
       ]);
     }
@@ -336,7 +336,7 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
     const hasProps = group.some(r => r.properties && Object.keys(r.properties).length > 0);
     const bicepMatch = bicepResources.find(br => br.type === type);
     if (hasProps && bicepMatch && bicepMatch.properties.length === 0) {
-      propTable.push([type, chalk.dim('(all)'), 'Yes', chalk.dim('No'), FAIL]);
+      propTable.push([type, chalk.dim("(all)"), "Yes", chalk.dim("No"), FAIL]);
       issues++;
       propsCompared = true;
     }
@@ -345,23 +345,23 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
   if (propsCompared) {
     console.log(propTable.toString());
   } else {
-    console.log('  No properties to compare.');
+    console.log("  No properties to compare.");
   }
 
   // 5. Dependencies
-  heading(5, 'DEPENDENCIES');
+  heading(5, "DEPENDENCIES");
   const bicepModules = parseBicepModules();
 
   const symbolToType = new Map<string, string>();
   for (const mod of bicepModules) {
     if (mod.type) symbolToType.set(mod.symbol, mod.type);
   }
-  symbolToType.set('rg', 'Microsoft.Resources/resourceGroups');
+  symbolToType.set("rg", "Microsoft.Resources/resourceGroups");
 
   const planNameToType = new Map<string, string>();
   for (const r of planResources) planNameToType.set(r.name, r.type);
 
-  const depTable = new Table({ head: ['Resource Type', 'Dependency', 'Plan', 'Bicep', ''] });
+  const depTable = new Table({ head: ["Resource Type", "Dependency", "Plan", "Bicep", ""] });
   let depsCompared = false;
 
   for (const mod of bicepModules) {
@@ -398,8 +398,8 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
       depTable.push([
         mod.type,
         dep,
-        inPlan ? 'Yes' : chalk.dim('No'),
-        inBicep ? 'Yes' : chalk.dim('No'),
+        inPlan ? "Yes" : chalk.dim("No"),
+        inBicep ? "Yes" : chalk.dim("No"),
         match ? PASS : (inBicep && !inPlan ? WARN : FAIL),
       ]);
     }
@@ -408,12 +408,12 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
   if (depsCompared) {
     console.log(depTable.toString());
   } else {
-    console.log('  No dependencies to compare.');
+    console.log("  No dependencies to compare.");
   }
 
   // 6. API versions
-  heading(6, 'API VERSIONS');
-  const versionTable = new Table({ head: ['Resource Type', 'Version', 'File'] });
+  heading(6, "API VERSIONS");
+  const versionTable = new Table({ head: ["Resource Type", "Version", "File"] });
   for (const br of bicepResources) {
     versionTable.push([br.type, br.version, br.file]);
   }
@@ -428,7 +428,7 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
     const parts: string[] = [];
     if (issues > 0) parts.push(chalk.red(`${issues} error(s)`));
     if (warnings > 0) parts.push(chalk.yellow(`${warnings} warning(s)`));
-    console.log(`${issues > 0 ? FAIL : WARN} ${parts.join(', ')} found.`);
+    console.log(`${issues > 0 ? FAIL : WARN} ${parts.join(", ")} found.`);
   }
   console.log();
 
@@ -438,9 +438,9 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
 /* Main */
 
 function main(): void {
-  console.log(chalk.bold('\nEvaluating infrastructure plan vs generated Bicep\n'));
-  console.log(`  Plan:  .azure/infrastructure-plan.json`);
-  console.log(`  Bicep: infra/`);
+  console.log(chalk.bold("\nEvaluating infrastructure plan vs generated Bicep\n"));
+  console.log("  Plan:  .azure/infrastructure-plan.json");
+  console.log("  Bicep: infra/");
 
   let planResources;
   let bicepResources;
