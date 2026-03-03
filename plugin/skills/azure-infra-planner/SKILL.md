@@ -1,9 +1,9 @@
 ---
 name: azure-infra-planner
 description: |
-  Plan, generate, and deploy Azure infrastructure from workload requirements or repository context. Produces a structured JSON infrastructure plan, generates Bicep or Terraform IaC, and executes deployment.
-  USE FOR: create infrastructure plan, plan Azure infrastructure, generate Bicep templates, generate Terraform for Azure, deploy infrastructure, provision Azure resources, multi-environment infrastructure, workload planning, infrastructure as code, what Azure resources do I need, set up dev staging production.
-  DO NOT USE FOR: application scaffolding or code generation (use azure-prepare), listing existing resources (use azure-resource-lookup), optimizing costs (use azure-cost-optimization).
+  Plan and provision Azure infrastructure from workload descriptions. When a user describes what they want to build — deploying microservices, setting up a data pipeline, provisioning a multi-tier app — this skill researches Azure resources, SKUs, and dependencies, produces a structured plan, and generates Bicep or Terraform.
+  USE FOR: deploy multi-resource Azure workload, build cloud infrastructure, provision microservices platform, plan data pipeline, launch multi-tier application, spin up serverless architecture, create IoT solution, deploy GenAI backend, build SaaS platform, set up AKS with supporting services, provision event-driven architecture, create infrastructure plan, what Azure resources do I need, generate Bicep or Terraform from requirements, multi-environment infrastructure.
+  DO NOT USE FOR: modifying existing application code or adding features to an existing app (use azure-prepare), listing deployed resources (use azure-resource-lookup), optimizing costs (use azure-cost-optimization).
 ---
 
 # Azure Infra Planner
