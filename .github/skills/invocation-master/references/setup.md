@@ -2,25 +2,35 @@
 
 ### Goal
 
-Create an integration test for the target skill that tests whether the Copilot agent selects the correct skill for a given prompt.
+Create the file `<root>/tests/<skill-name>/invocation.test.ts` — an integration test that checks whether the Copilot agent selects the correct skill for a batch of golden prompts.
+
+### Rules
+
+- **Do not use glob/file search to discover files.** All paths are specified explicitly below. Read them directly.
+- **Do not use or install SQLite.** It is not needed.
 
 ### Location
 
-Create the test file at `<root>/tests/<skill-name>/`. Follow the existing test naming convention (`tests/<skill-name>/`). Look at an existing integration test (e.g. `<root>/tests/azure-deploy/`) for the expected structure and imports.
+Create the test file at `<root>/tests/<skill-name>/invocation.test.ts`. Look at an existing integration test (e.g. `<root>/tests/azure-deploy/integration.test.ts`) for the expected structure and imports.
 
 ### Golden Prompts
 
-Test prompts are defined in `<root>/GoldenPrompts.csv`. Read this file and use the `prompt` column as test inputs.
+Test prompts are defined in `<root>/GoldenPrompts.csv`. The test should read this file at runtime (not hardcode prompts).
+
+### Batch Index
+
+The test accepts a batch index via the `INVOCATION_INDEX` environment variable (default: `0`). It reads 5 prompts from `GoldenPrompts.csv` starting at that index (e.g. index `0` = prompts 0–4, index `5` = prompts 5–9).
 
 ### Test Implementation
 
 - Implement this as an integration test using the Copilot SDK (already configured for integration tests).
-- **One prompt per test case.** Do not loop through multiple prompts in a single test. Run up to 5 test cases in parallel.
+- **One prompt per test case.** Use `test.concurrent.each` to run the 5 prompts in parallel.
 - **Skip skill execution.** The SKILL.md has two sections relevant to skill selection: the YAML frontmatter (between `---` delimiters, containing `name`, `description`) and the `## Triggers` section (bullet list of activation conditions). After loading the SKILL.md, truncate it to only these two sections — discard everything after `## Triggers` ends (i.e. everything from `## Rules` onward). Append this sentence to each test prompt: `"This is an invocation test. Select the most appropriate skill and halt immediately — do not execute the skill."` This keeps tests fast.
-- Write each result as a JSON file to `<root>/.invocation-test-logs/`, one file per prompt. Use this format:
+- Write each result as a JSON file to `<root>/.invocation-test-logs/`, one file per prompt. Filename: `<skill-name>-prompt-<NNN>.json` where NNN is the zero-padded prompt index. Use this format:
 
 ```json
 {
+  "promptIndex": 0,
   "prompt": "the golden prompt text",
   "selectedSkill": "skill-name",
   "correct": true,
@@ -30,9 +40,8 @@ Test prompts are defined in `<root>/GoldenPrompts.csv`. Read this file and use t
 
 ### Running Tests
 
-From the repo root:
+From the `<root>/tests/` directory:
 
 ```bash
-cd tests
-npm run test:integration -- <skill-name>
+INVOCATION_INDEX=0 npm run test:integration -- <skill-name> --testNamePattern="invocation"
 ```
