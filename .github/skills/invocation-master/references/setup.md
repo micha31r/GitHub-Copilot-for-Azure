@@ -25,7 +25,15 @@ The test accepts a batch index via the `INVOCATION_INDEX` environment variable (
 
 - Implement this as an integration test using the Copilot SDK (already configured for integration tests).
 - **One prompt per test case.** Use `test.concurrent.each` to run the 5 prompts in parallel.
-- **Skip skill execution.** The SKILL.md has two sections relevant to skill selection: the YAML frontmatter (between `---` delimiters, containing `name`, `description`) and the `## Triggers` section (bullet list of activation conditions). After loading the SKILL.md, truncate it to only these two sections — discard everything after `## Triggers` ends (i.e. everything from `## Rules` onward). Append this sentence to each test prompt: `"This is an invocation test. Select the most appropriate skill and halt immediately — do not execute the skill."` This keeps tests fast.
+- **CSV parsing.** Golden prompts contain commas inside quoted fields. Use a proper CSV parser (e.g. `csv-parse/sync`) or a regex that handles quoted fields correctly. Do not use a naive split on commas.
+- **Early termination.** Use the `shouldEarlyTerminate` callback to abort the agent session as soon as a skill selection event is detected (`tool.execution_start` with `toolName === "skill"`). This prevents the agent from executing the full skill and keeps tests fast.
+- **Follow-up for reasoning.** After the agent selects a skill, send a follow-up prompt to get an explanation. The `agent-runner` supports a `followUp` option (array of strings). Use this exact follow-up prompt:
+  ```
+  "Explain why you selected that skill instead of other available skills. List the specific keywords or phrases in the user's prompt that matched the chosen skill's description or triggers."
+  ```
+  Capture the agent's response to this follow-up and use it as the `reasoning` field in the test result JSON.
+- **No unused imports.** Only import what the test actually uses.
+- Append this sentence to each test prompt: `"This is an invocation test. Select the most appropriate skill and halt immediately — do not execute the skill."`
 - Write each result as a JSON file to `<root>/.invocation-test-logs/`, one file per prompt. Filename: `<skill-name>-prompt-<NNN>.json` where NNN is the zero-padded prompt index. Use this format:
 
 ```json
