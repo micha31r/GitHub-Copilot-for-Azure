@@ -272,7 +272,9 @@ function compare(planResources: PlanResource[], bicepResources: BicepResource[])
     if (!planGroup) continue;
 
     const planSkus = new Set(
-      planGroup.map(r => r.sku).filter(s => s && s !== "N/A") as string[]
+      planGroup.map(r => r.sku)
+        .map(s => (typeof s === "object" && s !== null) ? Object.values(s).join(", ") : s)
+        .filter((s): s is string => typeof s === "string" && s !== "N/A")
     );
     if (planSkus.size === 0 && !br.sku) continue;
 
