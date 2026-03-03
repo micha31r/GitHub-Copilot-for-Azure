@@ -29,7 +29,7 @@ The test accepts a batch index via the `INVOCATION_INDEX` environment variable (
 - **Early termination.** Use the `shouldEarlyTerminate` callback to abort the agent session as soon as a skill selection event is detected (`tool.execution_start` with `toolName === "skill"`). This prevents the agent from executing the full skill and keeps tests fast.
 - **Follow-up for reasoning.** After the agent selects a skill, send a follow-up prompt to get an explanation. The `agent-runner` supports a `followUp` option (array of strings). Use this exact follow-up prompt:
   ```
-  "Explain why you selected that skill instead of other available skills. List the specific keywords or phrases in the user's prompt that matched the chosen skill's description or triggers."
+  "Explain why you selected that skill instead of the azure-infra-planner skill. What specific keywords or phrases in the user's prompt made you choose this skill over azure-infra-planner?"
   ```
   Capture the agent's response to this follow-up and use it as the `reasoning` field in the test result JSON.
 - **No unused imports.** Only import what the test actually uses.
