@@ -26,14 +26,14 @@ Activate this skill when user wants to:
 |------|------|
 | Target skill SKILL.md | `<root>/plugin/skills/<skill-name>/SKILL.md` |
 | Golden prompts | `<root>/GoldenPrompts.csv` |
-| Invocation test file | `<root>/tests/<skill-name>/invocation.test.ts` |
+| Invocation test file | `<root>/tests/<skill-name>/invocation.integration.test.ts` |
 | Test results output | `<root>/.invocation-test-logs/` |
 | Test utilities | `<root>/tests/utils/` |
 | Test config | `<root>/tests/jest.config.ts` |
 
 ## Step 1: Check for Invocation Test
 
-Check if `<root>/tests/<skill-name>/invocation.test.ts` exists. If it does, continue to Step 2. If not, create it by following the instructions in [setup.md](references/setup.md).
+Check if `<root>/tests/<skill-name>/invocation.integration.test.ts` exists. If it does, continue to Step 2. If not, create it by following the instructions in [setup.md](references/setup.md).
 
 ## Step 2: Improvement Loop
 
