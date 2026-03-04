@@ -24,6 +24,15 @@ Does the plan follow Azure Well-Architected Framework principles?
 
 > ⚠️ **Warning:** Do not require all five pillars for every plan. Score based on what is relevant to the stated goal and workload.
 
+> 💡 **Tip:** Use the following Azure MCP tools to retrieve the latest WAF guidance before scoring this dimension:
+>
+> | Tool | Parameters | Purpose |
+> |------|------------|---------|
+> | `get_azure_bestpractices` | resource: `general`, action: `all` | Retrieve current WAF pillar best practices |
+> | `azure-documentation` | query: `"Well-Architected Framework"` + pillar name | Deep-dive into specific WAF pillars for the workload |
+>
+> Reference the tool output for up-to-date WAF criteria rather than relying solely on the checklist above.
+
 ### 3. Dependency Completeness (weight: 0.25)
 
 Are resource dependencies internally consistent?

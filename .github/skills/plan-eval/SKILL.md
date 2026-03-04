@@ -22,7 +22,7 @@ Evaluates `.azure/infrastructure-plan.json` produced by the **azure-infra-planne
 1. **Load Plan** — Read `.azure/infrastructure-plan.json`. If missing or unparseable, stop and report error.
 2. **Extract Context** — Pull `inputs.userGoal` and `plan.resources[]` from the plan JSON.
 3. **Evaluate** — Score the plan against the [evaluation criteria](references/CRITERIA.md). Assess each dimension independently.
-4. **Produce Result** — Output the evaluation as a JSON object matching the [output schema](#output-schema) below. Present a human-readable summary to the user.
+4. **Produce Result** — Output the evaluation as a JSON object matching the [output schema](#output-schema) below. Present a human-readable summary table with per-dimension scores and notes to the user.
 5. **Update Status** — Set `meta.status` to `reviewed` in the plan file.
 
 ## Output Schema
@@ -30,6 +30,12 @@ Evaluates `.azure/infrastructure-plan.json` produced by the **azure-infra-planne
 ```json
 {
   "overallScore": 0.0,
+  "dimensions": {
+    "goalAlignment": 0.0,
+    "wafConformance": 0.0,
+    "dependencyCompleteness": 0.0,
+    "deploymentViability": 0.0
+  },
   "risks": ["..."],
   "correctionsRecommended": ["..."],
   "hardDependencies": ["deployment blockers"],
@@ -40,6 +46,7 @@ Evaluates `.azure/infrastructure-plan.json` produced by the **azure-infra-planne
 | Field | Type | Description |
 |-------|------|-------------|
 | `overallScore` | float 0–1 | Weighted quality score |
+| `dimensions` | object | Per-dimension scores (see [CRITERIA.md](references/CRITERIA.md) for weights) |
 | `risks` | string[] | Identified risks or gaps |
 | `correctionsRecommended` | string[] | Suggested improvements |
 | `hardDependencies` | string[] | Properties that will cause deployment failures |
@@ -63,6 +70,16 @@ Pass threshold: `overallScore >= 0.7`
 - Do not penalize for missing or incomplete properties — only evaluate compatibility of what is present
 - Ignore naming conventions, type formatting, or N/A values — assume these are configured at runtime
 - Balance scoring: this is a first-version plan the user can iterate on
+
+### Resources for Rules
+
+Call the following tools to retrieve the latest documentation and best practices.
+
+| Order | Tool | Parameters | Purpose |
+|-------|------|------------|---------|
+| 1 | `get_azure_bestpractices` | resource: `general`, action: `all` | Baseline for WAF conformance and deployment viability |
+| 2 | `deploy_iac_rules_get` | `resource-types` per resource (e.g., `appservice`, `storage`) | Resource-specific mandatory rules |
+| 3 | `azure-documentation` | Resource type + "best practices" | Cover resources not in `deploy_iac_rules_get` (e.g., Cosmos DB, Key Vault) |
 
 ## References
 
