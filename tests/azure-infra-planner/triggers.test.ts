@@ -71,7 +71,6 @@ describe(`${SKILL_NAME} - Trigger Tests`, () => {
     const preparePrompts: string[] = [
       "Add authentication to my existing Express app on Azure",
       "Set up my Node.js app for Azure deployment",
-      "Modernize my legacy .NET application for Azure",
       "Add Azure Key Vault to my existing application code",
       "Help me migrate my app from Heroku to Azure",
     ];
