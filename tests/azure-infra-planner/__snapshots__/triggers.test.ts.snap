@@ -6,6 +6,7 @@ exports[`azure-infra-planner - Trigger Tests Trigger Keywords Snapshot skill des
   "extractedKeywords": [
     "3-tier",
     "adding",
+    "ai",
     "aks",
     "apps",
     "architect",
@@ -84,6 +85,7 @@ exports[`azure-infra-planner - Trigger Tests Trigger Keywords Snapshot skill key
 [
   "3-tier",
   "adding",
+  "ai",
   "aks",
   "apps",
   "architect",
