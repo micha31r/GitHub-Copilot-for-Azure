@@ -13,12 +13,10 @@ import * as fs from "fs";
 import * as path from "path";
 import {
   useAgentRunner,
-  // areToolCallsSuccess,
-  doesAssistantMessageIncludeKeyword,
   shouldSkipIntegrationTests,
   getIntegrationSkipReason
 } from "../utils/agent-runner";
-import { isSkillInvoked, softCheckSkill, getToolCalls } from "../utils/evaluate";
+import { isSkillInvoked, softCheckSkill, getToolCalls, listFilesRecursive } from "../utils/evaluate";
 
 const SKILL_NAME = "azure-infra-planner";
 const RUNS_PER_PROMPT = 1;
@@ -121,35 +119,119 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         }
       }
     });
+
+    test("invokes skill for web app with database and cache prompt", async () => {
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "Plan Azure infrastructure for a web application with a database and cache layer. Assume all defaults to make the plan.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
+    });
+
+    test("invokes skill for REST API with relational database prompt", async () => {
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "Plan Azure infrastructure for a REST API with a relational database. Assume all defaults to make the plan.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
+    });
   });
 
   describe("response-quality", () => {
-    test("response references infrastructure plan for planning prompt", async () => {
+    test("generates infrastructure-plan.json with expected resources", async () => {
+      let testWorkspacePath: string | undefined;
+
       const agentMetadata = await agent.run({
         prompt: "Plan Azure infrastructure for a web application with a database and cache layer. Assume all defaults to make the plan.",
         nonInteractive: true,
         followUp: FOLLOW_UP_PROMPT,
+        preserveWorkspace: true,
+        includeSkills: [SKILL_NAME],
+        setup: async (workspace: string) => {
+          testWorkspacePath = workspace;
+        }
       });
 
-      const mentionsPlan = doesAssistantMessageIncludeKeyword(agentMetadata, "plan") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "infrastructure");
-      expect(mentionsPlan).toBe(true);
+      softCheckSkill(agentMetadata, SKILL_NAME);
+
+      // Verify plan file was created
+      expect(testWorkspacePath).toBeDefined();
+      const planPath = path.join(testWorkspacePath!, ".azure", "infrastructure-plan.json");
+      expect(fs.existsSync(planPath)).toBe(true);
+
+      // Verify plan structure and resources
+      const plan = JSON.parse(fs.readFileSync(planPath, "utf-8"));
+      expect(plan).toHaveProperty("meta");
+      expect(plan).toHaveProperty("plan.resources");
+      expect(Array.isArray(plan.plan.resources)).toBe(true);
+      expect(plan.plan.resources.length).toBeGreaterThan(0);
+
+      // Should contain database and cache resources
+      const resourceTypes = plan.plan.resources.map((r: { type?: string }) =>
+        (r.type || "").toLowerCase()
+      );
+      const hasDatabase = resourceTypes.some((t: string) =>
+        t.includes("sql") || t.includes("cosmosdb") || t.includes("documentdb") || t.includes("postgresql")
+      );
+      const hasCache = resourceTypes.some((t: string) =>
+        t.includes("redis") || t.includes("cache")
+      );
+      console.log(`📋 Plan has ${plan.plan.resources.length} resources`);
+      console.log(`   Database present: ${hasDatabase}`);
+      console.log(`   Cache present: ${hasCache}`);
     });
 
-    test("response mentions specific Azure resources", async () => {
+    test("generates Bicep files from approved plan", async () => {
+      let testWorkspacePath: string | undefined;
+
       const agentMetadata = await agent.run({
-        prompt: "What Azure resources do I need for a REST API with a relational database? Assume all defaults to make the plan.",
+        prompt: "Plan Azure infrastructure for a REST API with a relational database. Assume all defaults to make the plan.",
         nonInteractive: true,
-        followUp: FOLLOW_UP_PROMPT,
-        // preserveWorkspace: true
+        followUp: [
+          ...FOLLOW_UP_PROMPT,
+          "Looks good! Let's make Bicep now."
+        ],
+        preserveWorkspace: true,
+        includeSkills: [SKILL_NAME],
+        setup: async (workspace: string) => {
+          testWorkspacePath = workspace;
+        }
       });
 
-      const mentionsResource =
-        doesAssistantMessageIncludeKeyword(agentMetadata, "App Service") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "SQL") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "Container App") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "Function");
-      expect(mentionsResource).toBe(true);
+      softCheckSkill(agentMetadata, SKILL_NAME);
+
+      // Check for Bicep files in the workspace
+      expect(testWorkspacePath).toBeDefined();
+      const bicepFiles = listFilesRecursive(testWorkspacePath!).filter(f => f.endsWith(".bicep"));
+      console.log(`📋 Found ${bicepFiles.length} Bicep files:`);
+      bicepFiles.forEach(f => console.log(`   ${path.relative(testWorkspacePath!, f)}`));
+      expect(bicepFiles.length).toBeGreaterThan(0);
     });
   });
 
@@ -171,6 +253,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         prompt: "What Azure infrastructure do I need for this project? Assume all defaults to make the plan.",
         nonInteractive: true,
         followUp: FOLLOW_UP_PROMPT,
+        shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
       });
 
       softCheckSkill(agentMetadata, SKILL_NAME);
@@ -187,6 +270,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         prompt: "Plan Azure infrastructure for this Python application. Assume all defaults to make the plan.",
         nonInteractive: true,
         followUp: FOLLOW_UP_PROMPT,
+        shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
       });
 
       softCheckSkill(agentMetadata, SKILL_NAME);

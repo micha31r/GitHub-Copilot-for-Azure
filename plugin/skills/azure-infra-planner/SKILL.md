@@ -56,7 +56,7 @@ Activate this skill when user wants to:
 | 1. Research | Gather requirements, check SKUs/regions, load per-resource files | [research.md](references/research.md), [resources.md](references/resources.md) |
 | 2. Plan Generation | Build `.azure/infrastructure-plan.json` one resource at a time. Verify each resource immediately. Present plan and **STOP HERE until user approves**. | [plan-schema.md](references/plan-schema.md), [verification.md](references/verification.md) |
 | 3. IaC Generation | Bicep or Terraform from approved plan | [bicep-generation.md](references/DSLs/bicep/bicep-generation.md), [terraform-generation.md](references/DSLs/terraform/terraform-generation.md) |
-| 4. Deployment | Execute `az deployment group create` or `terraform apply` only when `meta.status === "approved"` | [deployment.md](references/deployment.md) |
+| 4. Deployment | Confirm subscription and resource group, then execute `az deployment group create` or `terraform apply` only when `meta.status === "approved"` | [deployment.md](references/deployment.md) |
 
 ### Status Lifecycle
 
