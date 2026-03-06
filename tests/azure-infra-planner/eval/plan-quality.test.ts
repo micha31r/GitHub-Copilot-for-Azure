@@ -15,8 +15,8 @@ import {
   doesAssistantMessageIncludeKeyword,
   shouldSkipIntegrationTests,
   getIntegrationSkipReason
-} from "../utils/agent-runner";
-import { isSkillInvoked } from "../utils/evaluate";
+} from "../../utils/agent-runner";
+import { isSkillInvoked } from "../../utils/evaluate";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
