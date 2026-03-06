@@ -38,16 +38,25 @@ describeIntegration(`${SKILL_NAME} - Plan Quality`, () => {
   test("generates infrastructure-plan.json for event-driven pipeline", async () => {
     let testWorkspacePath: string | undefined;
 
-    const agentMetadata = await agent.run({
-      prompt:
-        "Plan Azure infrastructure for an event-driven serverless data pipeline with Cosmos DB and Event Hub. " +
-        "Let's focus on cost optimization and scalability. Assume all defaults to make the plan.",
-      preserveWorkspace: true,
-      includeSkills: ["azure-infra-planner"],
-      setup: async (workspace: string) => {
-        testWorkspacePath = workspace;
+    let agentMetadata;
+    try {
+      agentMetadata = await agent.run({
+        prompt:
+          "Plan Azure infrastructure for an event-driven serverless data pipeline with Cosmos DB and Event Hub. " +
+          "Let's focus on cost optimization and scalability. Assume all defaults to make the plan.",
+        preserveWorkspace: true,
+        includeSkills: ["azure-infra-planner"],
+        setup: async (workspace: string) => {
+          testWorkspacePath = workspace;
+        }
+      });
+    } catch (e: unknown) {
+      if (e instanceof Error && (e.message?.includes("Failed to load @github/copilot-sdk") || e.message?.includes("CLI server exited"))) {
+        console.log("⏭️  SDK/CLI not available, skipping test");
+        return;
       }
-    });
+      throw e;
+    }
 
     // Skill should have been invoked
     expect(isSkillInvoked(agentMetadata, SKILL_NAME)).toBe(true);
