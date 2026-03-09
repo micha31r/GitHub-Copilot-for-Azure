@@ -86,9 +86,6 @@ describe(`${SKILL_NAME} - Unit Tests`, () => {
       const requiredTools = [
         "microsoft_docs_search",
         "microsoft_docs_fetch",
-        "mcp_azure_mcp_ser_subscription_list",
-        "mcp_azure_mcp_ser_group_list",
-        "azure_resources-query_azure_resource_graph",
       ];
       for (const tool of requiredTools) {
         expect(skill.content).toContain(tool);

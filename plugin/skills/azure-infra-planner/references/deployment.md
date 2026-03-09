@@ -15,7 +15,7 @@ If status is not `approved`, **STOP** and inform the user. Do NOT manually chang
 ## Pre-Deployment Checklist
 
 1. **Plan approved** — `meta.status` is `approved`
-2. **IaC generated** — Bicep or Terraform files exist in `./infra/`
+2. **IaC generated** — Bicep or Terraform files exist in `<project-root>/infra/`
 3. **Azure context confirmed** — Subscription and resource group selected
 4. **User confirmation** — Explicit "yes, deploy" from the user
 5. **Syntax validated** — `az bicep build` or `terraform validate` passed
@@ -82,7 +82,7 @@ terraform apply tfplan
 
 After successful deployment:
 
-1. **Update status** — Set `meta.status` to `deployed` in `.azure/infrastructure-plan.json`
+1. **Update status** — Set `meta.status` to `deployed` in `<project-root>/.azure/infrastructure-plan.json`
 2. **Verify resources** — Use `mcp_azure_mcp_group_list` to confirm resources exist
 3. **Report to user** — List deployed resources, endpoints, and any follow-up actions
 

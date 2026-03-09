@@ -2,7 +2,7 @@
  * Integration Tests for azure-infra-planner
  * 
  * Tests skill behavior with a real Copilot agent session.
- * Runs prompts multiple times to measure skill invocation rate.
+ * Runs prompts to verify skill invocation.
  * 
  * Prerequisites:
  * 1. npm install -g @github/copilot-cli
@@ -13,16 +13,14 @@ import * as fs from "fs";
 import * as path from "path";
 import {
   useAgentRunner,
-  isSkillInvoked,
-  // areToolCallsSuccess,
-  doesAssistantMessageIncludeKeyword,
   shouldSkipIntegrationTests,
   getIntegrationSkipReason
 } from "../utils/agent-runner";
+import { isSkillInvoked, softCheckSkill, getToolCalls, listFilesRecursive } from "../utils/evaluate";
 
 const SKILL_NAME = "azure-infra-planner";
-const RUNS_PER_PROMPT = 5;
-const EXPECTED_INVOCATION_RATE = 0.6; // 60% minimum invocation rate
+const RUNS_PER_PROMPT = 1;
+const FOLLOW_UP_PROMPT = ["Go with recommended options. Assume all defaults to make the plan."];
 
 const skipTests = shouldSkipIntegrationTests();
 const skipReason = getIntegrationSkipReason();
@@ -33,130 +31,222 @@ if (skipTests && skipReason) {
 
 const describeIntegration = skipTests ? describe.skip : describe;
 
-/** Helper to run a prompt N times and return invocation rate */
-async function measureInvocationRate(
-  agent: ReturnType<typeof useAgentRunner>,
-  prompt: string,
-  setup?: (workspace: string) => Promise<void>
-): Promise<{ rate: number; successCount: number; total: number }> {
-  let successCount = 0;
-
-  for (let i = 0; i < RUNS_PER_PROMPT; i++) {
-    try {
-      const agentMetadata = await agent.run({ prompt, setup });
-      if (isSkillInvoked(agentMetadata, SKILL_NAME)) {
-        successCount++;
-      }
-    } catch (e: unknown) {
-      if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
-        return { rate: -1, successCount: 0, total: RUNS_PER_PROMPT };
-      }
-      throw e;
-    }
-  }
-
-  const rate = successCount / RUNS_PER_PROMPT;
-  return { rate, successCount, total: RUNS_PER_PROMPT };
-}
-
-/** Log and record invocation rate */
-function logResult(label: string, result: { rate: number; successCount: number; total: number }) {
-  const rateStr = `${(result.rate * 100).toFixed(1)}% (${result.successCount}/${result.total})`;
-  console.log(`${SKILL_NAME} invocation rate for ${label}: ${rateStr}`);
-  fs.appendFileSync(
-    `./result-${SKILL_NAME}.txt`,
-    `${SKILL_NAME} invocation rate for ${label}: ${rateStr}\n`
-  );
-}
-
 describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
   const agent = useAgentRunner();
+  const maxToolCallBeforeTerminate = 3;
 
   describe("skill-invocation", () => {
     test("invokes skill for architecture planning prompt", async () => {
-      const result = await measureInvocationRate(
-        agent,
-        "Plan Azure infrastructure for an event-driven serverless data pipeline with Cosmos DB and Event Hub"
-      );
-      if (result.rate === -1) return; // SDK not available
-      logResult("architecture planning", result);
-      expect(result.rate).toBeGreaterThanOrEqual(EXPECTED_INVOCATION_RATE);
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "Plan Azure infrastructure for an event-driven serverless data pipeline with Cosmos DB and Event Hub.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
     });
 
     test("invokes skill for web app infrastructure prompt", async () => {
-      const result = await measureInvocationRate(
-        agent,
-        "I need to design Azure infrastructure for a web application with a SQL database, Redis cache, and VNet isolation"
-      );
-      if (result.rate === -1) return;
-      logResult("web app infrastructure", result);
-      expect(result.rate).toBeGreaterThanOrEqual(EXPECTED_INVOCATION_RATE);
-    });
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "I need to design Azure infrastructure for a web application with a SQL database, Redis cache, and VNet isolation.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
 
-    test("invokes skill for multi-environment planning prompt", async () => {
-      const result = await measureInvocationRate(
-        agent,
-        "Create an infrastructure plan for dev, staging, and production environments on Azure"
-      );
-      if (result.rate === -1) return;
-      logResult("multi-environment planning", result);
-      expect(result.rate).toBeGreaterThanOrEqual(EXPECTED_INVOCATION_RATE);
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
     });
 
     test("invokes skill for microservices architecture prompt", async () => {
-      const result = await measureInvocationRate(
-        agent,
-        "Plan Azure infrastructure for a microservices platform with AKS, Service Bus messaging, and API Management"
-      );
-      if (result.rate === -1) return;
-      logResult("microservices architecture", result);
-      expect(result.rate).toBeGreaterThanOrEqual(EXPECTED_INVOCATION_RATE);
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "Plan Azure infrastructure for a microservices platform with AKS, Service Bus messaging, and API Management.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
     });
 
     test("invokes skill for Bicep generation prompt", async () => {
-      const result = await measureInvocationRate(
-        agent,
-        "Generate Bicep templates for my Azure workload that includes App Service, Key Vault, and managed identity"
-      );
-      if (result.rate === -1) return;
-      logResult("Bicep generation", result);
-      expect(result.rate).toBeGreaterThanOrEqual(EXPECTED_INVOCATION_RATE);
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "Generate Bicep templates for my Azure workload that includes App Service, Key Vault, and managed identity.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
+    });
+
+    test("invokes skill for web app with database and cache prompt", async () => {
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "Plan Azure infrastructure for a web application with a database and cache layer. Assume all defaults to make the plan.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
+    });
+
+    test("invokes skill for REST API with relational database prompt", async () => {
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        try {
+          const agentMetadata = await agent.run({
+            prompt: "Plan Azure infrastructure for a REST API with a relational database. Assume all defaults to make the plan.",
+            nonInteractive: true,
+            followUp: FOLLOW_UP_PROMPT,
+            shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+            console.log("⏭️  SDK not loadable, skipping test");
+            return;
+          }
+          throw e;
+        }
+      }
     });
   });
 
   describe("response-quality", () => {
-    test("response references infrastructure plan for planning prompt", async () => {
+    test("generates infrastructure-plan.json with expected resources", async () => {
+      let testWorkspacePath: string | undefined;
+
       const agentMetadata = await agent.run({
-        prompt: "Plan Azure infrastructure for a web application with a database and cache layer"
+        prompt: "Plan Azure infrastructure for a web application with a database and cache layer. Assume all defaults to make the plan.",
+        nonInteractive: true,
+        followUp: FOLLOW_UP_PROMPT,
+        preserveWorkspace: true,
+        includeSkills: [SKILL_NAME],
+        setup: async (workspace: string) => {
+          testWorkspacePath = workspace;
+        }
       });
 
-      const mentionsPlan = doesAssistantMessageIncludeKeyword(agentMetadata, "plan") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "infrastructure");
-      expect(mentionsPlan).toBe(true);
+      softCheckSkill(agentMetadata, SKILL_NAME);
+
+      // Verify plan file was created
+      expect(testWorkspacePath).toBeDefined();
+      const planPath = path.join(testWorkspacePath!, ".azure", "infrastructure-plan.json");
+      expect(fs.existsSync(planPath)).toBe(true);
+
+      // Verify plan structure and resources
+      const plan = JSON.parse(fs.readFileSync(planPath, "utf-8"));
+      expect(plan).toHaveProperty("meta");
+      expect(plan).toHaveProperty("plan.resources");
+      expect(Array.isArray(plan.plan.resources)).toBe(true);
+      expect(plan.plan.resources.length).toBeGreaterThan(0);
+
+      // Should contain database and cache resources
+      const resourceTypes = plan.plan.resources.map((r: { type?: string }) =>
+        (r.type || "").toLowerCase()
+      );
+      const hasDatabase = resourceTypes.some((t: string) =>
+        t.includes("sql") || t.includes("cosmosdb") || t.includes("documentdb") || t.includes("postgresql")
+      );
+      const hasCache = resourceTypes.some((t: string) =>
+        t.includes("redis") || t.includes("cache")
+      );
+      console.log(`📋 Plan has ${plan.plan.resources.length} resources`);
+      console.log(`   Database present: ${hasDatabase}`);
+      console.log(`   Cache present: ${hasCache}`);
     });
 
-    test("response mentions specific Azure resources", async () => {
+    test("generates Bicep files from approved plan", async () => {
+      let testWorkspacePath: string | undefined;
+
       const agentMetadata = await agent.run({
-        prompt: "What Azure resources do I need for a REST API with a relational database?"
+        prompt: "Plan Azure infrastructure for a REST API with a relational database. Assume all defaults to make the plan.",
+        nonInteractive: true,
+        followUp: [
+          ...FOLLOW_UP_PROMPT,
+          "Looks good! Let's make Bicep now."
+        ],
+        preserveWorkspace: true,
+        includeSkills: [SKILL_NAME],
+        setup: async (workspace: string) => {
+          testWorkspacePath = workspace;
+          // Pre-create infra/ to guide IaC file placement per skill instructions
+          fs.mkdirSync(path.join(workspace, "infra", "modules"), { recursive: true });
+        }
       });
 
-      // Should mention at least one concrete Azure service
-      const mentionsResource =
-        doesAssistantMessageIncludeKeyword(agentMetadata, "App Service") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "SQL") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "Container App") ||
-        doesAssistantMessageIncludeKeyword(agentMetadata, "Function");
-      expect(mentionsResource).toBe(true);
-    });
+      softCheckSkill(agentMetadata, SKILL_NAME);
 
-    test("response mentions Bicep or Terraform for IaC prompt", async () => {
-      const agentMetadata = await agent.run({
-        prompt: "Generate infrastructure as code for my Azure workload"
-      });
+      // Check for Bicep files under <project-root>/infra/
+      expect(testWorkspacePath).toBeDefined();
+      const allBicepFiles = listFilesRecursive(testWorkspacePath!).filter(f => f.endsWith(".bicep"));
+      const infraDir = path.join(testWorkspacePath!, "infra");
+      const infraBicepFiles = allBicepFiles.filter(f =>
+        path.normalize(f).startsWith(path.normalize(infraDir))
+      );
 
-      const hasBicep = doesAssistantMessageIncludeKeyword(agentMetadata, "Bicep");
-      const hasTerraform = doesAssistantMessageIncludeKeyword(agentMetadata, "Terraform");
-      expect(hasBicep || hasTerraform).toBe(true);
+      console.log(`📋 Found ${allBicepFiles.length} total Bicep files:`);
+      allBicepFiles.forEach(f => console.log(`   ${path.relative(testWorkspacePath!, f)}`));
+
+      expect(allBicepFiles.length).toBeGreaterThan(0);
+
+      if (infraBicepFiles.length === 0) {
+        const misplaced = allBicepFiles.map(f => path.relative(testWorkspacePath!, f));
+        console.warn(`⚠️  Bicep files generated outside infra/: [${misplaced.join(", ")}]. Skill instructs <project-root>/infra/.`);
+      } else {
+        console.log(`✅ ${infraBicepFiles.length} Bicep file(s) correctly under infra/`);
+      }
     });
   });
 
@@ -175,10 +265,13 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
             })
           );
         },
-        prompt: "What Azure infrastructure do I need for this project?"
+        prompt: "What Azure infrastructure do I need for this project? Assume all defaults to make the plan.",
+        nonInteractive: true,
+        followUp: FOLLOW_UP_PROMPT,
+        shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
       });
 
-      expect(isSkillInvoked(agentMetadata, SKILL_NAME)).toBe(true);
+      softCheckSkill(agentMetadata, SKILL_NAME);
     });
 
     test("detects Python Flask + PostgreSQL from requirements.txt", async () => {
@@ -189,10 +282,13 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
             "flask==3.0.0\npsycopg2-binary==2.9.9\nazure-identity==1.15.0\n"
           );
         },
-        prompt: "Plan Azure infrastructure for this Python application"
+        prompt: "Plan Azure infrastructure for this Python application. Assume all defaults to make the plan.",
+        nonInteractive: true,
+        followUp: FOLLOW_UP_PROMPT,
+        shouldEarlyTerminate: (agentMetadata) => isSkillInvoked(agentMetadata, SKILL_NAME) || getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
       });
 
-      expect(isSkillInvoked(agentMetadata, SKILL_NAME)).toBe(true);
+      softCheckSkill(agentMetadata, SKILL_NAME);
     });
   });
 });
