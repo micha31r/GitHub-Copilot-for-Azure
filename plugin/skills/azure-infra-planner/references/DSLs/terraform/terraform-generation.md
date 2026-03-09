@@ -4,7 +4,7 @@ Generate Terraform IaC files from the approved infrastructure plan.
 
 ## File Structure
 
-Generate files under `./infra/`:
+Generate files under `<project-root>/infra/`:
 
 ```
 infra/
@@ -31,13 +31,14 @@ infra/
 
 ## Generation Steps
 
-1. **Read plan** — Load `.azure/infrastructure-plan.json`, verify `meta.status === "approved"`
-2. **Generate providers.tf** — Configure `azurerm` provider with required features
-3. **Generate modules** — Group resources by category; one module per group
-4. **Generate root main.tf** — Call all modules, wire outputs to inputs
-5. **Generate variables.tf** — Declare all configurable parameters with descriptions and types
-6. **Generate terraform.tfvars** — Default values from the plan
-7. **Generate backend.tf** — Azure Storage backend for remote state
+1. **Create `infra/` directory** — Create `<project-root>/infra/` and `<project-root>/infra/modules/` directories. All files in subsequent steps go here.
+2. **Read plan** — Load `<project-root>/.azure/infrastructure-plan.json`, verify `meta.status === "approved"`
+3. **Generate providers.tf** — Write `infra/providers.tf` to configure `azurerm` provider with required features
+4. **Generate modules** — Group resources by category; one module per group under `infra/modules/`
+5. **Generate root main.tf** — Write `infra/main.tf` that calls all modules, wire outputs to inputs
+6. **Generate variables.tf** — Write `infra/variables.tf` with all configurable parameters
+7. **Generate terraform.tfvars** — Write `infra/terraform.tfvars` with default values from the plan
+8. **Generate backend.tf** — Write `infra/backend.tf` for Azure Storage backend remote state
 
 ## Terraform Conventions
 

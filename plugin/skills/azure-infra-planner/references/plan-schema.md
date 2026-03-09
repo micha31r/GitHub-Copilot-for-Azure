@@ -1,6 +1,6 @@
 # Infrastructure Plan JSON Schema
 
-The infrastructure plan is written to `.azure/infrastructure-plan.json`. This document describes the schema.
+The infrastructure plan is written to `<project-root>/.azure/infrastructure-plan.json`. This document describes the schema.
 
 ## Top-Level Structure
 

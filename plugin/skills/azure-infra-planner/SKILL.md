@@ -4,7 +4,7 @@ description: "Architect and plan multi-service Azure infrastructure from workloa
 license: MIT
 metadata:
   author: Microsoft
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Azure Infra Planner
@@ -30,7 +30,7 @@ Activate this skill when user wants to:
 ## Rules
 
 1. **Research before planning** — Use MCP tools if necessary to research best practices for SKUs, regions, naming conventions, and architecture if you can't find them in your references.
-2. **Plan before IaC** — Generate `.azure/infrastructure-plan.json` before any IaC so we can map the plan to generated code and ensure alignment.
+2. **Plan before IaC** — Generate `<project-root>/.azure/infrastructure-plan.json` before any IaC so we can map the plan to generated code and ensure alignment.
 3. **Get approval** — Plan status must be `approved` before deployment.
 4. **User chooses IaC format** — Bicep or Terraform; ask if not specified.
 5. ⛔ **Destructive actions require explicit confirmation.**
@@ -42,9 +42,9 @@ Activate this skill when user wants to:
 > **YOU MUST CREATE A PLAN BEFORE GENERATING ANY IAC**
 >
 > 1. **RESEARCH** — Gather requirements, check SKUs, regions, naming rules
-> 2. **PLAN** — Generate `.azure/infrastructure-plan.json` with status `draft`
+> 2. **PLAN** — Generate `<project-root>/.azure/infrastructure-plan.json` with status `draft`
 > 3. **CONFIRM** — Present the plan to the user; user sets status to `approved`
-> 4. **GENERATE** — Create Bicep or Terraform files from the approved plan under `/infra`
+> 4. **GENERATE** — First, create the `<project-root>/infra/` directory. Then generate all Bicep or Terraform files inside it. Never write IaC files outside `infra/`.
 > 5. **DEPLOY** — Execute deployment commands only when status is `approved`
 
 ---
@@ -54,8 +54,8 @@ Activate this skill when user wants to:
 | Phase | Action | References |
 |-------|--------|------------|
 | 1. Research | Gather requirements, check SKUs/regions, load per-resource files | [research.md](references/research.md), [resources.md](references/resources.md) |
-| 2. Plan Generation | Build `.azure/infrastructure-plan.json` one resource at a time. Verify each resource immediately. Present plan and **STOP HERE until user approves**. | [plan-schema.md](references/plan-schema.md), [verification.md](references/verification.md) |
-| 3. IaC Generation | Bicep or Terraform from approved plan | [bicep-generation.md](references/DSLs/bicep/bicep-generation.md), [terraform-generation.md](references/DSLs/terraform/terraform-generation.md) |
+| 2. Plan Generation | Build `<project-root>/.azure/infrastructure-plan.json` one resource at a time. Verify each resource immediately. Present plan and **STOP HERE until user approves**. | [plan-schema.md](references/plan-schema.md), [verification.md](references/verification.md) |
+| 3. IaC Generation | Generate Bicep or Terraform from approved plan. **Create `<project-root>/infra/` directory first**, then write all `.bicep` or `.tf` files there. Never write IaC files to `.azure/` or project root. | [bicep-generation.md](references/DSLs/bicep/bicep-generation.md), [terraform-generation.md](references/DSLs/terraform/terraform-generation.md) |
 | 4. Deployment | Confirm subscription and resource group, then execute `az deployment group create` or `terraform apply` only when `meta.status === "approved"` | [deployment.md](references/deployment.md) |
 
 ### Status Lifecycle
@@ -70,9 +70,14 @@ Activate this skill when user wants to:
 
 | Artifact | Location |
 |----------|----------|
-| **Infrastructure Plan** | `.azure/infrastructure-plan.json` |
-| Bicep files | `./infra/*.bicep` |
-| Terraform files | `./infra/*.tf` |
+| **Infrastructure Plan** | `<project-root>/.azure/infrastructure-plan.json` |
+| Bicep files | `<project-root>/infra/main.bicep`, `<project-root>/infra/modules/*.bicep` |
+| Terraform files | `<project-root>/infra/main.tf`, `<project-root>/infra/modules/**/*.tf` |
+
+> ⚠️ **IaC file placement is mandatory.** Before writing any `.bicep` or `.tf` files:
+> 1. Create the `infra/` directory at `<project-root>/infra/`
+> 2. Create `infra/modules/` for child modules
+> 3. Write `main.bicep` (or `main.tf`) inside `infra/`, NOT in the project root or `.azure/`
 
 ---
 

@@ -221,17 +221,32 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         includeSkills: [SKILL_NAME],
         setup: async (workspace: string) => {
           testWorkspacePath = workspace;
+          // Pre-create infra/ to guide IaC file placement per skill instructions
+          fs.mkdirSync(path.join(workspace, "infra", "modules"), { recursive: true });
         }
       });
 
       softCheckSkill(agentMetadata, SKILL_NAME);
 
-      // Check for Bicep files in the workspace
+      // Check for Bicep files under <project-root>/infra/
       expect(testWorkspacePath).toBeDefined();
-      const bicepFiles = listFilesRecursive(testWorkspacePath!).filter(f => f.endsWith(".bicep"));
-      console.log(`📋 Found ${bicepFiles.length} Bicep files:`);
-      bicepFiles.forEach(f => console.log(`   ${path.relative(testWorkspacePath!, f)}`));
-      expect(bicepFiles.length).toBeGreaterThan(0);
+      const allBicepFiles = listFilesRecursive(testWorkspacePath!).filter(f => f.endsWith(".bicep"));
+      const infraDir = path.join(testWorkspacePath!, "infra");
+      const infraBicepFiles = allBicepFiles.filter(f =>
+        path.normalize(f).startsWith(path.normalize(infraDir))
+      );
+
+      console.log(`📋 Found ${allBicepFiles.length} total Bicep files:`);
+      allBicepFiles.forEach(f => console.log(`   ${path.relative(testWorkspacePath!, f)}`));
+
+      expect(allBicepFiles.length).toBeGreaterThan(0);
+
+      if (infraBicepFiles.length === 0) {
+        const misplaced = allBicepFiles.map(f => path.relative(testWorkspacePath!, f));
+        console.warn(`⚠️  Bicep files generated outside infra/: [${misplaced.join(", ")}]. Skill instructs <project-root>/infra/.`);
+      } else {
+        console.log(`✅ ${infraBicepFiles.length} Bicep file(s) correctly under infra/`);
+      }
     });
   });
 
