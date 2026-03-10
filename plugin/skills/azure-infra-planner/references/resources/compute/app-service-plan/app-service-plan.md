@@ -73,4 +73,4 @@ App Service Plan has no significant Bicep child resources — apps and functions
 - [Bicep resource reference (2024-11-01)](https://learn.microsoft.com/azure/templates/microsoft.web/serverfarms?pivots=deployment-language-bicep)
 - [App Service plan overview](https://learn.microsoft.com/azure/app-service/overview-hosting-plans)
 - [Azure naming rules — Web](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-name-rules#microsoftweb)
-- [App Service pricing](https://azure.microsoft.com/pricing/details/app-service/)
+- [App Service pricing](https://azure.microsoft.com/en-us/pricing/details/app-service/linux)
