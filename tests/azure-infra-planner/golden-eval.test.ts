@@ -38,6 +38,9 @@ const EVAL_MODELS: string[] = process.env.EVAL_MODELS
   ? process.env.EVAL_MODELS.split(",").map((m) => m.trim()).filter(Boolean)
   : ["claude-opus-4.6"];
 
+/** Model used for plan-eval (Phase 2). Fixed for consistent scoring across runs. */
+const EVAL_JUDGE_MODEL = "claude-opus-4.6";
+
 interface GoldenEvalResult {
   rowId: number;
   prompt: string;
@@ -152,7 +155,7 @@ describeIntegration(`${SKILL_NAME} - Golden Eval`, () => {
           "dependencyCompleteness, deploymentViability), risks, correctionsRecommended, " +
           "hardDependencies, and deployable.",
         nonInteractive: true,
-        model,
+        model: EVAL_JUDGE_MODEL,
         preserveWorkspace: true,
         setup: async (workspace: string) => {
           evalWorkspace = workspace;

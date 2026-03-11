@@ -10,7 +10,7 @@ cd tests && npm install
 
 ## Golden Eval (end-to-end)
 
-Runs golden prompts through `azure-infra-planner` → `plan-eval` pipeline. Artifacts go to `artifacts/<row>/<model>/`.
+Runs golden prompts through `azure-infra-planner` → `plan-eval` pipeline. Artifacts go to `artifacts/<row>/<model>/`. Plan-eval (Phase 2) always runs on `claude-opus-4.6` for consistent scoring regardless of which model generates the plan.
 
 ```bash
 cd tests
