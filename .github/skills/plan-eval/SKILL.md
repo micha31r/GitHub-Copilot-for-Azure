@@ -73,14 +73,14 @@ Pass threshold: `overallScore >= 0.7`
 
 ### Resources for Rules
 
-Call the following tools to retrieve the latest documentation and best practices.
+Call the following tools to retrieve the latest documentation and best practices. See [CRITERIA.md](references/CRITERIA.md) for dimension-specific tool usage guidance.
 
-| Order | Tool | Parameters | Purpose |
-|-------|------|------------|---------|
-| 1 | `get_azure_bestpractices` | resource: `general`, action: `all` | Baseline for WAF conformance and deployment viability |
-| 2 | `wellarchitectedframework_serviceguide_get` | `service` per resource type | Per-service WAF guidance. Returns a raw markdown URL. For each resource, spawn a sub-agent with the guide URL and the **full plan JSON** to evaluate conformance in context. Falls back to step 4 if no guide exists. |
-| 3 | `deploy_iac_rules_get` | `resource-types` per resource (e.g., `appservice`, `storage`) | Resource-specific mandatory rules |
-| 4 | `azure-documentation` | Resource type + "best practices" | Cover resources not in `deploy_iac_rules_get` or without a WAF service guide |
+| Order | Tool | Purpose |
+|-------|------|---------|
+| 1 | `get_azure_bestpractices` | Baseline WAF and deployment best practices |
+| 2 | `wellarchitectedframework_serviceguide_get` | Per-service WAF guidance (see [CRITERIA.md](references/CRITERIA.md) for usage details) |
+| 3 | `deploy_iac_rules_get` | Resource-specific mandatory deployment rules |
+| 4 | `azure-documentation` | Pairing constraints, config checks, and gap-fill for services without dedicated guides |
 
 ## References
 
