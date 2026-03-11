@@ -30,25 +30,20 @@ npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
 
 ### With vs. without WAF tool
 
-The WAF tool (`wellarchitectedframework_serviceguide_get`) is part of the skill definitions. To compare results with/without it, run the golden eval on each branch:
+Use `EXCLUDED_TOOLS` to exclude the WAF tool from Phase 1 (planner) only — Phase 2 (plan-eval) always has full tool access. Use `EVAL_ARTIFACT_DIR` to write results to separate folders so runs can happen in parallel:
 
 ```bash
-# With WAF tool (current branch)
+# Terminal 1: With WAF tool → artifacts-waf/
+$env:EVAL_ARTIFACT_DIR="artifacts-waf"
 npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
 
-# Without WAF tool (baseline branch)
-git stash && git checkout main
-npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
-```
-
-You can also use `EXCLUDED_TOOLS` to exclude the WAF tool from Phase 1 (planner) only. Phase 2 (plan-eval) always has full tool access regardless of this setting:
-
-```bash
+# Terminal 2: Without WAF tool → artifacts-nowaf/
 $env:EXCLUDED_TOOLS="azure-wellarchitectedframework"
+$env:EVAL_ARTIFACT_DIR="artifacts-nowaf"
 npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
 ```
 
-Compare `artifacts/<row>/<model>/plan-evaluation.json` across runs, especially `wafConformance` scores.
+Compare `<artifact-dir>/<row>/<model>/plan-evaluation.json` across runs, especially `wafConformance` scores.
 
 ## Other Tests
 
