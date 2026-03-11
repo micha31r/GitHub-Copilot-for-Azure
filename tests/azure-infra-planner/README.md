@@ -20,10 +20,12 @@ $env:NODE_OPTIONS="--experimental-vm-modules"
 npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
 
 # Specific model
+$env:NODE_OPTIONS="--experimental-vm-modules"
 $env:EVAL_MODELS="gpt-4.1"
 npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
 
 # Multiple models
+$env:NODE_OPTIONS="--experimental-vm-modules"
 $env:EVAL_MODELS="claude-opus-4.6,gpt-4.1,claude-sonnet-4"
 npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
 ```
@@ -34,10 +36,12 @@ Use `EXCLUDED_TOOLS` to exclude the WAF tool from Phase 1 (planner) only — Pha
 
 ```bash
 # Terminal 1: With WAF tool → artifacts-waf/
+$env:NODE_OPTIONS="--experimental-vm-modules"
 $env:EVAL_ARTIFACT_DIR="artifacts-waf"
 npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
 
 # Terminal 2: Without WAF tool → artifacts-nowaf/
+$env:NODE_OPTIONS="--experimental-vm-modules"
 $env:EXCLUDED_TOOLS="azure-wellarchitectedframework"
 $env:EVAL_ARTIFACT_DIR="artifacts-nowaf"
 npx jest --testPathPattern "azure-infra-planner/golden-eval" --no-coverage
