@@ -103,6 +103,10 @@ describeIntegration(`${SKILL_NAME} - Golden Eval`, () => {
         followUp: FOLLOW_UP_PROMPT,
         preserveWorkspace: true,
         includeSkills: [SKILL_NAME],
+        shouldEarlyTerminate: () => {
+          if (!plannerWorkspace) return false;
+          return fs.existsSync(path.join(plannerWorkspace, ".azure", "infrastructure-plan.json"));
+        },
         setup: async (workspace: string) => {
           plannerWorkspace = workspace;
         }
