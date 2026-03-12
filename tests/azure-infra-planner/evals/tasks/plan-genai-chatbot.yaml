@@ -56,8 +56,9 @@ graders:
     type: file
     config:
       must_exist:
-        - "infrastructure-plan.json"
+        - ".azure/infrastructure-plan.json"
+        - "infra/main.bicep"
       content_patterns:
-        - path: "infrastructure-plan.json"
+        - path: "infra/main.bicep"
           must_match:
             - "(?i)openai|cognitiveservices"

@@ -54,8 +54,9 @@ graders:
     type: file
     config:
       must_exist:
-        - "infrastructure-plan.json"
+        - ".azure/infrastructure-plan.json"
+        - "infra/main.tf"
       content_patterns:
-        - path: "infrastructure-plan.json"
+        - path: "infra/main.tf"
           must_match:
             - "(?i)iot|iothub"
