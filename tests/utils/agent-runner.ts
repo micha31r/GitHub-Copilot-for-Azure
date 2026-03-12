@@ -19,6 +19,7 @@ import { fileURLToPath } from "url";
 import { type CopilotSession, CopilotClient, type SessionEvent, approveAll } from "@github/copilot-sdk";
 import { redactSecrets } from "./redact";
 import { listSkills } from "./skill-loader";
+import { generateThinkingLogs } from "./thinking-log";
 
 // Re-export for backward compatibility (consumers still import from agent-runner)
 export { getAllAssistantMessages } from "./evaluate";
@@ -383,6 +384,21 @@ function writeMarkdownReport(config: AgentRunConfig, agentMetadata: AgentMetadat
     if (agentMetadata.tokenUsage && agentMetadata.tokenUsage.apiCallCount > 0) {
       writeTokenUsageJson(config, agentMetadata, dir);
     }
+
+    // Write thinking-process logs (summary + detailed JSONL) to logs/
+    try {
+      const sessionTs = Date.now();
+      const sessionId = `${sessionTs}-${getTestName()}`;
+      const logsDir = path.join(DEFAULT_LOGS_DIR, sessionId);
+      generateThinkingLogs(agentMetadata.events, logsDir, config.prompt);
+      if (process.env.DEBUG) {
+        console.log(`Thinking logs written to: ${logsDir}`);
+      }
+    } catch (thinkingError) {
+      if (process.env.DEBUG) {
+        console.error("Failed to write thinking logs:", thinkingError);
+      }
+    }
   } catch (error) {
     // Don't fail the test if report generation fails
     if (process.env.DEBUG) {
@@ -507,7 +523,7 @@ export function useAgentRunner() {
 
       // Copilot client with yolo mode
       const cliArgs: string[] = config.nonInteractive ? ["--yolo"] : [];
-      if (process.env.DEBUG && isTest()) {
+      if (isTest()) {
         cliArgs.push("--log-dir");
         cliArgs.push(buildLogFilePath());
       }
@@ -758,6 +774,7 @@ export function getIntegrationSkipReason(): string | undefined {
 }
 
 const DEFAULT_REPORT_DIR = path.join(__dirname, "..", "reports");
+const DEFAULT_LOGS_DIR = path.join(__dirname, "..", "..", "logs");
 const TIME_STAMP = (process.env.START_TIMESTAMP || new Date().toISOString()).replace(/[:.]/g, "-");
 
 function buildShareFilePath(): string {
