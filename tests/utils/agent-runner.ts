@@ -400,21 +400,6 @@ function writeMarkdownReport(config: AgentRunConfig, agentMetadata: AgentMetadat
     if (agentMetadata.tokenUsage && agentMetadata.tokenUsage.apiCallCount > 0) {
       writeTokenUsageJson(config, agentMetadata, dir);
     }
-
-    // Write thinking-process logs (summary + detailed JSONL) to logs/
-    try {
-      const sessionTs = Date.now();
-      const sessionId = `${sessionTs}-${getTestName()}`;
-      const logsDir = path.join(DEFAULT_LOGS_DIR, sessionId);
-      generateThinkingLogs(agentMetadata.events, logsDir, config.prompt);
-      if (process.env.DEBUG) {
-        console.log(`Thinking logs written to: ${logsDir}`);
-      }
-    } catch (thinkingError) {
-      if (process.env.DEBUG) {
-        console.error("Failed to write thinking logs:", thinkingError);
-      }
-    }
   } catch (error) {
     // Don't fail the test if report generation fails
     if (process.env.DEBUG) {
@@ -677,6 +662,21 @@ export function useAgentRunner() {
       for (const followUpPrompt of config.followUp ?? []) {
         isComplete = false;
         await session.sendAndWait({ prompt: followUpPrompt }, FOLLOW_UP_TIMEOUT);
+      }
+
+      // Write thinking-process logs eagerly (don't wait for afterEach)
+      try {
+        const sessionTs = Date.now();
+        const sessionId = `${sessionTs}-${getTestName()}`;
+        const logsDir = path.join(DEFAULT_LOGS_DIR, sessionId);
+        generateThinkingLogs(agentMetadata.events, logsDir, config.prompt);
+        if (process.env.DEBUG) {
+          console.log(`Thinking logs written to: ${logsDir}`);
+        }
+      } catch (e) {
+        if (process.env.DEBUG) {
+          console.warn("Failed to write thinking logs:", e);
+        }
       }
 
       return agentMetadata;
