@@ -9,7 +9,7 @@ config:
   executor: copilot-sdk
   model: claude-opus-4.6
   skill_directories:
-    - ".."
+    - "../../../plugin/skills/azure-infra-planner"
 graders:
   - type: text
     name: no_fatal_errors
