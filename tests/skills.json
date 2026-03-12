@@ -20,7 +20,6 @@
         "azure-resource-visualizer",
         "azure-storage",
         "azure-validate",
-        "azure-infra-planner",
         "entra-app-registration",
         "microsoft-foundry"
     ],
