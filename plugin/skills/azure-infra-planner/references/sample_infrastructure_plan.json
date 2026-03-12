@@ -7,7 +7,12 @@
   },
 
   "inputs": {
-    "userGoal": "Deploy an event-driven serverless data pipeline in Azure"
+    "userGoal": "Deploy an event-driven serverless data pipeline in Azure",
+    "subGoals": [
+      "Cost-optimized: user chose defaults, prefer consumption/serverless tiers",
+      "Serverless-first: minimize operational overhead",
+      "Single-region: eastus, no multi-region complexity for initial deployment"
+    ]
   },
 
   "plan": {

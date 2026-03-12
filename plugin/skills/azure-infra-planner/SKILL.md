@@ -4,7 +4,7 @@ description: "Architect and plan multi-service Azure infrastructure from workloa
 license: MIT
 metadata:
   author: Microsoft
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Azure Infra Planner
@@ -29,7 +29,7 @@ Activate this skill when user wants to:
 
 ## Rules
 
-1. **Research before planning** — You **MUST** use available MCP tools to research best practices **AND** Well-Architected Framework for SKUs, regions, naming conventions, and architecture if you can't find them in your references. See [research.md](references/research.md) for detailed research instructions.
+1. **Research before planning** — You **MUST** call `get_azure_bestpractices` and `wellarchitectedframework_serviceguide_get` MCP tools BEFORE reading local resource files or generating a plan. See [research.md](references/research.md) Step 2.
 2. **Plan before IaC** — Generate `<project-root>/.azure/infrastructure-plan.json` before any IaC so we can map the plan to generated code and ensure alignment.
 3. **Get approval** — Plan status must be `approved` before deployment.
 4. **User chooses IaC format** — Bicep or Terraform; ask if not specified.
@@ -41,11 +41,13 @@ Activate this skill when user wants to:
 
 > **YOU MUST CREATE A PLAN BEFORE GENERATING ANY IAC**
 >
-> 1. **RESEARCH** — Gather requirements, check SKUs, regions, naming rules
-> 2. **PLAN** — Generate `<project-root>/.azure/infrastructure-plan.json` with status `draft`
-> 3. **CONFIRM** — Present the plan to the user; user sets status to `approved`
-> 4. **GENERATE** — First, create the `<project-root>/infra/` directory. Then generate all Bicep or Terraform files inside it. Never write IaC files outside `infra/`.
-> 5. **DEPLOY** — Execute deployment commands only when status is `approved`
+> 1. **RESEARCH** — Gather requirements, identify core resources, check SKUs, regions, naming rules
+> 2. **WAF RESEARCH** — Call WAF tools for every planned service; collect recommendations
+> 3. **REFINE RESOURCES** — Review WAF findings and add missing cross-cutting resources (Key Vault, managed identity, monitoring, diagnostics, network isolation). See [research.md](references/research.md) Step 3.
+> 4. **PLAN** — Generate `<project-root>/.azure/infrastructure-plan.json` with status `draft`
+> 5. **CONFIRM** — Present the plan to the user; user sets status to `approved`
+> 6. **GENERATE** — First, create the `<project-root>/infra/` directory. Then generate all Bicep or Terraform files inside it. Never write IaC files outside `infra/`.
+> 7. **DEPLOY** — Execute deployment commands only when status is `approved`
 
 ---
 
@@ -53,7 +55,7 @@ Activate this skill when user wants to:
 
 | Phase | Action | References |
 |-------|--------|------------|
-| 1. Research | Gather requirements, check SKUs/regions, load per-resource files, research WAF to see if any extra resources are necessary (monitoring, security) | [research.md](references/research.md), [resources.md](references/resources.md) |
+| 1. Research | Gather requirements, identify core resources, research WAF for **every** planned service, then **refine** the resource list by adding missing cross-cutting resources (Key Vault, managed identity, monitoring, network isolation, diagnostics). See the mandatory refinement loop in research.md. | [research.md](references/research.md), [resources.md](references/resources.md) |
 | 2. Plan Generation | Build `<project-root>/.azure/infrastructure-plan.json` one resource at a time. Verify each resource immediately. Present plan and **STOP HERE until user approves**. | [plan-schema.md](references/plan-schema.md), [verification.md](references/verification.md) |
 | 3. IaC Generation | Generate Bicep or Terraform from approved plan. **Create `<project-root>/infra/` directory first**, then write all `.bicep` or `.tf` files there. Never write IaC files to `.azure/` or project root. | [bicep-generation.md](references/DSLs/bicep/bicep-generation.md), [terraform-generation.md](references/DSLs/terraform/terraform-generation.md) |
 | 4. Deployment | Confirm subscription and resource group, then execute `az deployment group create` or `terraform apply` only when `meta.status === "approved"` | [deployment.md](references/deployment.md) |
@@ -83,8 +85,11 @@ Activate this skill when user wants to:
 
 ## MCP Tools
 
-| Tool | Purpose |
-|------|---------|
-| `microsoft_docs_search` | Search Microsoft Learn for architecture patterns, SKU details, naming rules, and best practices. |
-| `microsoft_docs_fetch` | Fetch full content of a specific Learn doc page by URL. |
-| `wellarchitectedframework_serviceguide_get` | Get a WAF service guide URL for an Azure service. Returns a raw markdown URL — use a sub-agent to fetch and summarize the guide using only the user's initial prompt (see [research.md](references/research.md)). Falls back to `microsoft_docs_search` if no guide exists. |
+> ⛔ **You MUST call these tools during research (Phase 1) BEFORE reading local resource files.** See [research.md](references/research.md) Step 2.
+
+| Tool | Purpose | When to Call |
+|------|---------|-------------|
+| `get_azure_bestpractices` | Get baseline WAF and deployment best practices. Call with `resource: "general"`, `action: "all"`. | Once at start of research |
+| `wellarchitectedframework_serviceguide_get` | Get WAF service guide for a specific Azure service. Call with `service: "<service-name>"` (e.g., `"Container Apps"`, `"Cosmos DB"`). Returns a raw markdown URL — **REQUIRED** use a sub-agent to fetch and summarize. | Once per core service — call in parallel |
+| `microsoft_docs_search` | Search Microsoft Learn for architecture patterns, SKU details, naming rules, and best practices. | Once per core service if needed — call in parallel |
+| `microsoft_docs_fetch` | Fetch full content of a specific Learn doc page by URL. | Once per core service if needed — call in parallel |

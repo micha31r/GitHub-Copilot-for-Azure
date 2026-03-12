@@ -141,7 +141,7 @@ describe(`${SKILL_NAME} - Unit Tests`, () => {
     test("all 7 resource category directories exist", () => {
       const expectedCategories = [
         "compute", "data", "networking", "messaging",
-        "observability", "ai", "security"
+        "monitoring", "ai", "security"
       ];
       for (const cat of expectedCategories) {
         const catDir = path.join(resourcesDir, cat);

@@ -16,17 +16,15 @@
 
 ## Subtypes (kind)
 
-The `kind` property is a free-form string (not an enum). Use these exact values for function apps:
+Use these exact `kind` values (comma-separated string, order matters):
 
 | Kind | Description |
 |------|-------------|
-| `functionapp` | Windows Consumption or Dedicated function app |
-| `functionapp,linux` | Linux Consumption or Dedicated function app |
+| `functionapp` | Windows Consumption or Dedicated |
+| `functionapp,linux` | Linux Consumption or Dedicated |
 | `functionapp,workflowapp` | Logic App (Standard) on Functions runtime |
 | `functionapp,linux,container` | Linux container function app |
 | `functionapp,linux,container,azurecontainerapps` | Function App on Container Apps |
-
-> **Note:** `kind` is a comma-separated string, not an enum. Order matters for some combinations.
 
 ## SKU Names
 
