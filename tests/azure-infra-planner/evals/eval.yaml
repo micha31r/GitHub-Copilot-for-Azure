@@ -34,8 +34,8 @@ graders:
         1. The agent follows a plan-first workflow (research requirements before generating IaC)
         2. The agent proposes creating an infrastructure-plan.json file at .azure/infrastructure-plan.json
         3. The agent identifies appropriate Azure resources and services for the described workload
-        4. The agent asks the user to approve the plan before generating any IaC (Bicep or Terraform)
-        5. The agent mentions Bicep or Terraform as the IaC format (or asks the user's preference)
+        4. The agent presents or acknowledges the plan before generating IaC (approval may be automatic if the user requested it)
+        5. The agent generates or offers to generate Bicep or Terraform as the IaC format
 
         If all 5 criteria are met, call set_waza_grade_pass with description "plan_request_correct" and a reason summarizing what was done well.
         If any criterion is not met, call set_waza_grade_fail with description "plan_request_incorrect" and explain which criteria failed.
