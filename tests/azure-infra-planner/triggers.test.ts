@@ -30,6 +30,11 @@ describe(`${SKILL_NAME} - Trigger Tests`, () => {
       "Plan dev staging and production Azure environments",
       "I need to provision Azure resources for my app",
       "Generate infrastructure as code for Azure",
+      "Deploy a GenAI backend with Azure OpenAI and supporting services",
+      "Plan infrastructure for a chatbot using Azure OpenAI",
+      "Create an IoT solution for 10,000 edge devices on Azure",
+      "Set up backup and disaster recovery across Azure regions",
+      "Build a SaaS platform on Azure with multi-tenant isolation",
     ];
 
     test.each(shouldTriggerPrompts)(

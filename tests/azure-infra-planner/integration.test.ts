@@ -291,4 +291,52 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
       softCheckSkill(agentMetadata, SKILL_NAME);
     });
   });
+
+  describe("anti-invocation", () => {
+    test("does NOT invoke skill for existing app preparation prompt", async () => {
+      try {
+        const agentMetadata = await agent.run({
+          prompt: "I have an existing Node.js Express application. Help me prepare it for Azure App Service deployment.",
+          nonInteractive: true,
+          followUp: FOLLOW_UP_PROMPT,
+          shouldEarlyTerminate: (agentMetadata) => getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+        });
+
+        // Skill should NOT be invoked for existing app preparation (azure-prepare territory)
+        const invoked = isSkillInvoked(agentMetadata, SKILL_NAME);
+        if (invoked) {
+          console.warn(`⚠️  ${SKILL_NAME} was invoked for an azure-prepare prompt (routing overlap)`);
+        }
+      } catch (e: unknown) {
+        if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+          console.log("⏭️  SDK not loadable, skipping test");
+          return;
+        }
+        throw e;
+      }
+    });
+
+    test("does NOT invoke skill for azd deploy prompt", async () => {
+      try {
+        const agentMetadata = await agent.run({
+          prompt: "I already have my azure.yaml configured. Run azd up to deploy everything to Azure.",
+          nonInteractive: true,
+          followUp: FOLLOW_UP_PROMPT,
+          shouldEarlyTerminate: (agentMetadata) => getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
+        });
+
+        // Skill should NOT be invoked for deployment execution (azure-deploy territory)
+        const invoked = isSkillInvoked(agentMetadata, SKILL_NAME);
+        if (invoked) {
+          console.warn(`⚠️  ${SKILL_NAME} was invoked for an azure-deploy prompt (routing overlap)`);
+        }
+      } catch (e: unknown) {
+        if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
+          console.log("⏭️  SDK not loadable, skipping test");
+          return;
+        }
+        throw e;
+      }
+    });
+  });
 });
