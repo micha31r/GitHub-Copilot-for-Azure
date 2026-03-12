@@ -1,6 +1,6 @@
 id: invoke-simple-plan
 inputs:
-  prompt: "Plan Azure infrastructure for a web app with a database and a Redis cache."
+  prompt: "Plan Azure infrastructure for a web app with a database and a Redis cache. Assume all defaults, auto-approve the plan, and generate Bicep."
 graders:
   - type: skill_invocation
     name: skill_invoked

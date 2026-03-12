@@ -26,12 +26,13 @@ The infrastructure plan is written to `<project-root>/.azure/infrastructure-plan
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `userGoal` | string | Yes | User's stated objective or workload description, matches user query exactly |
+| `subGoals` | string[] | No | Inferred architectural constraints and priorities derived from the user's request and research phase. Examples: `"Cost-optimized: user chose defaults, avoid premium networking"`, `"Security-first: encrypt all data, use managed identity"`, `"Minimal complexity: single region, no VNet"`. These help evaluators understand intentional tradeoffs. Should be short list of 0-3 points. |
 
 ## `plan` (required)
 
 ### `plan.resources[]` (required)
 
-Each element represents one Azure resource:
+Each element represents one Azure resource, include resource groups:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|

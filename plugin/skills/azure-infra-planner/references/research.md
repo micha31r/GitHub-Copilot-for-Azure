@@ -1,49 +1,44 @@
 # Research Phase
 
-Gather all information needed to make correct infrastructure decisions before generating the plan. 
+Research is sequential: identify resources → call WAF tools → refine → load resource files.
 
 ## Input Analysis
 
-Determine the input scenario and gather requirements accordingly:
-
 | Scenario | Action |
 |----------|--------|
-| **Repository analysis** | Scan project files: `package.json`, `requirements.txt`, `Dockerfile`, `*.csproj`, config files. Identify runtime, dependencies, and infrastructure needs. |
-| **User requirements** | Ask user to describe their workload: purpose, expected traffic, data storage needs, security requirements, budget constraints. |
-| **Multi-environment** | Ask which environments (dev/staging/prod) and how sizing differs between them. |
+| **Repository** | Scan `package.json`, `requirements.txt`, `Dockerfile`, `*.csproj` for runtime/dependencies. |
+| **User requirements** | Clarify workload purpose, traffic, data storage, security, budget. |
+| **Multi-environment** | Ask about dev/staging/prod sizing differences. |
 
-## MCP Tool Usage
+## Step 1 — Identify Core Resources and Sub-Goals
 
-### Architecture Research
+From the user's description, list the **core Azure services** (compute, data, networking, messaging). Also derive **sub-goals** — implicit constraints to include in `inputs.subGoals`:
+- "assume all defaults" → `"Cost-optimized: consumption/serverless tiers, minimal complexity"`
+- production system → `"Production-grade: zone redundancy, private networking, managed identity"`
 
-Use `microsoft_docs_search` to find architecture guidance:
-- Search for architecture patterns matching the workload type (e.g., "Azure web app architecture best practices")
-- Extract recommended resource types and design patterns from results
+## Step 2 — WAF Tool Calls (MANDATORY FIRST)
 
-### Well-Architected Framework Guidance
+> ⛔ **HARD GATE**: Call WAF MCP tools BEFORE reading local resource files. Do NOT skip this.
 
-**IMPORTANT** You **MUST** call `wellarchitectedframework_serviceguide_get` for every planned Azure service (if the service exists in the MCP) early in research so WAF recommendations can influence architecture decisions. These decisions include extra resources or properties needed for security, monitoring, and Single-Point-of-Failures. Use subagents to execute this research.
+1. Call `get_azure_bestpractices` with `resource: "general"`, `action: "all"` for baseline guidance.
+2. Call `wellarchitectedframework_serviceguide_get` with `service: "<name>"` for **each** core service (in parallel). Examples: `"Container Apps"`, `"Cosmos DB"`, `"App Service"`, `"Event Grid"`, `"Key Vault"`.
+3. The tool returns a markdown URL. Use a sub-agent to fetch and summarize in ≤500 tokens, focusing on: additional resources needed, required properties for security/reliability, key design decisions.
+4. Collect all WAF findings: missing resources, property hardening, architecture patterns.
 
-The tool returns a **raw markdown URL**, not content. Handle the two cases:
+## Step 3 — Resource Refinement (MANDATORY)
 
-1. **URL returned** — Spawn a subagent to summarize the content found and ask it to summarize important information 500 tokens or less. It can summarize better the more specific information you're seeking (cost, security, important properties, key principles).
-2. **No guide available** — Fall back to `microsoft_docs_search` for WAF guidance. Use a subagent to summarize the content found and ask it to summarize important information 500 tokens or less. It can summarize better the more specific information you're seeking (cost, security, important properties).
+> ⚠️ Do NOT skip. Review resources against WAF findings AND the [WAF checklist](waf-checklist.md) before planning.
 
-### SKU and Region Availability
+Walk through every concern in the [WAF cross-cutting checklist](waf-checklist.md) and add missing resources or harden properties. Document intentional omissions in `overallReasoning.tradeoffs` and `inputs.subGoals`.
 
-Use [resources](resources.md) and `microsoft_docs_search` and `microsoft_docs_fetch` if necessary to verify:
-- Which regions support the selected resource types
-- Available SKUs and their capabilities
-- Service limits and quotas for target SKUs
+## Step 4 — Load Resource Reference Files
 
-## Research Checklist
+Read [resource reference files](resources.md) for each resource to verify:
 
-For each resource in the plan, verify:
-
-1. **Type** — Correct `Microsoft.*` resource type
-2. **SKU** — Available in target region, appropriate for workload size
-3. **Region** — Service available, data residency requirements met
-4. **Name** — Complies with naming constraints
-5. **Dependencies** — All prerequisite resources identified and ordered
-6. **Properties** — Required properties populated per resource schema
-7. **Alternatives** — At least one alternative considered with tradeoff documented
+1. **Type** — Correct `Microsoft.*` resource type and API version
+2. **SKU** — Available in target region, appropriate for workload
+3. **Region** — Service available, data residency met
+4. **Name** — CAF-compliant naming constraints
+5. **Dependencies** — All prerequisites identified and ordered
+6. **Properties** — Required properties per resource schema
+7. **Alternatives** — At least one alternative with tradeoff documented

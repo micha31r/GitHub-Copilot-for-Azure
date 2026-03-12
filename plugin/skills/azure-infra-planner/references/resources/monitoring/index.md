@@ -1,4 +1,4 @@
-### Observability
+### Monitoring
 
 | Resource | ARM Type | File | CAF Prefix | Naming Scope | Region Category |
 |----------|----------|------|------------|--------------|-----------------|

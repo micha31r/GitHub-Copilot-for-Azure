@@ -10,7 +10,7 @@ Quick-lookup table mapping Azure resource types to their reference files. Each r
 | Data | 9 | [resources/data/index.md](resources/data/index.md) |
 | Networking | 17 | [resources/networking/index.md](resources/networking/index.md) |
 | Messaging | 3 | [resources/messaging/index.md](resources/messaging/index.md) |
-| Observability | 2 | [resources/observability/index.md](resources/observability/index.md) |
+| Monitoring | 2 | [resources/monitoring/index.md](resources/monitoring/index.md) |
 | AI & ML | 3 | [resources/ai/index.md](resources/ai/index.md) |
 | Security | 2 | [resources/security/index.md](resources/security/index.md) |
 
