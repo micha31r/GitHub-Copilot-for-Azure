@@ -302,11 +302,8 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
           shouldEarlyTerminate: (agentMetadata) => getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
         });
 
-        // Skill should NOT be invoked for existing app preparation (azure-prepare territory)
-        const invoked = isSkillInvoked(agentMetadata, SKILL_NAME);
-        if (invoked) {
-          console.warn(`⚠️  ${SKILL_NAME} was invoked for an azure-prepare prompt (routing overlap)`);
-        }
+        // Existing app preparation should route to azure-prepare, not azure-infra-planner
+        softCheckSkill(agentMetadata, "azure-prepare");
       } catch (e: unknown) {
         if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
           console.log("⏭️  SDK not loadable, skipping test");
@@ -325,11 +322,8 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
           shouldEarlyTerminate: (agentMetadata) => getToolCalls(agentMetadata).length > maxToolCallBeforeTerminate
         });
 
-        // Skill should NOT be invoked for deployment execution (azure-deploy territory)
-        const invoked = isSkillInvoked(agentMetadata, SKILL_NAME);
-        if (invoked) {
-          console.warn(`⚠️  ${SKILL_NAME} was invoked for an azure-deploy prompt (routing overlap)`);
-        }
+        // Deployment execution should route to azure-deploy, not azure-infra-planner
+        softCheckSkill(agentMetadata, "azure-deploy");
       } catch (e: unknown) {
         if (e instanceof Error && e.message?.includes("Failed to load @github/copilot-sdk")) {
           console.log("⏭️  SDK not loadable, skipping test");
