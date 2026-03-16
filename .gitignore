@@ -319,6 +319,9 @@ orleans.codegen.cs
 Package.StoreAssociation.xml
 paket-files/
 plugin/azure/
+
+.github/copilot-instructions.md
+.github/instructions/repo.instructions.md
 project.fragment.lock.json
 project.lock.json
 publish/
