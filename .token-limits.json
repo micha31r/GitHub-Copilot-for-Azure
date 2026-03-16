@@ -5,5 +5,7 @@
     "references/**/*.md": 1000,
     "*.md": 2000
   },
-  "overrides": {}
+  "overrides": {
+    "plugin/skills/azure-infra-planner/references/constraints.md": 15000
+  }
 }

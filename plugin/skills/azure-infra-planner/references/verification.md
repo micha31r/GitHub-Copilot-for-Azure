@@ -1,6 +1,6 @@
 # Resource Verification
 
-Run these checks **immediately after writing each resource** to `plan.resources[]`. Fix issues in-place before moving to the next resource. Load the per-resource file from [resources.md](resources.md) for naming constraints, valid SKUs, and pairing rules.
+Run these checks **immediately after writing each resource** to `plan.resources[]`. Fix issues in-place before moving to the next resource. Look up the resource in the [resource catalog](resources.md) and use MCP tool calls (`mcp_bicep_get_az_resource_type_schema`, `microsoft_docs_search`) for naming constraints, valid SKUs, and properties. Read [constraints.md](constraints.md) for pairing rules.
 
 ## 1. Name Checks
 

@@ -4,7 +4,7 @@ description: "Architect and plan multi-service Azure infrastructure from workloa
 license: MIT
 metadata:
   author: Microsoft
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Azure Infra Planner
@@ -91,5 +91,6 @@ Activate this skill when user wants to:
 |------|---------|-------------|
 | `get_azure_bestpractices` | Get baseline WAF and deployment best practices. Call with `resource: "general"`, `action: "all"`. | Once at start of research |
 | `wellarchitectedframework_serviceguide_get` | Get WAF service guide for a specific Azure service. Call with `service: "<service-name>"` (e.g., `"Container Apps"`, `"Cosmos DB"`). Returns a raw markdown URL — **REQUIRED** use a sub-agent to fetch and summarize. | Once per core service — call in parallel |
-| `microsoft_docs_search` | Search Microsoft Learn for architecture patterns, SKU details, naming rules, and best practices. | Once per core service if needed — call in parallel |
-| `microsoft_docs_fetch` | Fetch full content of a specific Learn doc page by URL. | Once per core service if needed — call in parallel |
+| `mcp_bicep_get_az_resource_type_schema` | Get full Bicep schema for an ARM resource type. Call with the ARM type and API version from [resources.md](references/resources.md). Returns required properties, SKU values, all property types. Replaces static bicep/SKU/properties files. | Once per resource during planning |
+| `microsoft_docs_search` | Search Microsoft Learn for architecture patterns, SKU details, naming rules, and best practices. Use `"<resource-name> naming rules"` to get naming constraints. | Once per core service if needed — call in parallel |
+| `microsoft_docs_fetch` | Fetch full content of a specific Learn doc page by URL. Use URLs from the documentation tables in [resources.md](references/resources.md). | Once per core service if needed — call in parallel |

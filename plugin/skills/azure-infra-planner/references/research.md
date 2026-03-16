@@ -31,9 +31,16 @@ From the user's description, list the **core Azure services** (compute, data, ne
 
 Walk through every concern in the [WAF cross-cutting checklist](waf-checklist.md) and add missing resources or harden properties. Document intentional omissions in `overallReasoning.tradeoffs` and `inputs.subGoals`.
 
-## Step 4 — Load Resource Reference Files
+## Step 4 — Resource Lookup via Tools
 
-Read [resource reference files](resources.md) for each resource to verify:
+Use MCP tools with data from the [resource catalog](resources.md) to verify each resource:
+
+1. **Look up the resource** in [resources.md](resources.md) to get its ARM type, API version, and CAF prefix.
+2. **Call `mcp_bicep_get_az_resource_type_schema`** with the ARM type and API version. This returns the full Bicep schema including required properties, SKU values, all property types and descriptions.
+3. **Call `microsoft_docs_search`** with `"<resource-name> naming rules"` to get naming constraints (min/max length, allowed characters, scope). Alternatively, use the naming rules URL from the documentation table in resources.md with `microsoft_docs_fetch`.
+4. **Read [constraints.md](constraints.md)** for the resource's pairing rules (not available from tools).
+
+From the tool results, verify:
 
 1. **Type** — Correct `Microsoft.*` resource type and API version
 2. **SKU** — Available in target region, appropriate for workload
