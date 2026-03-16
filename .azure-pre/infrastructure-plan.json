@@ -1,0 +1,1118 @@
+{
+  "meta": {
+    "planId": "docqa-api-001",
+    "generatedAt": "2026-03-16T14:33:34Z",
+    "version": "1.0.0",
+    "status": "draft"
+  },
+
+  "inputs": {
+    "userGoal": "Create a real-time document Q&A API leveraging Azure OpenAI and Azure Cosmos DB, expose endpoints using Azure API Management, and enforce rate limits per user.",
+    "subGoals": [
+      "Enterprise-grade security with private networking and managed identity",
+      "Per-user rate limiting via APIM policies",
+      "Vector search in Cosmos DB for document retrieval"
+    ]
+  },
+
+  "plan": {
+    "resources": [
+      {
+        "name": "vnet-docqa-prod-eastus2",
+        "type": "Microsoft.Network/virtualNetworks",
+        "subtype": "Virtual Network",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": ["10.0.0.0/16"]
+          },
+          "subnets": [
+            {
+              "name": "snet-aca",
+              "properties": {
+                "addressPrefix": "10.0.1.0/23",
+                "delegations": [
+                  {
+                    "name": "Microsoft.App.environments",
+                    "properties": {
+                      "serviceName": "Microsoft.App/environments"
+                    }
+                  }
+                ],
+                "networkSecurityGroup": { "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-aca-docqa-prod-eastus2')]" }
+              }
+            },
+            {
+              "name": "snet-pe",
+              "properties": {
+                "addressPrefix": "10.0.4.0/24",
+                "privateEndpointNetworkPolicies": "Disabled",
+                "networkSecurityGroup": { "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-pe-docqa-prod-eastus2')]" }
+              }
+            },
+            {
+              "name": "snet-apim",
+              "properties": {
+                "addressPrefix": "10.0.5.0/27",
+                "networkSecurityGroup": { "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-apim-docqa-prod-eastus2')]" }
+              }
+            }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Foundation for network isolation. All backend services connect via private endpoints in snet-pe. Container Apps environment uses delegated snet-aca (/23 for workload profiles). APIM uses snet-apim for outbound VNet integration.",
+          "alternativesConsidered": ["Hub-spoke topology with Azure Firewall — overkill for single-workload deployment"],
+          "tradeoffs": "Single VNet simplifies DNS and routing but limits blast-radius isolation between workloads."
+        },
+        "dependencies": ["nsg-aca-docqa-prod-eastus2", "nsg-pe-docqa-prod-eastus2", "nsg-apim-docqa-prod-eastus2"],
+        "dependencyReasoning": "NSGs must exist before subnet association.",
+        "references": [
+          { "title": "Azure VNet documentation", "url": "https://learn.microsoft.com/azure/virtual-network/virtual-networks-overview" },
+          { "title": "Container Apps VNet requirements", "url": "https://learn.microsoft.com/azure/container-apps/vnet-custom" }
+        ]
+      },
+
+      {
+        "name": "nsg-aca-docqa-prod-eastus2",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "subtype": "Network Security Group",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "securityRules": [
+            {
+              "name": "AllowVnetInbound",
+              "properties": {
+                "priority": 100,
+                "direction": "Inbound",
+                "access": "Allow",
+                "protocol": "*",
+                "sourceAddressPrefix": "VirtualNetwork",
+                "destinationAddressPrefix": "VirtualNetwork",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*"
+              }
+            },
+            {
+              "name": "AllowAzureLoadBalancerInbound",
+              "properties": {
+                "priority": 110,
+                "direction": "Inbound",
+                "access": "Allow",
+                "protocol": "*",
+                "sourceAddressPrefix": "AzureLoadBalancer",
+                "destinationAddressPrefix": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*"
+              }
+            }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Required for Container Apps subnet to control inbound/outbound traffic. Allows VNet-internal traffic and Azure Load Balancer probes.",
+          "alternativesConsidered": ["No NSG — violates WAF security pillar"],
+          "tradeoffs": "Permissive VNet rule; tighten for stricter environments."
+        },
+        "dependencies": [],
+        "references": [
+          { "title": "NSG overview", "url": "https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview" }
+        ]
+      },
+
+      {
+        "name": "nsg-pe-docqa-prod-eastus2",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "subtype": "Network Security Group",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "securityRules": [
+            {
+              "name": "AllowVnetInbound",
+              "properties": {
+                "priority": 100,
+                "direction": "Inbound",
+                "access": "Allow",
+                "protocol": "Tcp",
+                "sourceAddressPrefix": "VirtualNetwork",
+                "destinationAddressPrefix": "VirtualNetwork",
+                "sourcePortRange": "*",
+                "destinationPortRange": "443"
+              }
+            },
+            {
+              "name": "DenyAllInbound",
+              "properties": {
+                "priority": 4096,
+                "direction": "Inbound",
+                "access": "Deny",
+                "protocol": "*",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*"
+              }
+            }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Restricts private endpoint subnet to HTTPS-only from within VNet. Explicit deny-all catches any unmatched traffic.",
+          "alternativesConsidered": ["Open NSG — violates least-privilege principle"],
+          "tradeoffs": "Only port 443 allowed; Cosmos DB also uses 443 so this is sufficient."
+        },
+        "dependencies": [],
+        "references": [
+          { "title": "Private endpoint NSG support", "url": "https://learn.microsoft.com/azure/private-link/private-endpoint-overview" }
+        ]
+      },
+
+      {
+        "name": "nsg-apim-docqa-prod-eastus2",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "subtype": "Network Security Group",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "securityRules": [
+            {
+              "name": "AllowAPIMInbound",
+              "properties": {
+                "priority": 100,
+                "direction": "Inbound",
+                "access": "Allow",
+                "protocol": "Tcp",
+                "sourceAddressPrefix": "ApiManagement",
+                "destinationAddressPrefix": "VirtualNetwork",
+                "sourcePortRange": "*",
+                "destinationPortRange": "3443"
+              }
+            },
+            {
+              "name": "AllowClientInbound",
+              "properties": {
+                "priority": 110,
+                "direction": "Inbound",
+                "access": "Allow",
+                "protocol": "Tcp",
+                "sourceAddressPrefix": "Internet",
+                "destinationAddressPrefix": "VirtualNetwork",
+                "sourcePortRange": "*",
+                "destinationPortRange": "443"
+              }
+            }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "APIM management plane requires port 3443 from ApiManagement service tag. Client traffic on 443.",
+          "alternativesConsidered": ["No NSG — APIM requires explicit rules for management operations"],
+          "tradeoffs": "Internet inbound on 443 is needed for public-facing gateway; restrict with IP ranges if client base is known."
+        },
+        "dependencies": [],
+        "references": [
+          { "title": "APIM VNet NSG rules", "url": "https://learn.microsoft.com/azure/api-management/virtual-network-reference" }
+        ]
+      },
+
+      {
+        "name": "log-docqa-prod-eastus2",
+        "type": "Microsoft.OperationalInsights/workspaces",
+        "subtype": "Log Analytics Workspace",
+        "location": "eastus2",
+        "sku": "PerGB2018",
+        "properties": {
+          "retentionInDays": 90,
+          "workspaceCapping": {
+            "dailyQuotaGb": 5
+          },
+          "publicNetworkAccessForIngestion": "Enabled",
+          "publicNetworkAccessForQuery": "Enabled"
+        },
+        "reasoning": {
+          "whyChosen": "Central observability sink for all diagnostic settings, Container Apps system logs, and Application Insights backend. PerGB2018 is the recommended default SKU. 90-day retention balances cost with operational needs.",
+          "alternativesConsidered": ["CapacityReservation — better for >100 GB/day; not expected at this scale"],
+          "tradeoffs": "Daily quota of 5 GB caps unexpected log spikes but may drop data during incidents; adjust based on observed volume."
+        },
+        "dependencies": [],
+        "references": [
+          { "title": "Log Analytics pricing", "url": "https://learn.microsoft.com/azure/azure-monitor/logs/cost-logs" }
+        ]
+      },
+
+      {
+        "name": "appi-docqa-prod-eastus2",
+        "type": "Microsoft.Insights/components",
+        "subtype": "Application Insights",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "Application_Type": "web",
+          "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'log-docqa-prod-eastus2')]",
+          "IngestionMode": "LogAnalytics",
+          "DisableLocalAuth": true,
+          "publicNetworkAccessForIngestion": "Enabled",
+          "publicNetworkAccessForQuery": "Enabled"
+        },
+        "reasoning": {
+          "whyChosen": "Workspace-based Application Insights provides distributed tracing, live metrics, and dependency tracking for the Container App and APIM. Classic mode is retired; workspace-based is mandatory for new resources.",
+          "alternativesConsidered": ["Standalone classic App Insights — retired, not an option"],
+          "tradeoffs": "Local auth disabled for security; services must use managed identity or connection string from Key Vault."
+        },
+        "dependencies": ["log-docqa-prod-eastus2"],
+        "dependencyReasoning": "Workspace-based App Insights requires a Log Analytics workspace.",
+        "references": [
+          { "title": "Workspace-based App Insights", "url": "https://learn.microsoft.com/azure/azure-monitor/app/create-workspace-resource" }
+        ]
+      },
+
+      {
+        "name": "pdnsz-openai",
+        "type": "Microsoft.Network/privateDnsZones",
+        "subtype": "Private DNS Zone",
+        "location": "global",
+        "sku": "N/A",
+        "properties": {
+          "zoneName": "privatelink.openai.azure.com"
+        },
+        "reasoning": {
+          "whyChosen": "Required for Azure OpenAI private endpoint DNS resolution. Allows VNet-connected resources to resolve the OpenAI endpoint to the private IP.",
+          "alternativesConsidered": ["Custom DNS server — adds complexity without benefit in single-VNet topology"],
+          "tradeoffs": "Global resource; one zone can serve multiple VNets via VNet links."
+        },
+        "dependencies": [],
+        "references": [
+          { "title": "Private DNS zone for Cognitive Services", "url": "https://learn.microsoft.com/azure/private-link/private-endpoint-dns" }
+        ]
+      },
+
+      {
+        "name": "pdnsz-cosmos",
+        "type": "Microsoft.Network/privateDnsZones",
+        "subtype": "Private DNS Zone",
+        "location": "global",
+        "sku": "N/A",
+        "properties": {
+          "zoneName": "privatelink.documents.azure.com"
+        },
+        "reasoning": {
+          "whyChosen": "Required for Cosmos DB NoSQL private endpoint DNS resolution.",
+          "alternativesConsidered": ["Service endpoints — deprecated path for Cosmos DB; private endpoints are WAF-recommended"],
+          "tradeoffs": "None significant."
+        },
+        "dependencies": [],
+        "references": [
+          { "title": "Private DNS zone for Cosmos DB", "url": "https://learn.microsoft.com/azure/cosmos-db/how-to-configure-private-endpoints" }
+        ]
+      },
+
+      {
+        "name": "pdnsz-keyvault",
+        "type": "Microsoft.Network/privateDnsZones",
+        "subtype": "Private DNS Zone",
+        "location": "global",
+        "sku": "N/A",
+        "properties": {
+          "zoneName": "privatelink.vaultcore.azure.net"
+        },
+        "reasoning": {
+          "whyChosen": "Required for Key Vault private endpoint DNS resolution.",
+          "alternativesConsidered": [],
+          "tradeoffs": "None."
+        },
+        "dependencies": [],
+        "references": [
+          { "title": "Private DNS zones for Key Vault", "url": "https://learn.microsoft.com/azure/key-vault/general/private-link-service" }
+        ]
+      },
+
+      {
+        "name": "pdnsz-link-openai",
+        "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+        "subtype": "DNS Zone VNet Link",
+        "location": "global",
+        "sku": "N/A",
+        "properties": {
+          "virtualNetwork": { "id": "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-docqa-prod-eastus2')]" },
+          "registrationEnabled": false
+        },
+        "reasoning": {
+          "whyChosen": "Links the OpenAI private DNS zone to the VNet so private endpoint DNS records are resolvable from within the network.",
+          "alternativesConsidered": [],
+          "tradeoffs": "None."
+        },
+        "dependencies": ["pdnsz-openai", "vnet-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires both the DNS zone and VNet to exist.",
+        "references": [
+          { "title": "Private DNS zone VNet links", "url": "https://learn.microsoft.com/azure/dns/private-dns-virtual-network-links" }
+        ]
+      },
+
+      {
+        "name": "pdnsz-link-cosmos",
+        "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+        "subtype": "DNS Zone VNet Link",
+        "location": "global",
+        "sku": "N/A",
+        "properties": {
+          "virtualNetwork": { "id": "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-docqa-prod-eastus2')]" },
+          "registrationEnabled": false
+        },
+        "reasoning": {
+          "whyChosen": "Links the Cosmos DB private DNS zone to the VNet.",
+          "alternativesConsidered": [],
+          "tradeoffs": "None."
+        },
+        "dependencies": ["pdnsz-cosmos", "vnet-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires both the DNS zone and VNet to exist.",
+        "references": [
+          { "title": "Private DNS zone VNet links", "url": "https://learn.microsoft.com/azure/dns/private-dns-virtual-network-links" }
+        ]
+      },
+
+      {
+        "name": "pdnsz-link-keyvault",
+        "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+        "subtype": "DNS Zone VNet Link",
+        "location": "global",
+        "sku": "N/A",
+        "properties": {
+          "virtualNetwork": { "id": "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-docqa-prod-eastus2')]" },
+          "registrationEnabled": false
+        },
+        "reasoning": {
+          "whyChosen": "Links the Key Vault private DNS zone to the VNet.",
+          "alternativesConsidered": [],
+          "tradeoffs": "None."
+        },
+        "dependencies": ["pdnsz-keyvault", "vnet-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires both the DNS zone and VNet to exist.",
+        "references": [
+          { "title": "Private DNS zone VNet links", "url": "https://learn.microsoft.com/azure/dns/private-dns-virtual-network-links" }
+        ]
+      },
+
+      {
+        "name": "kv-docqa-prod",
+        "type": "Microsoft.KeyVault/vaults",
+        "subtype": "Key Vault",
+        "location": "eastus2",
+        "sku": "standard",
+        "properties": {
+          "tenantId": "[subscription().tenantId]",
+          "enableRbacAuthorization": true,
+          "enableSoftDelete": true,
+          "softDeleteRetentionInDays": 90,
+          "enablePurgeProtection": true,
+          "publicNetworkAccess": "Disabled",
+          "networkAcls": {
+            "defaultAction": "Deny",
+            "bypass": "AzureServices"
+          }
+        },
+        "reasoning": {
+          "whyChosen": "Centralized secret management for API keys, connection strings, and certificates. RBAC authorization is WAF-recommended over access policies. Soft delete + purge protection guard against accidental/malicious deletion. Public access disabled; all access via private endpoint.",
+          "alternativesConsidered": ["Premium SKU — only needed for HSM-backed keys; not required here", "Azure App Configuration — complementary for feature flags but doesn't replace Key Vault for secrets"],
+          "tradeoffs": "Standard SKU lacks HSM support; acceptable for API keys and connection strings."
+        },
+        "dependencies": ["vnet-docqa-prod-eastus2"],
+        "dependencyReasoning": "VNet must exist for private endpoint connectivity.",
+        "references": [
+          { "title": "Key Vault best practices", "url": "https://learn.microsoft.com/azure/key-vault/general/best-practices" }
+        ]
+      },
+
+      {
+        "name": "oai-docqa-prod-eastus2",
+        "type": "Microsoft.CognitiveServices/accounts",
+        "subtype": "Azure OpenAI",
+        "location": "eastus2",
+        "sku": "S0",
+        "properties": {
+          "kind": "OpenAI",
+          "customSubDomainName": "oai-docqa-prod-eastus2",
+          "publicNetworkAccess": "Disabled",
+          "disableLocalAuth": true,
+          "networkAcls": {
+            "defaultAction": "Deny"
+          },
+          "encryption": {
+            "keySource": "Microsoft.CognitiveServices"
+          }
+        },
+        "reasoning": {
+          "whyChosen": "Azure OpenAI provides enterprise-grade GPT models for document Q&A. S0 is the only SKU for OpenAI. Local auth disabled forces managed identity usage. Public access disabled; traffic flows through private endpoint only.",
+          "alternativesConsidered": ["Azure AI Services multi-service account — unnecessary; single-purpose OpenAI account is cleaner", "Third-party LLM APIs — no enterprise SLA or data residency guarantees"],
+          "tradeoffs": "Single-region deployment; add a second region behind APIM load balancing for higher availability if needed."
+        },
+        "dependencies": ["vnet-docqa-prod-eastus2"],
+        "dependencyReasoning": "VNet must exist for private endpoint connectivity.",
+        "references": [
+          { "title": "Azure OpenAI overview", "url": "https://learn.microsoft.com/azure/ai-services/openai/overview" },
+          { "title": "Azure OpenAI networking", "url": "https://learn.microsoft.com/azure/ai-services/cognitive-services-virtual-networks" }
+        ]
+      },
+
+      {
+        "name": "oai-docqa-prod-eastus2/text-embedding-3-small",
+        "type": "Microsoft.CognitiveServices/accounts/deployments",
+        "subtype": "OpenAI Model Deployment (Embeddings)",
+        "location": "eastus2",
+        "sku": "GlobalStandard",
+        "properties": {
+          "model": {
+            "format": "OpenAI",
+            "name": "text-embedding-3-small",
+            "version": "1"
+          },
+          "sku": {
+            "name": "GlobalStandard",
+            "capacity": 120
+          },
+          "versionUpgradeOption": "OnceCurrentVersionExpired"
+        },
+        "reasoning": {
+          "whyChosen": "text-embedding-3-small provides high-quality 1536-dimension embeddings at low cost and high throughput. Used to vectorize documents and queries for Cosmos DB vector search. GlobalStandard deployment type for pay-per-token flexibility.",
+          "alternativesConsidered": ["text-embedding-3-large — higher dimensions (3072) but 2x cost; small is sufficient for most Q&A", "text-embedding-ada-002 — legacy; text-embedding-3-small outperforms at lower cost"],
+          "tradeoffs": "120K TPM capacity; increase if ingestion volume is high."
+        },
+        "dependencies": ["oai-docqa-prod-eastus2"],
+        "dependencyReasoning": "Model deployment requires the parent OpenAI account.",
+        "references": [
+          { "title": "OpenAI embeddings models", "url": "https://learn.microsoft.com/azure/ai-services/openai/concepts/models" }
+        ]
+      },
+
+      {
+        "name": "oai-docqa-prod-eastus2/gpt-4o",
+        "type": "Microsoft.CognitiveServices/accounts/deployments",
+        "subtype": "OpenAI Model Deployment (Completions)",
+        "location": "eastus2",
+        "sku": "GlobalStandard",
+        "properties": {
+          "model": {
+            "format": "OpenAI",
+            "name": "gpt-4o",
+            "version": "2024-11-20"
+          },
+          "sku": {
+            "name": "GlobalStandard",
+            "capacity": 80
+          },
+          "versionUpgradeOption": "OnceCurrentVersionExpired"
+        },
+        "reasoning": {
+          "whyChosen": "GPT-4o offers the best quality/cost/speed balance for document Q&A. Handles complex reasoning over retrieved context with 128K token window. GlobalStandard for pay-per-token flexibility and global routing.",
+          "alternativesConsidered": ["gpt-4o-mini — 60% cheaper but weaker at multi-document synthesis", "gpt-4 — legacy; gpt-4o is faster and cheaper at same quality", "ProvisionedManaged — better for sustained high throughput; switch if >50K TPM steady-state"],
+          "tradeoffs": "80K TPM capacity; monitor usage and scale up or switch to PTU if latency variance is unacceptable."
+        },
+        "dependencies": ["oai-docqa-prod-eastus2"],
+        "dependencyReasoning": "Model deployment requires the parent OpenAI account.",
+        "references": [
+          { "title": "GPT-4o model card", "url": "https://learn.microsoft.com/azure/ai-services/openai/concepts/models#gpt-4o-and-gpt-4-turbo" }
+        ]
+      },
+
+      {
+        "name": "cosmos-docqa-prod",
+        "type": "Microsoft.DocumentDB/databaseAccounts",
+        "subtype": "Cosmos DB NoSQL with Vector Search",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "databaseAccountOfferType": "Standard",
+          "kind": "GlobalDocumentDB",
+          "consistencyPolicy": {
+            "defaultConsistencyLevel": "Session"
+          },
+          "locations": [
+            {
+              "locationName": "eastus2",
+              "failoverPriority": 0,
+              "isZoneRedundant": true
+            }
+          ],
+          "capabilities": [
+            { "name": "EnableNoSQLVectorSearch" }
+          ],
+          "enableAutomaticFailover": true,
+          "publicNetworkAccess": "Disabled",
+          "disableLocalAuth": true,
+          "isVirtualNetworkFilterEnabled": true,
+          "backupPolicy": {
+            "type": "Continuous",
+            "continuousModeProperties": {
+              "tier": "Continuous7Days"
+            }
+          },
+          "enableFreeTier": false,
+          "minimalTlsVersion": "Tls12"
+        },
+        "reasoning": {
+          "whyChosen": "Cosmos DB NoSQL with vector search capability stores documents, metadata, and embeddings in a single database. Enables low-latency vector similarity search for RAG pattern. Session consistency balances performance and correctness for user-scoped Q&A. Zone-redundant for reliability. Continuous backup enables point-in-time restore.",
+          "alternativesConsidered": ["Azure AI Search — powerful but adds another service and cost; Cosmos DB vector search consolidates storage + search", "PostgreSQL with pgvector — viable but lacks Cosmos DB's global distribution and autoscale", "Azure SQL — no native vector search support"],
+          "tradeoffs": "Single-region; add a second region if global availability is required. Vector search indexes are immutable after creation — plan partition key and index strategy carefully."
+        },
+        "dependencies": ["vnet-docqa-prod-eastus2"],
+        "dependencyReasoning": "VNet must exist for private endpoint connectivity.",
+        "references": [
+          { "title": "Cosmos DB vector search", "url": "https://learn.microsoft.com/azure/cosmos-db/nosql/vector-search" },
+          { "title": "Cosmos DB private endpoints", "url": "https://learn.microsoft.com/azure/cosmos-db/how-to-configure-private-endpoints" }
+        ]
+      },
+
+      {
+        "name": "cae-docqa-prod-eastus2",
+        "type": "Microsoft.App/managedEnvironments",
+        "subtype": "Container Apps Environment",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "zoneRedundant": true,
+          "vnetConfiguration": {
+            "infrastructureSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'vnet-docqa-prod-eastus2', 'snet-aca')]",
+            "internal": true
+          },
+          "appLogsConfiguration": {
+            "destination": "log-analytics",
+            "logAnalyticsConfiguration": {
+              "customerId": "[reference('log-docqa-prod-eastus2').customerId]",
+              "sharedKey": "[listKeys('log-docqa-prod-eastus2', '2023-09-01').primarySharedKey]"
+            }
+          },
+          "workloadProfiles": [
+            {
+              "workloadProfileType": "Consumption",
+              "name": "Consumption"
+            },
+            {
+              "workloadProfileType": "D4",
+              "name": "dedicated-d4",
+              "minimumCount": 1,
+              "maximumCount": 3
+            }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Internal Container Apps environment keeps the API backend private — only accessible from within the VNet (via APIM). Zone-redundant for reliability. Dedicated D4 workload profile provides consistent CPU/memory for latency-sensitive Q&A requests. Consumption profile available for background/batch tasks.",
+          "alternativesConsidered": ["Azure App Service — lacks VNet-native isolation and KEDA scaling", "Azure Kubernetes Service — full Kubernetes overhead not justified for single API", "Azure Functions — cold starts problematic for real-time Q&A"],
+          "tradeoffs": "Dedicated workload profile has baseline cost even at zero traffic; Consumption-only is cheaper but has cold starts."
+        },
+        "dependencies": ["vnet-docqa-prod-eastus2", "log-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires VNet subnet for network integration and Log Analytics workspace for logging.",
+        "references": [
+          { "title": "Container Apps environments", "url": "https://learn.microsoft.com/azure/container-apps/environment" },
+          { "title": "Container Apps VNet integration", "url": "https://learn.microsoft.com/azure/container-apps/vnet-custom" }
+        ]
+      },
+
+      {
+        "name": "ca-docqa-api-prod",
+        "type": "Microsoft.App/containerApps",
+        "subtype": "Container App (Q&A API)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', 'cae-docqa-prod-eastus2')]",
+          "workloadProfileName": "dedicated-d4",
+          "identity": {
+            "type": "SystemAssigned"
+          },
+          "configuration": {
+            "ingress": {
+              "external": false,
+              "targetPort": 8080,
+              "transport": "http",
+              "allowInsecure": false
+            },
+            "secrets": [],
+            "registries": []
+          },
+          "template": {
+            "containers": [
+              {
+                "name": "docqa-api",
+                "image": "<acr-name>.azurecr.io/docqa-api:latest",
+                "resources": {
+                  "cpu": 2.0,
+                  "memory": "4Gi"
+                },
+                "env": [
+                  { "name": "AZURE_OPENAI_ENDPOINT", "value": "https://oai-docqa-prod-eastus2.openai.azure.com/" },
+                  { "name": "AZURE_OPENAI_DEPLOYMENT_CHAT", "value": "gpt-4o" },
+                  { "name": "AZURE_OPENAI_DEPLOYMENT_EMBEDDING", "value": "text-embedding-3-small" },
+                  { "name": "AZURE_COSMOSDB_ENDPOINT", "value": "https://cosmos-docqa-prod.documents.azure.com:443/" },
+                  { "name": "AZURE_COSMOSDB_DATABASE", "value": "docqa" },
+                  { "name": "AZURE_COSMOSDB_CONTAINER", "value": "documents" },
+                  { "name": "APPLICATIONINSIGHTS_CONNECTION_STRING", "secretRef": "appinsights-connstr" }
+                ],
+                "probes": [
+                  {
+                    "type": "Liveness",
+                    "httpGet": { "path": "/healthz", "port": 8080 },
+                    "initialDelaySeconds": 10,
+                    "periodSeconds": 30
+                  },
+                  {
+                    "type": "Readiness",
+                    "httpGet": { "path": "/ready", "port": 8080 },
+                    "initialDelaySeconds": 5,
+                    "periodSeconds": 10
+                  },
+                  {
+                    "type": "Startup",
+                    "httpGet": { "path": "/healthz", "port": 8080 },
+                    "initialDelaySeconds": 3,
+                    "failureThreshold": 10,
+                    "periodSeconds": 5
+                  }
+                ]
+              }
+            ],
+            "scale": {
+              "minReplicas": 2,
+              "maxReplicas": 10,
+              "rules": [
+                {
+                  "name": "http-scaling",
+                  "http": {
+                    "metadata": {
+                      "concurrentRequests": "20"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "reasoning": {
+          "whyChosen": "Hosts the document Q&A API backend. Internal ingress ensures only APIM can reach it. System-assigned managed identity authenticates to OpenAI, Cosmos DB, and Key Vault without credentials. Dedicated D4 profile avoids cold starts. Min 2 replicas for availability; HTTP scaling handles load spikes.",
+          "alternativesConsidered": ["Single replica — no availability during updates/failures", "External ingress — exposes API directly, bypassing APIM rate limiting"],
+          "tradeoffs": "2 CPU / 4 GiB per container; right-size based on load testing. Image placeholder must be replaced with actual ACR image."
+        },
+        "dependencies": ["cae-docqa-prod-eastus2", "oai-docqa-prod-eastus2", "cosmos-docqa-prod", "appi-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires Container Apps environment for hosting, and references OpenAI/Cosmos DB endpoints and App Insights connection string.",
+        "references": [
+          { "title": "Container Apps overview", "url": "https://learn.microsoft.com/azure/container-apps/overview" },
+          { "title": "Container Apps health probes", "url": "https://learn.microsoft.com/azure/container-apps/health-probes" }
+        ]
+      },
+
+      {
+        "name": "apim-docqa-prod",
+        "type": "Microsoft.ApiManagement/service",
+        "subtype": "API Management (Standard v2)",
+        "location": "eastus2",
+        "sku": "StandardV2",
+        "properties": {
+          "publisherEmail": "platform-team@contoso.com",
+          "publisherName": "Contoso Document Q&A",
+          "sku": {
+            "name": "StandardV2",
+            "capacity": 1
+          },
+          "identity": {
+            "type": "SystemAssigned"
+          },
+          "apiVersionConstraint": {
+            "minApiVersion": "2021-08-01"
+          }
+        },
+        "reasoning": {
+          "whyChosen": "APIM is the single entry point for the Q&A API. Standard v2 supports outbound VNet integration to reach the internal Container App, subscription-key and OAuth-based rate limiting, Application Insights integration, and caching. Per-user rate limiting enforced via rate-limit-by-key policy keyed on JWT claim or subscription key.",
+          "alternativesConsidered": ["Premium v2 — full VNet injection + zones; more expensive; use if multi-region or strict network isolation is required", "Azure Front Door + App Gateway — adds latency and complexity for single-region", "Consumption tier — no VNet integration, limited policies"],
+          "tradeoffs": "Standard v2 is single-region and lacks availability zone support. Upgrade to Premium v2 if zone redundancy is critical. Publisher email is a placeholder — replace with actual team email."
+        },
+        "dependencies": ["vnet-docqa-prod-eastus2", "appi-docqa-prod-eastus2"],
+        "dependencyReasoning": "VNet required for outbound integration to reach internal Container App. App Insights for API analytics and diagnostics.",
+        "references": [
+          { "title": "APIM v2 tiers", "url": "https://learn.microsoft.com/azure/api-management/v2-service-tiers-overview" },
+          { "title": "APIM rate limiting", "url": "https://learn.microsoft.com/azure/api-management/rate-limit-by-key-policy" }
+        ]
+      },
+
+      {
+        "name": "pe-oai-docqa-prod",
+        "type": "Microsoft.Network/privateEndpoints",
+        "subtype": "Private Endpoint (OpenAI)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "subnet": {
+            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'vnet-docqa-prod-eastus2', 'snet-pe')]"
+          },
+          "privateLinkServiceConnections": [
+            {
+              "name": "oai-connection",
+              "properties": {
+                "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', 'oai-docqa-prod-eastus2')]",
+                "groupIds": ["account"]
+              }
+            }
+          ],
+          "customDnsConfigs": [],
+          "privateDnsZoneGroup": {
+            "name": "default",
+            "properties": {
+              "privateDnsZoneConfigs": [
+                {
+                  "name": "openai-dns",
+                  "properties": {
+                    "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.openai.azure.com')]"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "reasoning": {
+          "whyChosen": "Private endpoint for Azure OpenAI ensures all API traffic stays within the VNet. DNS zone group auto-registers the A record in the private DNS zone.",
+          "alternativesConsidered": ["Service endpoints — not supported for Cognitive Services", "Public access with IP restrictions — less secure than private endpoint"],
+          "tradeoffs": "Consumes one IP from snet-pe per endpoint."
+        },
+        "dependencies": ["oai-docqa-prod-eastus2", "vnet-docqa-prod-eastus2", "pdnsz-openai", "pdnsz-link-openai"],
+        "dependencyReasoning": "Requires the OpenAI account, VNet subnet, and linked DNS zone.",
+        "references": [
+          { "title": "Cognitive Services private endpoints", "url": "https://learn.microsoft.com/azure/ai-services/cognitive-services-virtual-networks" }
+        ]
+      },
+
+      {
+        "name": "pe-cosmos-docqa-prod",
+        "type": "Microsoft.Network/privateEndpoints",
+        "subtype": "Private Endpoint (Cosmos DB)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "subnet": {
+            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'vnet-docqa-prod-eastus2', 'snet-pe')]"
+          },
+          "privateLinkServiceConnections": [
+            {
+              "name": "cosmos-connection",
+              "properties": {
+                "privateLinkServiceId": "[resourceId('Microsoft.DocumentDB/databaseAccounts', 'cosmos-docqa-prod')]",
+                "groupIds": ["Sql"]
+              }
+            }
+          ],
+          "privateDnsZoneGroup": {
+            "name": "default",
+            "properties": {
+              "privateDnsZoneConfigs": [
+                {
+                  "name": "cosmos-dns",
+                  "properties": {
+                    "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.documents.azure.com')]"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "reasoning": {
+          "whyChosen": "Private endpoint for Cosmos DB NoSQL API. GroupId 'Sql' is correct for the NoSQL (formerly SQL) API.",
+          "alternativesConsidered": ["VNet service endpoint — private endpoint is WAF-preferred"],
+          "tradeoffs": "Cosmos DB may create multiple regional endpoints; additional PEs needed for multi-region."
+        },
+        "dependencies": ["cosmos-docqa-prod", "vnet-docqa-prod-eastus2", "pdnsz-cosmos", "pdnsz-link-cosmos"],
+        "dependencyReasoning": "Requires the Cosmos DB account, VNet subnet, and linked DNS zone.",
+        "references": [
+          { "title": "Cosmos DB private endpoints", "url": "https://learn.microsoft.com/azure/cosmos-db/how-to-configure-private-endpoints" }
+        ]
+      },
+
+      {
+        "name": "pe-kv-docqa-prod",
+        "type": "Microsoft.Network/privateEndpoints",
+        "subtype": "Private Endpoint (Key Vault)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "subnet": {
+            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'vnet-docqa-prod-eastus2', 'snet-pe')]"
+          },
+          "privateLinkServiceConnections": [
+            {
+              "name": "kv-connection",
+              "properties": {
+                "privateLinkServiceId": "[resourceId('Microsoft.KeyVault/vaults', 'kv-docqa-prod')]",
+                "groupIds": ["vault"]
+              }
+            }
+          ],
+          "privateDnsZoneGroup": {
+            "name": "default",
+            "properties": {
+              "privateDnsZoneConfigs": [
+                {
+                  "name": "kv-dns",
+                  "properties": {
+                    "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.vaultcore.azure.net')]"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "reasoning": {
+          "whyChosen": "Private endpoint for Key Vault ensures secret retrieval stays within the VNet.",
+          "alternativesConsidered": ["VNet service endpoint for Key Vault — private endpoint is WAF-preferred"],
+          "tradeoffs": "None significant."
+        },
+        "dependencies": ["kv-docqa-prod", "vnet-docqa-prod-eastus2", "pdnsz-keyvault", "pdnsz-link-keyvault"],
+        "dependencyReasoning": "Requires Key Vault, VNet subnet, and linked DNS zone.",
+        "references": [
+          { "title": "Key Vault private endpoints", "url": "https://learn.microsoft.com/azure/key-vault/general/private-link-service" }
+        ]
+      },
+
+      {
+        "name": "ra-ca-to-openai",
+        "type": "Microsoft.Authorization/roleAssignments",
+        "subtype": "Role Assignment (Container App → OpenAI)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "roleDefinitionId": "Cognitive Services OpenAI User",
+          "roleDefinitionGuid": "5e0bd9bd-7b93-4f28-af87-19fc36ad61bd",
+          "principalId": "[reference('ca-docqa-api-prod', '2024-03-01', 'Full').identity.principalId]",
+          "principalType": "ServicePrincipal",
+          "scope": "[resourceId('Microsoft.CognitiveServices/accounts', 'oai-docqa-prod-eastus2')]"
+        },
+        "reasoning": {
+          "whyChosen": "Grants the Container App's managed identity permission to call OpenAI inference endpoints (completions, embeddings). 'Cognitive Services OpenAI User' is the least-privilege role for inference-only access.",
+          "alternativesConsidered": ["Cognitive Services OpenAI Contributor — grants model management; not needed for inference", "API key auth — less secure; local auth is disabled on the account"],
+          "tradeoffs": "None; this is the WAF-recommended pattern."
+        },
+        "dependencies": ["ca-docqa-api-prod", "oai-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires both the Container App (for principal ID) and OpenAI account (for scope).",
+        "references": [
+          { "title": "Azure OpenAI RBAC", "url": "https://learn.microsoft.com/azure/ai-services/openai/how-to/role-based-access-control" }
+        ]
+      },
+
+      {
+        "name": "ra-ca-to-cosmos",
+        "type": "Microsoft.Authorization/roleAssignments",
+        "subtype": "Role Assignment (Container App → Cosmos DB)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "roleDefinitionId": "Cosmos DB Built-in Data Contributor",
+          "roleDefinitionGuid": "00000000-0000-0000-0000-000000000002",
+          "principalId": "[reference('ca-docqa-api-prod', '2024-03-01', 'Full').identity.principalId]",
+          "principalType": "ServicePrincipal",
+          "scope": "[resourceId('Microsoft.DocumentDB/databaseAccounts', 'cosmos-docqa-prod')]"
+        },
+        "reasoning": {
+          "whyChosen": "Grants the Container App's managed identity read/write access to Cosmos DB data plane. Built-in Data Contributor is the appropriate role for CRUD operations on documents and vectors.",
+          "alternativesConsidered": ["Cosmos DB Account Reader — read-only; API also needs to write conversation history", "Connection string auth — less secure; local auth is disabled"],
+          "tradeoffs": "Data Contributor grants full data CRUD; restrict to custom role if more granular control is needed."
+        },
+        "dependencies": ["ca-docqa-api-prod", "cosmos-docqa-prod"],
+        "dependencyReasoning": "Requires both the Container App (for principal ID) and Cosmos DB account (for scope).",
+        "references": [
+          { "title": "Cosmos DB RBAC", "url": "https://learn.microsoft.com/azure/cosmos-db/how-to-setup-rbac" }
+        ]
+      },
+
+      {
+        "name": "ra-ca-to-keyvault",
+        "type": "Microsoft.Authorization/roleAssignments",
+        "subtype": "Role Assignment (Container App → Key Vault)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "roleDefinitionId": "Key Vault Secrets User",
+          "roleDefinitionGuid": "4633458b-17de-408a-b874-0445c86b69e6",
+          "principalId": "[reference('ca-docqa-api-prod', '2024-03-01', 'Full').identity.principalId]",
+          "principalType": "ServicePrincipal",
+          "scope": "[resourceId('Microsoft.KeyVault/vaults', 'kv-docqa-prod')]"
+        },
+        "reasoning": {
+          "whyChosen": "Grants the Container App's managed identity read-only access to Key Vault secrets. 'Key Vault Secrets User' is the least-privilege role for secret retrieval.",
+          "alternativesConsidered": ["Key Vault Administrator — too broad; app only needs to read secrets", "Access policies — RBAC is WAF-recommended"],
+          "tradeoffs": "None; standard pattern."
+        },
+        "dependencies": ["ca-docqa-api-prod", "kv-docqa-prod"],
+        "dependencyReasoning": "Requires both the Container App (for principal ID) and Key Vault (for scope).",
+        "references": [
+          { "title": "Key Vault RBAC roles", "url": "https://learn.microsoft.com/azure/key-vault/general/rbac-guide" }
+        ]
+      },
+
+      {
+        "name": "ra-apim-to-keyvault",
+        "type": "Microsoft.Authorization/roleAssignments",
+        "subtype": "Role Assignment (APIM → Key Vault)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "roleDefinitionId": "Key Vault Secrets User",
+          "roleDefinitionGuid": "4633458b-17de-408a-b874-0445c86b69e6",
+          "principalId": "[reference('apim-docqa-prod', '2024-03-01', 'Full').identity.principalId]",
+          "principalType": "ServicePrincipal",
+          "scope": "[resourceId('Microsoft.KeyVault/vaults', 'kv-docqa-prod')]"
+        },
+        "reasoning": {
+          "whyChosen": "Allows APIM to retrieve named values and certificates from Key Vault via managed identity.",
+          "alternativesConsidered": ["Direct secret embedding in APIM — insecure and hard to rotate"],
+          "tradeoffs": "None."
+        },
+        "dependencies": ["apim-docqa-prod", "kv-docqa-prod"],
+        "dependencyReasoning": "Requires both APIM (for principal ID) and Key Vault (for scope).",
+        "references": [
+          { "title": "APIM Key Vault integration", "url": "https://learn.microsoft.com/azure/api-management/api-management-howto-properties" }
+        ]
+      },
+
+      {
+        "name": "diag-oai-docqa-prod",
+        "type": "Microsoft.Insights/diagnosticSettings",
+        "subtype": "Diagnostic Settings (OpenAI)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'log-docqa-prod-eastus2')]",
+          "logs": [
+            { "category": "Audit", "enabled": true },
+            { "category": "RequestResponse", "enabled": true },
+            { "category": "Trace", "enabled": true }
+          ],
+          "metrics": [
+            { "category": "AllMetrics", "enabled": true }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Captures OpenAI request/response logs, audit events, and metrics for monitoring token usage, latency, and content filter triggers.",
+          "alternativesConsidered": [],
+          "tradeoffs": "RequestResponse logs may have volume cost; disable if cost is a concern and App Insights telemetry is sufficient."
+        },
+        "dependencies": ["oai-docqa-prod-eastus2", "log-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires the OpenAI account and Log Analytics workspace.",
+        "references": [
+          { "title": "Azure OpenAI monitoring", "url": "https://learn.microsoft.com/azure/ai-services/openai/how-to/monitoring" }
+        ]
+      },
+
+      {
+        "name": "diag-cosmos-docqa-prod",
+        "type": "Microsoft.Insights/diagnosticSettings",
+        "subtype": "Diagnostic Settings (Cosmos DB)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'log-docqa-prod-eastus2')]",
+          "logs": [
+            { "category": "DataPlaneRequests", "enabled": true },
+            { "category": "QueryRuntimeStatistics", "enabled": true },
+            { "category": "PartitionKeyStatistics", "enabled": true },
+            { "category": "PartitionKeyRUConsumption", "enabled": true }
+          ],
+          "metrics": [
+            { "category": "Requests", "enabled": true }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Captures Cosmos DB data plane requests, query performance, partition key statistics, and RU consumption for performance tuning and alerting on 429 throttling.",
+          "alternativesConsidered": [],
+          "tradeoffs": "DataPlaneRequests log can be high volume; consider sampling or disabling for cost optimization."
+        },
+        "dependencies": ["cosmos-docqa-prod", "log-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires Cosmos DB account and Log Analytics workspace.",
+        "references": [
+          { "title": "Cosmos DB diagnostics", "url": "https://learn.microsoft.com/azure/cosmos-db/monitor-resource-logs" }
+        ]
+      },
+
+      {
+        "name": "diag-apim-docqa-prod",
+        "type": "Microsoft.Insights/diagnosticSettings",
+        "subtype": "Diagnostic Settings (APIM)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'log-docqa-prod-eastus2')]",
+          "logs": [
+            { "category": "GatewayLogs", "enabled": true },
+            { "category": "WebSocketConnectionLogs", "enabled": true }
+          ],
+          "metrics": [
+            { "category": "AllMetrics", "enabled": true }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Captures APIM gateway logs for request tracing, rate limit violations, and backend errors. Complements App Insights integration for end-to-end observability.",
+          "alternativesConsidered": [],
+          "tradeoffs": "GatewayLogs include full request/response headers; exclude body logging for PII compliance."
+        },
+        "dependencies": ["apim-docqa-prod", "log-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires APIM service and Log Analytics workspace.",
+        "references": [
+          { "title": "APIM diagnostics", "url": "https://learn.microsoft.com/azure/api-management/api-management-howto-use-azure-monitor" }
+        ]
+      },
+
+      {
+        "name": "diag-kv-docqa-prod",
+        "type": "Microsoft.Insights/diagnosticSettings",
+        "subtype": "Diagnostic Settings (Key Vault)",
+        "location": "eastus2",
+        "sku": "N/A",
+        "properties": {
+          "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'log-docqa-prod-eastus2')]",
+          "logs": [
+            { "category": "AuditEvent", "enabled": true }
+          ],
+          "metrics": [
+            { "category": "AllMetrics", "enabled": true }
+          ]
+        },
+        "reasoning": {
+          "whyChosen": "Audit logging for Key Vault tracks all access and modification events — critical for security monitoring and compliance.",
+          "alternativesConsidered": [],
+          "tradeoffs": "None; audit logging should always be enabled."
+        },
+        "dependencies": ["kv-docqa-prod", "log-docqa-prod-eastus2"],
+        "dependencyReasoning": "Requires Key Vault and Log Analytics workspace.",
+        "references": [
+          { "title": "Key Vault logging", "url": "https://learn.microsoft.com/azure/key-vault/general/logging" }
+        ]
+      }
+    ],
+
+    "assumptions": [
+      "Single-region deployment in East US 2; multi-region can be added later by replicating OpenAI + Cosmos DB and adding APIM multi-region or Front Door.",
+      "Container image will be built and pushed to an Azure Container Registry (ACR) — ACR provisioning is out of scope for this plan but should be added if not pre-existing.",
+      "Per-user rate limiting is enforced at APIM layer using rate-limit-by-key policy keyed on JWT sub claim or APIM subscription key.",
+      "Vector embeddings use 1536 dimensions (text-embedding-3-small default) with DiskANN index in Cosmos DB for efficient similarity search.",
+      "The Q&A API implements a RAG pattern: embed query → vector search Cosmos DB → augment prompt with context → call GPT-4o for answer.",
+      "Publisher email in APIM is a placeholder and must be replaced.",
+      "Global unique resource names (Cosmos DB, Key Vault, APIM, OpenAI custom subdomain) use the naming pattern shown but may need suffixes to avoid collisions."
+    ],
+
+    "overallReasoning": {
+      "summary": "This architecture implements a secure, enterprise-grade document Q&A API using the RAG pattern. Azure OpenAI provides embedding and completion models. Cosmos DB NoSQL with vector search stores documents and embeddings in a single store, eliminating the need for a separate search service. Container Apps hosts the API backend in an internal VNet-integrated environment, ensuring it's only reachable via APIM. API Management provides the public-facing gateway with per-user rate limiting (rate-limit-by-key policy), subscription management, and caching. All backend services are connected via private endpoints with dedicated DNS zones. Managed identity with least-privilege RBAC eliminates credential management. Application Insights and Log Analytics provide end-to-end observability.",
+      "tradeoffs": "1) Single-region: no geo-redundancy for OpenAI or APIM; acceptable for initial deployment. 2) Standard v2 APIM lacks availability zones; upgrade to Premium v2 for zone redundancy. 3) Cosmos DB vector search is newer than Azure AI Search; AI Search has richer features (semantic ranking, skills) but adds cost and complexity. 4) Container Apps dedicated profile has baseline cost; switch to Consumption-only if cold starts are acceptable."
+    },
+
+    "validation": "All resources have valid ARM types, CAF-aligned names, and complete dependency chains. Deployment order: NSGs → VNet → Log Analytics → App Insights → DNS Zones → DNS Zone Links → Key Vault → OpenAI Account → OpenAI Deployments → Cosmos DB → Container Apps Environment → Container App → APIM → Private Endpoints → Role Assignments → Diagnostic Settings. No circular dependencies exist.",
+
+    "architecturePrinciples": [
+      "Zero-trust networking: all backend services use private endpoints; no public access",
+      "Managed identity everywhere: no stored credentials; RBAC for all service-to-service auth",
+      "Defense in depth: NSGs + private endpoints + disabled public access + Key Vault for any remaining secrets",
+      "Observability by default: diagnostic settings on every resource, centralized Log Analytics + App Insights",
+      "Least privilege: each role assignment grants minimum required permissions",
+      "Cost awareness: pay-per-token OpenAI, autoscale Cosmos DB, HTTP-based Container Apps scaling"
+    ],
+
+    "references": [
+      { "title": "Azure Well-Architected Framework", "url": "https://learn.microsoft.com/azure/well-architected/" },
+      { "title": "RAG pattern with Azure OpenAI", "url": "https://learn.microsoft.com/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide" },
+      { "title": "APIM rate-limit-by-key policy", "url": "https://learn.microsoft.com/azure/api-management/rate-limit-by-key-policy" },
+      { "title": "Cosmos DB vector search", "url": "https://learn.microsoft.com/azure/cosmos-db/nosql/vector-search" },
+      { "title": "Container Apps networking", "url": "https://learn.microsoft.com/azure/container-apps/networking" }
+    ]
+  }
+}
