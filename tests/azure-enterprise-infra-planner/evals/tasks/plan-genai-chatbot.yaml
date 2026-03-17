@@ -6,5 +6,5 @@ graders:
     name: skill_invoked
     config:
       required_skills:
-        - azure-infra-planner
+        - azure-enterprise-infra-planner
       mode: any_order
