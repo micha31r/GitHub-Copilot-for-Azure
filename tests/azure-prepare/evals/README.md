@@ -13,16 +13,16 @@ azd ext install microsoft.azd.waza
 go install github.com/microsoft/waza/cmd/waza@latest
 
 # Run with mock executor (fast, no auth)
-waza run tests/azure-prepare/eval/eval.yaml \
-  --context-dir tests/azure-prepare/eval/fixtures -v
+waza run tests/azure-prepare/evals/eval.yaml \
+  --context-dir tests/azure-prepare/evals/fixtures -v
 
 # Run with real Copilot SDK (requires GITHUB_TOKEN)
-waza run tests/azure-prepare/eval/eval.yaml \
+waza run tests/azure-prepare/evals/eval.yaml \
   --executor copilot-sdk \
-  --context-dir tests/azure-prepare/eval/fixtures -v
+  --context-dir tests/azure-prepare/evals/fixtures -v
 
 # Run via azd extension
-azd waza run tests/azure-prepare/eval/eval.yaml -v
+azd waza run tests/azure-prepare/evals/eval.yaml -v
 ```
 
 ## What It Tests
@@ -61,7 +61,7 @@ Each task adds specific graders for template selection accuracy, recipe applicat
 ## Structure
 
 ```
-eval/
+evals/
 ├── eval.yaml                           # Main eval spec
 ├── trigger_tests.yaml                  # Trigger accuracy (16 should, 10 should-not)
 ├── README.md                           # This file
@@ -106,7 +106,7 @@ This repo uses a **hybrid** approach for waza evals:
 
 | Mode | Skills | How it works |
 |------|--------|-------------|
-| **Committed** (⬢) | azure-prepare | Hand-authored `eval/` dir in `tests/{skill}/eval/`. Custom graders, fixtures, assertions specific to the skill's domain. |
+| **Committed** (⬢) | azure-prepare | Hand-authored `evals/` dir in `tests/{skill}/evals/`. Custom graders, fixtures, assertions specific to the skill's domain. |
 | **Generated** (⬡) | All other skills | Auto-generated at runtime via `waza generate plugin/skills/{skill}/SKILL.md`. Generic trigger + invocation tests. |
 
 **When to commit vs. generate:**
@@ -116,8 +116,8 @@ This repo uses a **hybrid** approach for waza evals:
 To promote a generated eval to committed:
 ```bash
 # Generate into the test directory
-waza generate plugin/skills/azure-deploy/SKILL.md -d tests/azure-deploy/eval
+waza generate plugin/skills/azure-deploy/SKILL.md -d tests/azure-deploy/evals
 
 # Customize the generated files, then commit
-git add tests/azure-deploy/eval/
+git add tests/azure-deploy/evals/
 ```

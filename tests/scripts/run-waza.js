@@ -4,7 +4,7 @@
  * Waza eval runner bridge script.
  *
  * Hybrid model:
- *   - If tests/{skill}/eval/eval.yaml exists → use committed eval (customized)
+ *   - If tests/{skill}/evals/eval.yaml exists → use committed eval (customized)
  *   - Otherwise → auto-generate from plugin/skills/{skill}/SKILL.md into a temp dir
  *
  * Usage:
@@ -97,7 +97,7 @@ if (!wazaBin) {
 function getCommittedEvalSkills() {
   return fs.readdirSync(testsDir, { withFileTypes: true })
     .filter(d => d.isDirectory() && !d.name.startsWith("_") && !d.name.startsWith("."))
-    .filter(d => fs.existsSync(path.join(testsDir, d.name, "eval", "eval.yaml")))
+    .filter(d => fs.existsSync(path.join(testsDir, d.name, "evals", "eval.yaml")))
     .map(d => d.name);
 }
 
@@ -152,8 +152,8 @@ function generateEval(skill) {
  * Run waza for a single skill. Returns the exit code.
  */
 function runSkill(skill) {
-  const committedEval = path.join(testsDir, skill, "eval", "eval.yaml");
-  const committedFixtures = path.join(testsDir, skill, "eval", "fixtures");
+  const committedEval = path.join(testsDir, skill, "evals", "eval.yaml");
+  const committedFixtures = path.join(testsDir, skill, "evals", "fixtures");
   const isCommitted = fs.existsSync(committedEval);
 
   let evalYaml, fixturesDir;

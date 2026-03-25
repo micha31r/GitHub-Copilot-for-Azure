@@ -159,7 +159,7 @@ go install github.com/microsoft/waza/cmd/waza@latest
 | `npm run waza -- azure-storage` | Auto-generate + run eval from SKILL.md |
 | `npm run waza -- --all` | Run all skills (committed + generated) |
 | `npm run waza:live -- azure-prepare` | Run with real Copilot SDK |
-| `waza run tests/azure-prepare/eval/eval.yaml -v` | Run directly with waza CLI |
+| `waza run tests/azure-prepare/evals/eval.yaml -v` | Run directly with waza CLI |
 | `waza run eval.yaml --cache` | Cached re-runs (skip unchanged tasks) |
 | `waza compare results-a.json results-b.json` | Compare results across models |
 | `waza check plugin/skills/azure-prepare` | Check skill readiness for submission |
@@ -170,7 +170,7 @@ go install github.com/microsoft/waza/cmd/waza@latest
 
 **Auto-generated** (⬡ from SKILL.md frontmatter): all other skills
 
-See [tests/azure-prepare/eval/README.md](azure-prepare/eval/README.md) for the committed eval suite documentation.
+See [tests/azure-prepare/evals/README.md](azure-prepare/evals/README.md) for the committed eval suite documentation.
 
 ### Integration Tests
 
