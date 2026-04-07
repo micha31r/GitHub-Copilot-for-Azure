@@ -39,7 +39,7 @@ const brownfieldTestTimeoutMs = 2700000;
 describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
   const agent = useAgentRunner();
   describe("skill-invocation", () => {
-    const followUp = ["Go with recommended options."];
+    const followUp = ["Continue with recommended options until complete."];
     test("invokes azure-deploy skill for deployment prompt", async () => {
       await withTestResult(async ({ setSkillInvocationRate }) => {
         let invocationCount = 0;
@@ -90,6 +90,50 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         for (let i = 0; i < RUNS_PER_PROMPT; i++) {
           const agentMetadata = await agent.run({
             prompt: "Deploy my existing Azure Functions project to the cloud. The infrastructure and azure.yaml are already set up.",
+            nonInteractive: true,
+            followUp,
+            shouldEarlyTerminate: (metadata) => shouldEarlyTerminateForSkillInvocation(metadata, SKILL_NAME)
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+          if (isSkillInvoked(agentMetadata, SKILL_NAME)) {
+            invocationCount += 1;
+          }
+        }
+        const rate = invocationCount / RUNS_PER_PROMPT;
+        setSkillInvocationRate(rate);
+        expect(rate).toBeGreaterThanOrEqual(invocationRateThreshold);
+      });
+    });
+
+    test("invokes azure-deploy skill for live RBAC role verification prompt", async () => {
+      await withTestResult(async ({ setSkillInvocationRate }) => {
+        let invocationCount = 0;
+        for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+          const agentMetadata = await agent.run({
+            prompt: "Deploy my app to Azure and verify the live RBAC role assignments are correct after provisioning",
+            nonInteractive: true,
+            followUp,
+            shouldEarlyTerminate: (metadata) => shouldEarlyTerminateForSkillInvocation(metadata, SKILL_NAME)
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+          if (isSkillInvoked(agentMetadata, SKILL_NAME)) {
+            invocationCount += 1;
+          }
+        }
+        const rate = invocationCount / RUNS_PER_PROMPT;
+        setSkillInvocationRate(rate);
+        expect(rate).toBeGreaterThanOrEqual(invocationRateThreshold);
+      });
+    });
+
+    test("invokes azure-deploy skill for post-deployment role assignment check prompt", async () => {
+      await withTestResult(async ({ setSkillInvocationRate }) => {
+        let invocationCount = 0;
+        for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+          const agentMetadata = await agent.run({
+            prompt: "Deploy my already-prepared Azure app and confirm the managed identity roles are properly assigned",
             nonInteractive: true,
             followUp,
             shouldEarlyTerminate: (metadata) => shouldEarlyTerminateForSkillInvocation(metadata, SKILL_NAME)
@@ -807,7 +851,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
             "Use standard SKUs. " +
             `The app can be found under ${CUSTOM_RESOURCES_SPARSE_PATH}.`,
           nonInteractive: true,
-          followUp: FOLLOW_UP_PROMPT,
+          followUp: ["Stop if there is no further work; otherwise go with recommended options."],
           shouldEarlyTerminate: shouldEarlyTerminateForCompletedDeployment
         });
 

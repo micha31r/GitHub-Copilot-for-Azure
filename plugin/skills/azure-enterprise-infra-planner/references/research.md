@@ -38,7 +38,7 @@ Walk through every concern in the [WAF cross-cutting checklist](waf-checklist.md
 For each resource identified in Steps 1-3:
 
 1. Look up the resource in the relevant [resources/](resources/README.md) category file (e.g., `resources/compute-infra.md` for AKS, `resources/data-analytics.md` for Cosmos DB) to get its ARM type, API version, and CAF prefix. Read the index in `resources/README.md` to find the right category file.
-2. After collecting all resources from Steps 1-3, use **one** sub-agent to fetch naming rules for all resources in a single call. Instruct the sub-agent: "Call `microsoft_docs_search` with query `'Azure resource naming rules'`. From the results, extract naming rules for each of these resources: {comma-separated list of resource names}. For each resource return: min/max length, allowed characters, uniqueness scope. Keep total output ≤500 tokens." Do not spawn per-resource sub-agents.
+2. Use a sub-agent to call `microsoft_docs_fetch` with the naming rules URL from the resource category file. Instruct the sub-agent: "Extract naming rules for {service}: min/max length, allowed characters, uniqueness scope. ≤200 tokens." Fall back to `microsoft_docs_search` with `"<resource-name> naming rules"` only if the URL is missing or returns an error.
 3. Read pairing constraints for the resource from the matching [constraints/](constraints/README.md) category file (e.g., `constraints/networking-core.md` for VNet, `constraints/security.md` for Key Vault). Each category file is <2K tokens — read the whole file for all resources in that category.
 
    Use the [constraints/README.md](constraints/README.md) index to find the right category file for each resource name.

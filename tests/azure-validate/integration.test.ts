@@ -113,10 +113,46 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
       setSkillInvocationRate(rate);
       expect(rate).toBeGreaterThanOrEqual(invocationRateThreshold);
     }));
+
+    test("invokes azure-validate skill for RBAC role verification prompt", () => withTestResult(async ({ setSkillInvocationRate }) => {
+      let invocationCount = 0;
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        const agentMetadata = await agent.run({
+          prompt: "Verify the RBAC role assignments in my Bicep templates before deploying to Azure",
+          shouldEarlyTerminate: (metadata) => shouldEarlyTerminateForSkillInvocation(metadata, SKILL_NAME)
+        });
+
+        softCheckSkill(agentMetadata, SKILL_NAME);
+        if (isSkillInvoked(agentMetadata, SKILL_NAME)) {
+          invocationCount += 1;
+        }
+      }
+      const rate = invocationCount / RUNS_PER_PROMPT;
+      setSkillInvocationRate(rate);
+      expect(rate).toBeGreaterThanOrEqual(invocationRateThreshold);
+    }));
+
+    test("invokes azure-validate skill for managed identity permissions check prompt", () => withTestResult(async ({ setSkillInvocationRate }) => {
+      let invocationCount = 0;
+      for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+        const agentMetadata = await agent.run({
+          prompt: "Validate the managed identity RBAC role assignments in my Bicep templates before deploying to Azure",
+          shouldEarlyTerminate: (metadata) => shouldEarlyTerminateForSkillInvocation(metadata, SKILL_NAME)
+        });
+
+        softCheckSkill(agentMetadata, SKILL_NAME);
+        if (isSkillInvoked(agentMetadata, SKILL_NAME)) {
+          invocationCount += 1;
+        }
+      }
+      const rate = invocationCount / RUNS_PER_PROMPT;
+      setSkillInvocationRate(rate);
+      expect(rate).toBeGreaterThanOrEqual(invocationRateThreshold);
+    }));
   });
 
   describe("deployment-validation", () => {
-    const FOLLOW_UP_PROMPT = ["Go with recommended options."];
+    const FOLLOW_UP_PROMPT = ["Continue with recommended options until complete."];
 
     test("terminates at validation for static whiteboard web app", () => withTestResult(async () => {
       const agentMetadata = await agent.run({
@@ -172,7 +208,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
 
   describe("brownfield-dotnet-validate", () => {
     const ASPIRE_SAMPLES_REPO = "https://github.com/dotnet/aspire-samples.git";
-    const FOLLOW_UP_PROMPT = ["Go with recommended options."];
+    const FOLLOW_UP_PROMPT = ["Continue with recommended options until complete."];
 
     test("passes --environment on azd init and sets subscription before provision", () => withTestResult(async () => {
       const CLIENT_APPS_SPARSE_PATH = "samples/client-apps-integration";

@@ -21,7 +21,7 @@ import { expectFiles, getToolCalls, softCheckSkill, isSkillInvoked, shouldEarlyT
 
 const SKILL_NAME = "azure-prepare";
 const RUNS_PER_PROMPT = 1;
-const FOLLOW_UP_PROMPT = ["Go with recommended options."];
+const FOLLOW_UP_PROMPT = ["Continue with recommended options until complete."];
 const invocationRateThreshold = 0.8;
 
 /**
@@ -49,7 +49,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
   const agent = useAgentRunner();
 
   describe("skill-invocation", () => {
-    const followUp = ["Go with recommended options."];
+    const followUp = ["Continue with recommended options until complete."];
     test("invokes azure-prepare skill for new Azure application preparation prompt", async () => {
       await withTestResult(async ({ setSkillInvocationRate }) => {
         let invocationCount = 0;
@@ -78,6 +78,50 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         for (let i = 0; i < RUNS_PER_PROMPT; i++) {
           const agentMetadata = await agent.run({
             prompt: "Modernize my existing application for Azure hosting and generate the required infrastructure files",
+            nonInteractive: true,
+            followUp,
+            shouldEarlyTerminate: (agentMetadata) => shouldEarlyTerminateForSkillInvocation(agentMetadata, SKILL_NAME)
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+          if (isSkillInvoked(agentMetadata, SKILL_NAME)) {
+            invocationCount += 1;
+          }
+        }
+        const rate = invocationCount / RUNS_PER_PROMPT;
+        setSkillInvocationRate(rate);
+        expect(rate).toBeGreaterThanOrEqual(invocationRateThreshold);
+      });
+    });
+
+    test("invokes azure-prepare skill for functional verification before deployment prompt", async () => {
+      await withTestResult(async ({ setSkillInvocationRate }) => {
+        let invocationCount = 0;
+        for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+          const agentMetadata = await agent.run({
+            prompt: "Prepare my web app for Azure and verify it works locally before deploying",
+            nonInteractive: true,
+            followUp,
+            shouldEarlyTerminate: (agentMetadata) => shouldEarlyTerminateForSkillInvocation(agentMetadata, SKILL_NAME)
+          });
+
+          softCheckSkill(agentMetadata, SKILL_NAME);
+          if (isSkillInvoked(agentMetadata, SKILL_NAME)) {
+            invocationCount += 1;
+          }
+        }
+        const rate = invocationCount / RUNS_PER_PROMPT;
+        setSkillInvocationRate(rate);
+        expect(rate).toBeGreaterThanOrEqual(invocationRateThreshold);
+      });
+    });
+
+    test("invokes azure-prepare skill for subscription policy compliance prompt", async () => {
+      await withTestResult(async ({ setSkillInvocationRate }) => {
+        let invocationCount = 0;
+        for (let i = 0; i < RUNS_PER_PROMPT; i++) {
+          const agentMetadata = await agent.run({
+            prompt: "Prepare my application for Azure deployment and check subscription policies for compliance",
             nonInteractive: true,
             followUp,
             shouldEarlyTerminate: (agentMetadata) => shouldEarlyTerminateForSkillInvocation(agentMetadata, SKILL_NAME)
@@ -719,7 +763,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         expect(workspacePath).toBeDefined();
         expect(isSkillInvoked(agentMetadata, SKILL_NAME)).toBe(true);
         expectFiles(workspacePath!,
-          [/plan\.md$/, /azure\.yaml$/, /infra\/.*\.bicep$/],
+          [/deployment-plan\.md$/, /azure\.yaml$/, /infra\/.*\.bicep$/],
           [/\.tf$/],
         );
       });
@@ -745,8 +789,8 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         expect(workspacePath).toBeDefined();
         expect(isSkillInvoked(agentMetadata, SKILL_NAME)).toBe(true);
         expectFiles(workspacePath!,
-          [/plan\.md$/, /infra\/.*\.tf$/],
-          [/\.bicep$/, /azure\.yaml$/],
+          [/deployment-plan\.md$/, /infra\/.*\.tf$/],
+          [/\.bicep$/],
         );
       });
     });
@@ -771,7 +815,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
         expect(workspacePath).toBeDefined();
         expect(isSkillInvoked(agentMetadata, SKILL_NAME)).toBe(true);
         expectFiles(workspacePath!,
-          [/plan\.md$/, /infra\/.*\.bicep$/, /infra\/(.*\.bicepparam|(.*\.)?parameters\.json)$/],
+          [/deployment-plan\.md$/, /infra\/.*\.bicep$/, /infra\/(.*\.bicepparam|(.*\.)?parameters\.json)$/],
           [/azure\.yaml$/, /\.tf$/],
         );
       });
@@ -986,7 +1030,7 @@ describeIntegration(`${SKILL_NAME}_ - Integration Tests`, () => {
 
         // Workspace should contain orchestration/workflow code files
         expectFiles(workspacePath!,
-          [/plan\.md$/, /azure\.yaml$/, /infra\/.*\.bicep$/],
+          [/deployment-plan\.md$/, /azure\.yaml$/, /infra\/.*\.bicep$/],
           [/\.tf$/],
         );
       });
