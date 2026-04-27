@@ -1,0 +1,84 @@
+{
+  "total_prompts": 9,
+  "wins": {
+    "baseline": 1,
+    "mfi": 4,
+    "draw": 0,
+    "inconclusive": 4
+  },
+  "consistency": 5,
+  "per_prompt": [
+    {
+      "prompt_index": 1,
+      "prompt": "Internal web app for the finance team with a relational data...",
+      "final_winner": "mfi",
+      "consistent": true,
+      "ordering1_justification": "Both sets are highly substantive and actionable (A: 9/9, B: 10/10). Set B edges out Set A because it is slightly more comprehensive: it includes observability/region guidance, explicit storage-redundancy/backups recommendations, richer network inventory guidance (NSGs/VNets), and a governance-oriented Key Vault RBAC vs access-policy decision. Set A is also strong and adds useful region- and naming-convention detail, but overall B provides a broader set of practical planning items.",
+      "ordering2_justification": "Set A contains one more architecturally substantive insight (10 vs 9) and more operationally specific guidance in areas B only covers at a higher level—notably reuse of tenant WAF rule patterns, explicit recommendation to consider isolated hosting, regional monitoring integration, and a clear decision-framing for Key Vault access models. Set B has a few useful unique points (Front Door, subnet naming conventions, explicit region recommendation) but overall A is slightly stronger and more actionable across the full stack."
+    },
+    {
+      "prompt_index": 2,
+      "prompt": "Deploy a geo-redundant backup solution for on-premises SQL s...",
+      "final_winner": "mfi",
+      "consistent": true,
+      "ordering1_justification": "Set A: 7 architecturally substantive insights, 7 provide actionable planning guidance. Set B: 9 architecturally substantive insights, 9 provide actionable planning guidance. Both sets are well grounded and specific, but Set B is broader and more prescriptive for this scenario — it adds operational security and orchestration details (TLS baseline, Key Vault RBAC gap, reuse of Traffic Manager/DNS, and an explicit recommendation to provision a paired vault in a secondary region) that are directly relevant to geo‑redundant backups, CMK handling, and automated DR testing. Set A includes useful, concrete points (notably strong on on‑prem network capacity/ExpressRoute and a high count of Logic Apps) but is narrower overall. For completeness and planning guidance, Set B offers the more actionable, comprehensive set.",
+      "ordering2_justification": "Set A is more comprehensive and directly aligned to the user request: it explicitly recommends a geo‑paired Recovery Services vault for redundancy, covers encryption (CMKs + Key Vault controls), automation for monthly DR tests, identity choices, network hardening, and additional operational constraints (TLS minimums, Key Vault RBAC posture, and reuse of Traffic Manager for failover testing). Set B is solid and concise and calls out useful facts (notably ExpressRoute connectivity and quantified counts), but it omits some architecture points that are directly relevant to geo‑redundant backup and DR testing (paired vault, TLS requirement, Key Vault RBAC, Traffic Manager usage) that A includes."
+    },
+    {
+      "prompt_index": 3,
+      "prompt": "Deploy 3-tier architecture with hardened OS images, VM backu...",
+      "final_winner": "inconclusive",
+      "consistent": false,
+      "ordering1_justification": "Both sets meet the evaluation criteria: each insight identifies concrete architectural points, gives valid planning implications, and cites tenant facts. Set A is broader (10 items) and emphasizes networking/traffic patterns, App Gateway/WAF usage, image-build automation details, and disk-performance choices. Set B is slightly more operationally focused on secrets/backup retention and monitoring (Key Vault purge protection, soft-delete/retention, Log Analytics/Application Insights onboarding) and explicit autoscale/health-probe guidance. Neither set is clearly superior overall — they are complementary.",
+      "ordering2_justification": "Set A: 8 insights — all 8 are architecturally substantive and provide actionable planning guidance, grounded in tenant counts (images, vaults, VMSS, Key Vaults, Standard SKUs, telemetry). Set B: 10 insights — all 10 are architecturally substantive and actionable, also grounded in tenant facts. Both sets are high quality and overlap heavily (image pipeline, managed identities, backups, VMSS + Standard networking, private endpoints/NSGs, prefer VMSS/AZs). Set B wins because it is more comprehensive: it preserves all of A’s concrete recommendations and adds several additional, concrete architecture-level recommendations (disk tier guidance, multi-region DNS/Traffic Manager pattern, explicit Application Gateway WAF_v2 + HTTPS enforcement, and more granular image-build automation and availability-domain detail) that are directly actionable for deploying the requested 3-tier design."
+    },
+    {
+      "prompt_index": 4,
+      "prompt": "Configure a site recovery plan for disaster failover from Ea...",
+      "final_winner": "inconclusive",
+      "consistent": false,
+      "ordering1_justification": "Set A: 8 architecturally substantive insights, 8 actionable planning guidance items. Set B: 9 architecturally substantive insights, 9 actionable planning guidance items. Both sets are well-grounded in observed facts and mostly overlap on core recovery requirements (vault SKUs/encryption, Traffic Manager DNS failover, disk SKUs, storage redundancy, VM managed identities, VNet/networking mapping). Set B wins because it covers one additional substantive item and includes extra practical planning specifics that A omits or under-emphasizes (Key Vault soft-delete/purge-protection handling, explicit guidance that public IPs are regional and should not be relied on to move between regions, and explicit vault identity provisioning details), which materially affect DR/runbook design.",
+      "ordering2_justification": "Both sets are high-quality: Set A has 9 substantive, actionable, and fact-grounded insights; Set B has 8. Both cover most same surface (vaults, DNS failover, storage redundancy, identities, disks, public IP SKUs). Set B wins narrowly because it calls out several additional, directly actionable networking items that are critical to an East->West VM failover: Private DNS zone/link provisioning, hub/spoke VNet peerings recreation (or pre-provisioning a West hub), and matching Standard Load Balancer configs and probes. Those items materially reduce blast radius and speed recovery of internal connectivity and DNS failbacks."
+    },
+    {
+      "prompt_index": 5,
+      "prompt": "Provision a jumpbox VM for secure management, establish NSGs...",
+      "final_winner": "inconclusive",
+      "consistent": false,
+      "ordering1_justification": "Both sets are high quality: each insight is an architecture point, provides actionable planning guidance, and is grounded in tenant facts. Set B wins narrowly because it includes several operationally significant items that A omits (OS platform skew, hub-and-spoke placement guidance, and integration with centralized monitoring), which materially affect jumpbox image choice, placement in the network topology, and telemetry planning. Set A has useful unique notes (NAT gateway egress and public IP SKU guidance) but B's additional operational context gives it the edge.",
+      "ordering2_justification": "Both sets are high-quality: every insight in each set points to a concrete architecture decision, gives a valid planning implication, and is grounded in tenant facts. They largely overlap but each set contains a few complementary, non‑overlapping recommendations (A emphasizes OS, hub placement, and monitoring; B emphasizes NAT/egress, public IP SKU, subnet naming, and Key Vault network ACLs). Neither set is uniformly stronger overall, so a draw is appropriate."
+    },
+    {
+      "prompt_index": 6,
+      "prompt": "Spin up Linux VMs for each tier using Terraform, automate pa...",
+      "final_winner": "mfi",
+      "consistent": true,
+      "ordering1_justification": "Both sets are high quality: every insight in each set identifies an architecture point, gives a valid planning implication, and is grounded in the supplied facts. Set B is the winner because it contains more distinct, actionable architecture points (10 vs 8) and includes several additional planning-relevant items that Set A does not (Key Vault protection conventions, disk performance defaults, explicit SSH-public-key counts + container-Linux callout, and a recommended Terraform module shape and image choices). Set A has useful unique details (VM extension onboarding patterns and storage-account sink/network ACL guidance), but overall Set B provides broader, more immediately actionable coverage for the requested work.",
+      "ordering2_justification": "Set A is the winner because it contains more architecturally substantive insights (10 vs 8) and every insight in A ties a concrete observed fact to a clear, actionable planning implication (e.g., use tenant Ubuntu images, prefer Premium OS disks, store SSH keys in Key Vault with soft-delete/purge-protection, and implement Terraform modules that mirror existing resource groupings). Set B is also strong and grounded (all 8 insights are substantive and actionable) and brings valuable unique points (notably VM extension onboarding and storage-sink/network-ACL guidance), but overall A is more comprehensive for the requested changes (Linux VMs, patch automation, and inter-subnet traffic logging)."
+    },
+    {
+      "prompt_index": 7,
+      "prompt": "Deploy three distinct VM scale sets for a legacy app, route ...",
+      "final_winner": "mfi",
+      "consistent": true,
+      "ordering1_justification": "Set B is broader and more practically prescriptive: it contains more architecture-specific observations (9 vs 7) and more actionable planning guidance. B adds important, concrete items that A omits (storage SKU guidance, Key Vault access-model guidance, and explicit network placement/NSG guidance) while A's unique points (VMSS instance-count norm and WAF custom-rule patterns) are useful but narrower in scope.",
+      "ordering2_justification": "Both sets are high quality, grounded, and actionable. Set A is the winner because it is more comprehensive (9 vs 7 insights) and contains several additional concrete architecture points (disk SKU preference, Key Vault access‑policy posture, and explicit App Gateway placement/NSG guidance) that provide extra planning detail beyond Set B’s coverage. Set B does have a couple of valuable unique items (WAF custom rules and the common VMSS capacity=2 convention) but overall A gives more architecturally substantive and actionable items."
+    },
+    {
+      "prompt_index": 8,
+      "prompt": "Set up Azure Backup for critical VM workloads, create a long...",
+      "final_winner": "inconclusive",
+      "consistent": false,
+      "ordering1_justification": "Both sets are high quality: each contains 8 architecturally substantive insights and 8 that offer actionable planning guidance. Set B wins narrowly because it adds stronger operational guidance directly tied to the user's goals — explicit vault‑consolidation guidance (vault counts + RS0 SKU), automation/runbook recommendations for executing quarterly restores, and concrete monitoring/logging integration for audit evidence — all of which make implementing and proving quarterly restore tests and long‑term retention easier. Set A contains important complementary items (infrastructure encryption, Windows VM emphasis, vault identity mix, and network exposure hardening) but overall B’s additional operational recommendations give it the edge.",
+      "ordering2_justification": "Both sets contain 8 architecturally substantive insights and 8 actionable planning recommendations, and each insight is tied to concrete facts. They cover largely the same surface area with complementary unique points, so neither set is categorically better overall."
+    },
+    {
+      "prompt_index": 9,
+      "prompt": "Deploy disaster recovery for VMware VMs using Azure Site Rec...",
+      "final_winner": "baseline",
+      "consistent": true,
+      "ordering1_justification": "Both sets produce architecture-specific, actionable, and fact-grounded insights. Set A edges out B by being slightly more comprehensive (10 vs 9 insights) and by including concrete guidance around VMware-to-Azure placement (minimizing cross-region latency/data residency), ExpressRoute usage for replication/failover, Hybrid Runbook Worker options, and the high proportion of scheduled queries using user-assigned identities — all of which add useful, practical detail for DR planning. Set B is strong on SKU-level and network-artifact counts and pre-provisioning guidance but overall is a bit narrower.",
+      "ordering2_justification": "Both sets are high-quality: every insight in A (9/9) and B (10/10) is architecturally substantive, provides actionable planning guidance, and is grounded in the stated facts. Set B wins narrowly because it contains one additional insight and covers a few operationally important items that Set A omits (notably geographic misalignment between VMs and vaults, explicit use of ExpressRoute for replication, and hybrid/HA runbook hosting options). Set A has valuable, slightly different emphasis (RS0 SKU prevalence, explicit Traffic Manager/DNS pre-provisioning and private endpoint considerations), but overall B gives the broader operational coverage for the stated DR scenario."
+    }
+  ]
+}

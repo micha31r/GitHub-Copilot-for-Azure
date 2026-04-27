@@ -1,0 +1,483 @@
+[
+  {
+    "prompt_index": 1,
+    "prompt_short": "Internal web app for the finance team with a relational data...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "B",
+        "justification": "Both sets are highly substantive and actionable (A: 9/9, B: 10/10). Set B edges out Set A because it is slightly more comprehensive: it includes observability/region guidance, explicit storage-redundancy/backups recommendations, richer network inventory guidance (NSGs/VNets), and a governance-oriented Key Vault RBAC vs access-policy decision. Set A is also strong and adds useful region- and naming-convention detail, but overall B provides a broader set of practical planning items.",
+        "unique_to_a": [
+          "Explicit regional concentration recommendation to place the app and DB in eastus or westus2 (calls out both regions for latency/egress minimization).",
+          "Subnet and VNet naming-convention alignment guidance (calls out common subnet names like 'default', 'appSubnet', 'endpointSubnet').",
+          "Mention that Front Door WAF Premium is used tenant-wide (in addition to Application Gateway WAF_v2)."
+        ],
+        "unique_to_b": [
+          "Integrate monitoring/telemetry: explicit guidance to onboard the app and DB to Application Insights and Log Analytics in-region (notes App Insights concentrated ~81% in westus2).",
+          "Explicit storage/backups posture including redundancy recommendation (Standard_LRS) and lifecycle/retention guidance for backup storage.",
+          "Network inventory-driven guidance: cites large NSG and VNet counts and recommends strict subnet-level NSGs limited to finance IP ranges and Application Gateway subnets.",
+          "Governance nuance on Key Vault access model: recommends deciding upfront between RBAC and Access Policies and documenting role/policy mappings."
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "A",
+        "justification": "Set A contains one more architecturally substantive insight (10 vs 9) and more operationally specific guidance in areas B only covers at a higher level—notably reuse of tenant WAF rule patterns, explicit recommendation to consider isolated hosting, regional monitoring integration, and a clear decision-framing for Key Vault access models. Set B has a few useful unique points (Front Door, subnet naming conventions, explicit region recommendation) but overall A is slightly stronger and more actionable across the full stack.",
+        "unique_to_a": [
+          "Explicit recommendation to reuse tenant WAF rule patterns (rate-limit and custom rules) and to front the app with an internal Application Gateway WAF_v2 tailored to those policies.",
+          "Monitoring/telemetry regional consolidation (App Insights concentration) and the recommendation to attach the app/DB to App Insights and a Log Analytics workspace in the same region to match tenant monitoring workflows.",
+          "Stronger suggestion to consider higher-isolation App Service hosting (isolated/higher-tier) rather than only bumping from Basic SKUs.",
+          "Quantified network posture (large counts of NSGs and VNets) with explicit advice to use subnet-level NSGs and restrict inbound rules to the finance team IP ranges and application gateway subnets.",
+          "Framing the Key Vault access-model as an upfront decision point (either adopt RBAC tenant-wide or conform and document access-policy mappings) rather than only recommending one approach."
+        ],
+        "unique_to_b": [
+          "Explicit region planning callout to place the finance app and database in eastus or westus2 to minimize latency and inter-region egress costs.",
+          "Inclusion of Front Door WAF Premium as an alternative/adjunct perimeter option (in addition to Application Gateway WAF_v2).",
+          "Subnet and VNet naming-convention guidance (aligning to common subnet names like 'default', 'appSubnet', 'endpointSubnet').",
+          "More prescriptive recommendation to enable RBAC-based access on Key Vaults (as a tighter access-control approach).",
+          "Callout that Key Vaults often have publicnetworkaccess enabled (~92%), highlighting a specific public-exposure risk to address."
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "consistent": true,
+    "final_winner": "mfi"
+  },
+  {
+    "prompt_index": 2,
+    "prompt_short": "Deploy a geo-redundant backup solution for on-premises SQL s...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "B",
+        "justification": "Set A: 7 architecturally substantive insights, 7 provide actionable planning guidance. Set B: 9 architecturally substantive insights, 9 provide actionable planning guidance. Both sets are well grounded and specific, but Set B is broader and more prescriptive for this scenario — it adds operational security and orchestration details (TLS baseline, Key Vault RBAC gap, reuse of Traffic Manager/DNS, and an explicit recommendation to provision a paired vault in a secondary region) that are directly relevant to geo‑redundant backups, CMK handling, and automated DR testing. Set A includes useful, concrete points (notably strong on on‑prem network capacity/ExpressRoute and a high count of Logic Apps) but is narrower overall. For completeness and planning guidance, Set B offers the more actionable, comprehensive set.",
+        "unique_to_a": [
+          "Recommendation to leverage substantial ExpressRoute connectivity (170 cross‑connections) for backup replication and DR test traffic — i.e., explicitly route backup/DR traffic over ExpressRoute or private links.",
+          "Explicit count indicating a very large number of Logic Apps (95) available to reuse for DR orchestration (high emphasis on existing Logic workflow footprint)."
+        ],
+        "unique_to_b": [
+          "Explicit recommendation to provision a paired Recovery Services vault in a secondary region (e.g., westus2) for geo‑redundant vault/archive strategy.",
+          "Tenant TLS baseline (storage TLS1.2 = 96.6%, SQL TLS1.2 = 85.7%) and the directive to require TLS1.2 for agents and on‑prem→Azure connections used in DR tests.",
+          "Observation that Key Vault RBAC is not broadly enabled (~60% using legacy access policies) and the recommendation to address precise access controls (enable RBAC or define policies) for CMKs used by Azure Backup.",
+          "Suggestion to reuse existing Traffic Manager / global DNS profiles as part of DR test orchestration and failover validation.",
+          "More granular automation posture note (automation accounts are limited in number while Logic workflows are commonly used) and tailored guidance to pick Automation Account or Logic App with user‑assigned identity for DR orchestration."
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "A",
+        "justification": "Set A is more comprehensive and directly aligned to the user request: it explicitly recommends a geo‑paired Recovery Services vault for redundancy, covers encryption (CMKs + Key Vault controls), automation for monthly DR tests, identity choices, network hardening, and additional operational constraints (TLS minimums, Key Vault RBAC posture, and reuse of Traffic Manager for failover testing). Set B is solid and concise and calls out useful facts (notably ExpressRoute connectivity and quantified counts), but it omits some architecture points that are directly relevant to geo‑redundant backup and DR testing (paired vault, TLS requirement, Key Vault RBAC, Traffic Manager usage) that A includes.",
+        "set_a": {
+          "architecturally_substantive": 9,
+          "actionable_planning_guidance": 9
+        },
+        "set_b": {
+          "architecturally_substantive": 7,
+          "actionable_planning_guidance": 7
+        },
+        "unique_to_a": [
+          "Explicit recommendation to provision a paired Recovery Services vault in a secondary region (geo‑pairing) for geo‑redundant backups.",
+          "Callout to require TLS 1.2 for backup agents and on‑prem to Azure connections (transport encryption requirement).",
+          "Specific observation that Key Vault RBAC is not broadly enabled (~60% enablerbacauthorization False) and recommendation to address RBAC vs legacy access policies for CMKs.",
+          "Recommendation to reuse existing Traffic Manager / global DNS profiles as part of DR test orchestration and failover validation."
+        ],
+        "unique_to_b": [
+          "Explicit quantified tenant telemetry for vault distribution and SKUs (e.g., 68.9% vaults in eastus, 97.8% RS0) used to recommend deploying a vault consistent with tenant conventions.",
+          "Quantified counts of automation/logic artefacts (e.g., 95 Logic workflows, 10 automation runbooks) used to justify reusing existing Logic Apps/Automation runbooks for orchestration.",
+          "Callout of substantial on‑prem connectivity capacity (170 ExpressRoute cross‑connections) and a recommendation to leverage ExpressRoute/VPN for backup replication and DR test traffic."
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "consistent": true,
+    "final_winner": "mfi"
+  },
+  {
+    "prompt_index": 3,
+    "prompt_short": "Deploy 3-tier architecture with hardened OS images, VM backu...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "draw",
+        "justification": "Both sets meet the evaluation criteria: each insight identifies concrete architectural points, gives valid planning implications, and cites tenant facts. Set A is broader (10 items) and emphasizes networking/traffic patterns, App Gateway/WAF usage, image-build automation details, and disk-performance choices. Set B is slightly more operationally focused on secrets/backup retention and monitoring (Key Vault purge protection, soft-delete/retention, Log Analytics/Application Insights onboarding) and explicit autoscale/health-probe guidance. Neither set is clearly superior overall — they are complementary.",
+        "unique_to_a": [
+          "Preference for Premium_LRS / Premium OS and data disk selection to match tenant performance/cost conventions and ensure backup/snapshot compatibility.",
+          "Explicit callout of heavy Traffic Manager usage and a recommendation to design multi-region frontends using Traffic Manager with regional Standard Load Balancer/Application Gateway pairs.",
+          "Specific observation that Application Gateways are WAF_v2 with http->https redirect and user‑assigned identities, recommending a WAF_v2 Application Gateway fronting the application tier with HTTPS enforcement and UA identity for cert/secret access.",
+          "Noted concentration of custom-image galleries/templates in particular regions (East/West) and recommendation to reuse the existing shared image gallery workflow scoped to those regions.",
+          "Explicit mention that image templates include shell-command customization steps (i.e., customization scripts) and recommendation to incorporate the same image-template automation for baking hardened OS images."
+        ],
+        "unique_to_b": [
+          "Key Vault posture details (purge protection enabled, long soft-delete retention, network ACL split) and explicit recommendation to store image and backup credentials in Key Vault with purge protection and restricted network access.",
+          "Explicit recommendation to apply daily backup policies with attention to retention and soft-delete settings for Recovery Services vaults.",
+          "Explicit telemetry/monitoring recommendation to onboard new VMs/VMSS to Log Analytics and Application Insights and create metric alerts and autoscale triggers.",
+          "Explicit callout that zone redundancy is not commonly enabled by default (tenant percentages) and recommendation to choose zone‑redundant SKUs or spread VMSS across zones.",
+          "Callout that Public IPs are Standard SKU (~95.9%) with recommendation to use Standard SKU Public IPs along with Standard Load Balancer.",
+          "Recommendation to implement autoscale rules and health probes for VMSS behind a Standard Load Balancer (explicit autoscale/health-probe guidance)."
+        ]
+      },
+      "mapped_winner": "draw"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "B",
+        "justification": "Set A: 8 insights — all 8 are architecturally substantive and provide actionable planning guidance, grounded in tenant counts (images, vaults, VMSS, Key Vaults, Standard SKUs, telemetry). Set B: 10 insights — all 10 are architecturally substantive and actionable, also grounded in tenant facts. Both sets are high quality and overlap heavily (image pipeline, managed identities, backups, VMSS + Standard networking, private endpoints/NSGs, prefer VMSS/AZs). Set B wins because it is more comprehensive: it preserves all of A’s concrete recommendations and adds several additional, concrete architecture-level recommendations (disk tier guidance, multi-region DNS/Traffic Manager pattern, explicit Application Gateway WAF_v2 + HTTPS enforcement, and more granular image-build automation and availability-domain detail) that are directly actionable for deploying the requested 3-tier design.",
+        "unique_to_a": [
+          "Onboard new VMs/VMSS to Log Analytics and Application Insights and create metric alerts and autoscale triggers (telemetry/alerting focus).",
+          "Explicit call-out to use Key Vault purge protection and long soft-delete retention when storing image and backup credentials (purge-protection / soft-delete specifics)."
+        ],
+        "unique_to_b": [
+          "Recommendation to choose Premium_LRS / Premium-tier OS and data disks to match tenant performance/cost conventions and ensure backup/snapshot compatibility.",
+          "Design multi-region frontends using Traffic Manager for DNS failover with regional Standard Load Balancer/Application Gateway pairs for local distribution.",
+          "Fronting the app with WAF_v2 Application Gateway (user-assigned identity for cert/secret access) and enforce HTTPS (http->https redirect) as a standard pattern.",
+          "More granular availability detail contrasting availability sets (Aligned, 2 fault domains) with VMSS platformFaultDomainCount (including 5) and preferring VMSS/AZs for higher availability.",
+          "Image-template automation detail: templates use user-assigned identities and include shell-command customization steps to bake hardened images."
+        ]
+      },
+      "mapped_winner": "baseline"
+    },
+    "consistent": false,
+    "final_winner": "inconclusive"
+  },
+  {
+    "prompt_index": 4,
+    "prompt_short": "Configure a site recovery plan for disaster failover from Ea...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "B",
+        "justification": "Set A: 8 architecturally substantive insights, 8 actionable planning guidance items. Set B: 9 architecturally substantive insights, 9 actionable planning guidance items. Both sets are well-grounded in observed facts and mostly overlap on core recovery requirements (vault SKUs/encryption, Traffic Manager DNS failover, disk SKUs, storage redundancy, VM managed identities, VNet/networking mapping). Set B wins because it covers one additional substantive item and includes extra practical planning specifics that A omits or under-emphasizes (Key Vault soft-delete/purge-protection handling, explicit guidance that public IPs are regional and should not be relied on to move between regions, and explicit vault identity provisioning details), which materially affect DR/runbook design.",
+        "unique_to_a": [
+          "Private DNS heavy usage: pre-provision private DNS zones and VNet links (or conditional forwarding) in West to preserve internal name resolution immediately after failover",
+          "Explicit hub/spoke VNet peering recreation guidance: include recreation or pre-provisioning of hub/spoke VNets and peerings in West to restore connectivity",
+          "Callout to mirror existing Traffic Manager monitor configurations when switching endpoints to avoid unexpected probe/health behaviour"
+        ],
+        "unique_to_b": [
+          "Key Vault specifics: soft-delete retention and purge-protection require backup/restore or cross-region secret replication and must be considered in automated failback",
+          "Public IP immovability: explicit recommendation to avoid relying on moving public IPs between regions—use DNS failover and provision new Standard regional IPs instead",
+          "Recovery Services vault identity detail: many vaults use user-assigned identities (~50%) so script vault identity provisioning and RBAC into DR automation",
+          "NSG/subnet naming repeatability: mirror NSG configurations and consistent subnet names to simplify automation and ASR network mapping",
+          "Disk SKU/quota validation: include checks for SKU parity and available disk quota in target region as part of runbook/replication steps"
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "B",
+        "justification": "Both sets are high-quality: Set A has 9 substantive, actionable, and fact-grounded insights; Set B has 8. Both cover most same surface (vaults, DNS failover, storage redundancy, identities, disks, public IP SKUs). Set B wins narrowly because it calls out several additional, directly actionable networking items that are critical to an East->West VM failover: Private DNS zone/link provisioning, hub/spoke VNet peerings recreation (or pre-provisioning a West hub), and matching Standard Load Balancer configs and probes. Those items materially reduce blast radius and speed recovery of internal connectivity and DNS failbacks.",
+        "unique_to_a": [
+          "Key Vaults: explicit mention of soft-delete/purge-protection (90-day retention) and the need for Key Vault backup/restore or cross-region secret replication and accounting for purge-protection in automated failback.",
+          "Consistent subnet naming and NSG mirroring: recommendation to mirror VNet and NSG configurations and reuse subnet names to simplify ASR network mapping and automation.",
+          "Recovery Services vaults using user-assigned identities (~50%): explicit call to match the vault identity model and script identity provisioning and RBAC for vaults.",
+          "Explicit guidance to avoid trying to move public IPs cross-region and instead provision new Standard regional IPs plus DNS failover."
+        ],
+        "unique_to_b": [
+          "Private DNS usage: explicit counts of private DNS zones and VNet links and the recommendation to pre-provision matching private DNS zones/VNet links (or conditional forwarding) in the West region so internal names resolve immediately after failover.",
+          "Hub/spoke topology and peering recreation: identification of peered hub/spoke naming patterns and a recommendation to recreate peerings or pre-provision a West hub to restore connectivity dependencies.",
+          "Load balancer parity: explicit callout to pre-create equivalent Standard Load Balancers in the West and match health probes/frontend configs (in addition to public IPs) to enable smooth traffic cutover and automated DNS failbacks.",
+          "Mirror existing Traffic Manager/Front Door monitor configurations when switching endpoints to avoid unexpected probe/health behavior (more explicit than Set A on probe mirroring)."
+        ]
+      },
+      "mapped_winner": "baseline"
+    },
+    "consistent": false,
+    "final_winner": "inconclusive"
+  },
+  {
+    "prompt_index": 5,
+    "prompt_short": "Provision a jumpbox VM for secure management, establish NSGs...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "B",
+        "justification": "Both sets are high quality: each insight is an architecture point, provides actionable planning guidance, and is grounded in tenant facts. Set B wins narrowly because it includes several operationally significant items that A omits (OS platform skew, hub-and-spoke placement guidance, and integration with centralized monitoring), which materially affect jumpbox image choice, placement in the network topology, and telemetry planning. Set A has useful unique notes (NAT gateway egress and public IP SKU guidance) but B's additional operational context gives it the edge.",
+        "unique_to_a": [
+          "NAT Gateway usage and recommendation to place the management subnet/jumpbox behind a NAT Gateway to centralize egress control.",
+          "Public IP SKU preference (≈95.9% Standard) and the explicit recommendation to use Standard SKU if a public IP is needed or to avoid a public IP entirely.",
+          "Explicit subnet naming conventions (default, appSubnet, endpointSubnet) and the recommendation to create a management/managementSubnet and attach NSGs per subnet.",
+          "Recommendation to follow existing load-balancer/backend/frontend naming conventions when provisioning the ILB."
+        ],
+        "unique_to_b": [
+          "OS platform skew toward Windows (~95%) with the planning implication to provision a Windows jumpbox image by default unless Linux is required.",
+          "Evidence of a hub-and-spoke networking pattern and the explicit recommendation to position the jumpbox in the hub or a management spoke and rely on VNet peering for connectivity to ILB-backed tiers.",
+          "Monitoring and diagnostics integration (many Log Analytics workspaces) with the planning implication to enable VM diagnostics and forward jumpbox logs/metrics to the tenant Log Analytics workspace."
+        ],
+        "counts": {
+          "set_a": {
+            "architecturally_substantive": 9,
+            "actionable_planning_guidance": 9
+          },
+          "set_b": {
+            "architecturally_substantive": 9,
+            "actionable_planning_guidance": 9
+          }
+        }
+      },
+      "mapped_winner": "mfi"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "draw",
+        "justification": "Both sets are high-quality: every insight in each set points to a concrete architecture decision, gives a valid planning implication, and is grounded in tenant facts. They largely overlap but each set contains a few complementary, non‑overlapping recommendations (A emphasizes OS, hub placement, and monitoring; B emphasizes NAT/egress, public IP SKU, subnet naming, and Key Vault network ACLs). Neither set is uniformly stronger overall, so a draw is appropriate.",
+        "unique_to_a": [
+          "OS platform skew toward Windows (≈95%) and the recommendation to provision a Windows jumpbox image by default unless Linux is explicitly required.",
+          "Explicit hub-and-spoke placement guidance: position the jumpbox in the hub or a management spoke and rely on VNet peering for ILB-backed tier connectivity.",
+          "Recommendation to forward jumpbox VM diagnostics and logs to the tenant Log Analytics/Operational Insights workspace to align with existing telemetry.",
+          "Recommendation to colocate the jumpbox in the same region (eastus concentration) to simplify NSG rule reuse and auditing.",
+          "Emphasis on the ILB health-probe model and backend-pool/diagnostics expectations when choosing the Standard SKU ILB."
+        ],
+        "unique_to_b": [
+          "Guidance about public IP address SKU preference (95.9% Standard) and the explicit choice to use a Standard public IP or avoid a public IP via Bastion/private methods.",
+          "Recommendation to place the management subnet or jumpbox behind an existing NAT Gateway to centralize and control outbound egress.",
+          "Observation of VNet subnet naming conventions (default, appSubnet, endpointSubnet) and the specific recommendation to create a management/managementSubnet to match tenant conventions.",
+          "Advice to explicitly restrict Key Vault network ACLs to the management subnet or allowed admin IP ranges (notes mixed Key Vault network ACL defaults).",
+          "Advice to align backend/frontend naming conventions for load balancer configs with existing pool naming practices."
+        ]
+      },
+      "mapped_winner": "draw"
+    },
+    "consistent": false,
+    "final_winner": "inconclusive"
+  },
+  {
+    "prompt_index": 6,
+    "prompt_short": "Spin up Linux VMs for each tier using Terraform, automate pa...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "B",
+        "justification": "Both sets are high quality: every insight in each set identifies an architecture point, gives a valid planning implication, and is grounded in the supplied facts. Set B is the winner because it contains more distinct, actionable architecture points (10 vs 8) and includes several additional planning-relevant items that Set A does not (Key Vault protection conventions, disk performance defaults, explicit SSH-public-key counts + container-Linux callout, and a recommended Terraform module shape and image choices). Set A has useful unique details (VM extension onboarding patterns and storage-account sink/network ACL guidance), but overall Set B provides broader, more immediately actionable coverage for the requested work.",
+        "stats_A": {
+          "insights_total": 8,
+          "architecturally_substantive": 8,
+          "provide_actionable_planning_guidance": 8
+        },
+        "stats_B": {
+          "insights_total": 10,
+          "architecturally_substantive": 10,
+          "provide_actionable_planning_guidance": 10
+        },
+        "unique_to_a": [
+          "VM onboarding via extensions is common — recommend installing/configuring the same VM extensions for consistent registration/management.",
+          "Storage accounts as flow/diagnostic sinks — note TLS1_2 enforcement and varied public network access; pick storage accounts with appropriate network ACLs for sinks."
+        ],
+        "unique_to_b": [
+          "Key Vault protection conventions (soft-delete and purge-protection enabled) — store SSH keys and automation secrets in Key Vault with those protections.",
+          "Premium OS disk usage is common (~63% Premium_LRS) — default new Linux OS disks to Premium SSD unless cost trade-offs dictate otherwise.",
+          "Explicit image alignment (use Ubuntu 18.04/Ubuntu Pro) — align new Linux VM images to existing image usage.",
+          "SSH public-key evidence (51 sshpublickeys) and Linux container workload note — use SSH key-pair provisioning and store private keys in Key Vault.",
+          "Terraform module composition recommendation — provide vnet->subnet->nsg->nic->vm plus log-analytics and managed-identity modules for reuse and conformity."
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "A",
+        "justification": "Set A is the winner because it contains more architecturally substantive insights (10 vs 8) and every insight in A ties a concrete observed fact to a clear, actionable planning implication (e.g., use tenant Ubuntu images, prefer Premium OS disks, store SSH keys in Key Vault with soft-delete/purge-protection, and implement Terraform modules that mirror existing resource groupings). Set B is also strong and grounded (all 8 insights are substantive and actionable) and brings valuable unique points (notably VM extension onboarding and storage-sink/network-ACL guidance), but overall A is more comprehensive for the requested changes (Linux VMs, patch automation, and inter-subnet traffic logging).",
+        "unique_to_a": [
+          "Recommendation to align with existing Ubuntu images (18.04-LTS/Ubuntu Pro) when provisioning Linux VMs",
+          "Key Vault protection posture (soft-delete and purge-protection) and explicit recommendation to store SSH keys and automation credentials there",
+          "Explicit guidance to default new Linux OS disks to Premium SSD based on existing Premium_LRS/P-series prevalence",
+          "Explicit count of sshPublicKeys observed and recommendation to provision SSH key-pairs and store private keys in Key Vault",
+          "A concrete Terraform module pattern recommendation (vnet -> subnet -> nsg -> nic -> vm plus log-analytics and managed-identity modules) based on frequent resource grouping"
+        ],
+        "unique_to_b": [
+          "Observation that VM onboarding via extensions is widespread and a recommendation to install/configure the same VM extensions for consistent management/monitoring/registration",
+          "Guidance to select storage accounts as flow-log/diagnostic sinks based on TLS1_2 and network ACL posture (explicit storage-account sink guidance)",
+          "More explicit subnet/peering/name-pattern observations (common subnet names like 'default' and 'appSubnet' and many virtual network peerings) and a recommendation to adopt matching subnet naming and peering patterns",
+          "Emphasis on either scaling Automation Accounts or centralizing Update Management linkage (practical sizing/centralization trade-off tied to runbook counts)"
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "consistent": true,
+    "final_winner": "mfi"
+  },
+  {
+    "prompt_index": 7,
+    "prompt_short": "Deploy three distinct VM scale sets for a legacy app, route ...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "B",
+        "justification": "Set B is broader and more practically prescriptive: it contains more architecture-specific observations (9 vs 7) and more actionable planning guidance. B adds important, concrete items that A omits (storage SKU guidance, Key Vault access-model guidance, and explicit network placement/NSG guidance) while A's unique points (VMSS instance-count norm and WAF custom-rule patterns) are useful but narrower in scope.",
+        "unique_to_a": [
+          "WAF policy content recommendation: callout of RateLimitRule and BlockInvalidSymbols and plan to attach corresponding custom rules",
+          "VM scale set instance-count convention: majority use capacity=2 → plan min/initial instances = 2",
+          "Explicit recommendation to assign the user‑assigned managed identity to the Disk Encryption Set (explicit identity-to-DES binding)",
+          "Explicit recommendation to grant App Gateway managed identity access to Key Vault for TLS certs (explicit TLS cert access note)"
+        ],
+        "unique_to_b": [
+          "Network placement detail: place App Gateway in a dedicated AppGateway subnet and ensure NSG/network controls align with tenant patterns",
+          "Managed disk SKU guidance: majority Premium_LRS → provision data disks as Premium_LRS",
+          "Key Vault access model guidance: tenant tends to use access-policies (enablerbacauthorization=false) → plan access-policy based grants unless org policy requires RBAC",
+          "Explicit recommendation to verify region support for multiple platform fault domains and choose platformFaultDomainCount accordingly (region-constraint caveat)",
+          "Explicit, high-confidence summary of Public IP / Load Balancer SKUs with percentages (calls out Load Balancer Standard = 100%)"
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "A",
+        "justification": "Both sets are high quality, grounded, and actionable. Set A is the winner because it is more comprehensive (9 vs 7 insights) and contains several additional concrete architecture points (disk SKU preference, Key Vault access‑policy posture, and explicit App Gateway placement/NSG guidance) that provide extra planning detail beyond Set B’s coverage. Set B does have a couple of valuable unique items (WAF custom rules and the common VMSS capacity=2 convention) but overall A gives more architecturally substantive and actionable items.",
+        "unique_to_a": [
+          "Managed disk SKU skew to Premium_LRS (recommend provisioning data disks as Premium_LRS).",
+          "Key Vaults predominantly use access policies rather than RBAC (recommend aligning new Key Vaults with access‑policies unless org policy mandates RBAC).",
+          "Explicit network placement guidance for Application Gateway (dedicated AppGateway subnet, pairings with VNets/NSGs and Public IPs and ensuring routing/NSG alignment).",
+          "Nuanced presentation of the platformFaultDomainCount split (calls out the near even split 5 vs 1 and recommends preferring 5 where supported or matching tenant alternates)."
+        ],
+        "unique_to_b": [
+          "WAF policies commonly include custom rules for rate limiting and blocking suspicious payloads (recommend attaching rate‑limit and relevant custom rules).",
+          "VM scale set instance counts are typically small (capacity=2 is the tenant norm) and should be used as a baseline with autoscale rules as needed.",
+          "Explicit suggestion to grant the App Gateway's user‑assigned identity Key Vault access for TLS certificates (callout tied to TLS cert management).",
+          "Explicit instruction to assign the user‑assigned managed identity to the Disk Encryption Set when using a customer‑managed key (more prescriptive on identity-to‑DES mapping)."
+        ],
+        "counts": {
+          "set_a": {
+            "insights_total": 9,
+            "architecturally_substantive": 9,
+            "actionable_planning_guidance": 9
+          },
+          "set_b": {
+            "insights_total": 7,
+            "architecturally_substantive": 7,
+            "actionable_planning_guidance": 7
+          }
+        }
+      },
+      "mapped_winner": "mfi"
+    },
+    "consistent": true,
+    "final_winner": "mfi"
+  },
+  {
+    "prompt_index": 8,
+    "prompt_short": "Set up Azure Backup for critical VM workloads, create a long...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "B",
+        "justification": "Both sets are high quality: each contains 8 architecturally substantive insights and 8 that offer actionable planning guidance. Set B wins narrowly because it adds stronger operational guidance directly tied to the user's goals — explicit vault‑consolidation guidance (vault counts + RS0 SKU), automation/runbook recommendations for executing quarterly restores, and concrete monitoring/logging integration for audit evidence — all of which make implementing and proving quarterly restore tests and long‑term retention easier. Set A contains important complementary items (infrastructure encryption, Windows VM emphasis, vault identity mix, and network exposure hardening) but overall B’s additional operational recommendations give it the edge.",
+        "unique_to_a": [
+          "Recovery Services vaults have infrastructureEncryption enabled — calls out evaluating customer‑managed keys for compliance",
+          "Tenant VM OS mix is overwhelmingly Windows (95.2%) — recommends Windows‑specific restore validation and SLAs",
+          "Vault identity usage is mixed (50/50 UserAssigned/None) vs VMs using managed identities — suggests aligning vault identities with existing MI practice",
+          "Network exposure of backup resources is broad (public access enabled) — recommends introducing private endpoints/network restrictions before enforcing",
+          "Callout about higher snapshot/restore cost/performance due to majority Premium disks (phrased as sizing retention windows/SLAs)"
+        ],
+        "unique_to_b": [
+          "Recovery Services vault SKU standardization (97.8% RS0) and explicit advice to adopt RS0 as an operational baseline",
+          "Counts/fragmentation of existing backup infrastructure (90 Recovery Services vaults, 18 dataprotection vaults) and a recommendation to standardize/reuse vaults",
+          "Presence of Automation Accounts/runbooks and a concrete recommendation to automate the quarterly restore tests and capture results centrally",
+          "Explicit monitoring/logging coverage (Application Insights components and many Log Analytics workspaces) and routing backup/restore telemetry into central Log Analytics for alerts/dashboards and audit evidence",
+          "Direct recommendation to assign backup RBAC to user‑assigned managed identities (reusing existing MIs) for consistent, auditable permissions"
+        ]
+      },
+      "mapped_winner": "mfi"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "draw",
+        "justification": "Both sets contain 8 architecturally substantive insights and 8 actionable planning recommendations, and each insight is tied to concrete facts. They cover largely the same surface area with complementary unique points, so neither set is categorically better overall.",
+        "unique_to_a": [
+          "RS0 SKU prevalence and recommendation to adopt the RS0 configuration baseline when creating/consolidating vaults.",
+          "Counts and fragmentation of existing backup infrastructure (90 Recovery Services vaults and 18 dataprotection backup vaults) with the recommendation to standardize and reuse vaults.",
+          "Presence of Automation Accounts and runbooks as an existing capability to automate the quarterly restore‑test cadence.",
+          "Broad monitoring/log analytics coverage (explicit counts of Application Insights components and Log Analytics workspaces) and the recommendation to centralize backup telemetry and create alerts/dashboards."
+        ],
+        "unique_to_b": [
+          "Explicit VM regional distribution mismatch (vaults concentrated in eastus while VMs concentrated in westus2, centralindia, southeastasia) called out with a recommendation to provision vaults in the same regions as critical VMs.",
+          "Recovery Services vaults have infrastructure encryption enabled (encryption.infrastructureencryption) and the advice to evaluate customer‑managed keys where compliance requires customer key control.",
+          "VM OS mix: the tenant is overwhelmingly Windows (95.2%) and backup/restore tests should be designed/validated for Windows specifics.",
+          "Network exposure detail: Recovery Services vaults largely allow public network access (~98.9%) and the recommendation to harden vaults with private endpoints/network restrictions while validating allowed paths for backup/restore."
+        ]
+      },
+      "mapped_winner": "draw"
+    },
+    "consistent": false,
+    "final_winner": "inconclusive"
+  },
+  {
+    "prompt_index": 9,
+    "prompt_short": "Deploy disaster recovery for VMware VMs using Azure Site Rec...",
+    "ordering1": {
+      "a": "baseline",
+      "b": "mfi",
+      "raw": {
+        "winner": "A",
+        "justification": "Both sets produce architecture-specific, actionable, and fact-grounded insights. Set A edges out B by being slightly more comprehensive (10 vs 9 insights) and by including concrete guidance around VMware-to-Azure placement (minimizing cross-region latency/data residency), ExpressRoute usage for replication/failover, Hybrid Runbook Worker options, and the high proportion of scheduled queries using user-assigned identities — all of which add useful, practical detail for DR planning. Set B is strong on SKU-level and network-artifact counts and pre-provisioning guidance but overall is a bit narrower.",
+        "unique_to_a": [
+          "Recommend placing ASR vaults or replication targets nearer VMware primary sites to minimize cross-region latency and satisfy data residency",
+          "Callout of heavy ExpressRoute cross-connections and explicit recommendation to route/test replication/failover over ExpressRoute circuits",
+          "Recommend using Hybrid Runbook Workers (on‑prem/VCF) as failover runbook hosts to increase availability",
+          "Statistic that 75% of scheduled query rules use user-assigned identities and recommendation to leverage identity-backed scheduled queries for auditable alerting",
+          "Advice to ensure ASR-related cryptographic material (snapshots/keys) aligns with vault-level infrastructure encryption and documented compliance controls"
+        ],
+        "unique_to_b": [
+          "Recommendation to deploy Recovery Services vaults with the RS0 SKU (97.8% tenant preference)",
+          "Log Analytics SKU detail (PerGB2018 87.9%) and explicit recommendation to connect Automation to the Log Analytics workspace to preserve job history",
+          "Counts of network building blocks (NSGs, VNets, Traffic Manager profiles) and explicit guidance to pre-create/validate target VNets/NSGs/public IPs and Traffic Manager/DNS records in the DR region",
+          "Explicit monitoring artifact counts (datacollectionrules, metricalerts, scheduled query rules, activity log alerts) and the recommendation to integrate runbook/ASR events into metricalerts/escalation workflows",
+          "Explicit recommendation to evaluate/implement vault network controls (private endpoints/service endpoints) while ensuring runbooks retain necessary access"
+        ]
+      },
+      "mapped_winner": "baseline"
+    },
+    "ordering2": {
+      "a": "mfi",
+      "b": "baseline",
+      "raw": {
+        "winner": "B",
+        "justification": "Both sets are high-quality: every insight in A (9/9) and B (10/10) is architecturally substantive, provides actionable planning guidance, and is grounded in the stated facts. Set B wins narrowly because it contains one additional insight and covers a few operationally important items that Set A omits (notably geographic misalignment between VMs and vaults, explicit use of ExpressRoute for replication, and hybrid/HA runbook hosting options). Set A has valuable, slightly different emphasis (RS0 SKU prevalence, explicit Traffic Manager/DNS pre-provisioning and private endpoint considerations), but overall B gives the broader operational coverage for the stated DR scenario.",
+        "unique_to_a": [
+          "Prevalence of RS0 SKU for Recovery Services vaults and recommendation to standardize on RS0 in deployments",
+          "Explicit recommendation to connect Automation to the target Log Analytics workspace to preserve runbook job history",
+          "Callout to pre-create and validate Traffic Manager/DNS records and public IPs and to include their reconfiguration/validation in runbooks",
+          "Explicit mention of high public network access on vaults (98.9%) with a recommendation to evaluate private endpoints/service endpoints while ensuring runbook reachability",
+          "Recommendation to store ASR encryption keys and recovery certificates in Key Vault with the same purge/retention policies as existing vaults"
+        ],
+        "unique_to_b": [
+          "Callout that primary VMs peak in regions (westus2, centralindia, southeastasia) while vaults concentrate in eastus, and recommendation to place ASR capacity nearer VMware primaries or minimize cross-region latency/data-residency impacts",
+          "Recommendation to scale/distribute runbook hosting (including Hybrid Runbook Workers on-prem/VCF) for high-availability across primary and DR regions",
+          "Explicit use of existing ExpressRoute cross-connections for replication/failover traffic and testing over private circuits",
+          "Statistic-driven recommendation that scheduled query rules largely use UAMI (75%) and to implement alert/runbook actions using user-assigned identities for auditable alerting actions",
+          "Explicit statement that Recovery Services vaults report infrastructure encryption enabled (called out separately as a design constraint for cryptographic material alignment)"
+        ]
+      },
+      "mapped_winner": "baseline"
+    },
+    "consistent": true,
+    "final_winner": "baseline"
+  }
+]

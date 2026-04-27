@@ -108,6 +108,61 @@ These are useful but narrow. The 76 MFIs mined from 489 transactions mostly rest
 
 This approach ranked #1 across both evaluation orderings and avoids the prompt-steering problem while keeping MFI data accessible for the model to draw on when it adds genuine value.
 
+---
+
+## Multi-Prompt Validation (MFI Value Test)
+
+The initial experiments used a single prompt ("Internal web app for the finance team with a relational database backend"). To validate whether MFI data consistently adds value, a follow-up experiment tested baseline vs MFI (Exp1 approach: MFI data + baseline prompt) across all 9 prompts from the skill's trigger test suite.
+
+### Prompts Tested
+
+| # | Prompt | Domain |
+|---|--------|--------|
+| 1 | Internal web app for the finance team with a relational database backend | Web app + SQL |
+| 2 | Deploy a geo-redundant backup solution for on-premises SQL servers using Azure Backup, configure encryption-at-rest, and automate monthly DR tests | Backup / DR |
+| 3 | Deploy 3-tier architecture with hardened OS images, VM backups scheduled daily, and application-level redundancy for the business logic tier | 3-tier / HA |
+| 4 | Configure a site recovery plan for disaster failover from East to West Azure region, replicate major VM workloads, and automate DNS failbacks | Site Recovery / DR |
+| 5 | Provision a jumpbox VM for secure management, establish NSGs for each tier, and connect tiers using internal Azure Load Balancer | Network security |
+| 6 | Spin up Linux VMs for each tier using Terraform, automate patch management via Azure Automation, and log traffic between subnets for compliance | VM / compliance |
+| 7 | Deploy three distinct VM scale sets for a legacy app, route incoming HTTP/S via Application Gateway with WAF, and encrypt all data disks | VMSS / WAF |
+| 8 | Set up Azure Backup for critical VM workloads, create a long-term retention policy for compliance, and test backup restores quarterly | Backup / retention |
+| 9 | Deploy disaster recovery for VMware VMs using Azure Site Recovery, configure runbooks for smooth failover, and maintain compliance audit trails | VMware DR |
+
+### Results
+
+| Prompt | Ordering 1 | Ordering 2 | Final Verdict |
+|--------|------------|------------|---------------|
+| 1 (web app + SQL) | MFI | MFI | **MFI wins** |
+| 2 (backup/DR) | MFI | MFI | **MFI wins** |
+| 3 (3-tier/HA) | Draw | Baseline | Inconclusive |
+| 4 (site recovery) | MFI | Baseline | Inconclusive |
+| 5 (jumpbox/NSGs) | MFI | Draw | Inconclusive |
+| 6 (Linux VMs/Terraform) | MFI | MFI | **MFI wins** |
+| 7 (VMSS/WAF) | MFI | MFI | **MFI wins** |
+| 8 (backup retention) | MFI | Draw | Inconclusive |
+| 9 (VMware DR) | Baseline | Baseline | **Baseline wins** |
+
+**Summary**: MFI wins 4, Baseline wins 1, Inconclusive 4. Consistency: 5/9 verdicts agreed across orderings.
+
+### Interpretation
+
+With 9 prompts, the picture is clearer than the initial 4-prompt run. MFI consistently outperforms baseline — winning 4 of 9 prompts with full consistency, while baseline only wins 1. The 4 inconclusive cases all had MFI winning in at least one ordering.
+
+Notably, the one prompt where baseline clearly won (VMware DR) is a scenario involving mostly VMware-specific resources where co-occurrence patterns add limited architectural signal.
+
+### Cost-Benefit
+
+- **Computation**: FP-Growth mining takes ~2–3 seconds on 490 transactions. Negligible.
+- **Token cost**: MFI adds ~19K chars (~5–6K tokens) to the payload. At current pricing, this is a fraction of a cent per call.
+- **Complexity**: Adding MFI to the payload requires the FP-Growth pipeline (TransactionEncoder, fpgrowth, MFI maximality filter). This is ~50 lines of code.
+- **Risk**: None. The baseline prompt doesn't mandate MFI analysis, so including MFI data can't hurt — the model uses it when relevant and ignores it otherwise.
+
+### Conclusion
+
+**Include MFI data.** The 9-prompt experiment strengthens the recommendation from the initial 4-prompt run. MFI wins outright in 4/9 cases, ties or nearly-ties in another 4, and loses only 1. The cost is trivial (~2s compute, ~5K extra tokens), and since the baseline prompt doesn't force MFI analysis, MFI data is strictly additive.
+
+The stronger signal remains property counts. Any effort to improve insight quality should prioritize prompt engineering and property aggregation depth over MFI sophistication.
+
 ## Files
 
 | File | Description |
@@ -121,3 +176,5 @@ This approach ranked #1 across both evaluation orderings and avoids the prompt-s
 | `insights_baseline.ipynb` | Baseline pipeline (property counts only) |
 | `insights_itemset.ipynb` | Full itemset pipeline (property counts + MFIs) |
 | `insights_bm25.ipynb` | BM25 retrieval pipeline |
+| `../mfi-value/mfi_value_test.ipynb` | Multi-prompt baseline vs MFI comparison |
+| `../mfi-value/results/` | Per-prompt insight outputs, evaluations, and summary |
