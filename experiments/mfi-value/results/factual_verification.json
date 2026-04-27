@@ -1,0 +1,2290 @@
+{
+  "1": {
+    "baseline": {
+      "scores": {
+        "total_claims": 28,
+        "verdicts": {
+          "supported": 21,
+          "approximate": 2,
+          "hallucinated": 2,
+          "unverifiable": 3
+        },
+        "verifiable_claims": 25,
+        "accuracy_pct": 92.0,
+        "hallucinated_claims": [
+          {
+            "insight": "Key Vault protective defaults: Key Vaults overwhelmingly have soft-delete (enableSoftDelete) and long retention (90 days...",
+            "claim": "Key Vaults have purge protection enabled",
+            "fact_sheet_value": "properties.enablepurgeprotection: totalResponded 15, True count 15 (8.9% of vaults)",
+            "explanation": "The fact sheet shows only 15 vaults (≈8.9%) have purge protection enabled, so the claim that purge protection is generally enabled is contradicted by the data."
+          },
+          {
+            "insight": "Mixed public network posture across services: several services have publicnetworkaccess enabled (Key Vault ~92%, Storage...",
+            "claim": "Storage accounts Enabled ~54% (publicnetworkaccess enabled)",
+            "fact_sheet_value": "microsoft.storage/storageaccounts -> properties.publicnetworkaccess: totalResponded=210, Enabled: count=113, percentage=25.5% (note: count 113 out of total storage accounts 443 yields 25.5%; 113/210 = 53.8% if using totalResponded as denominator)",
+            "explanation": "The fact sheet records 113 storage accounts with publicnetworkaccess=Enabled. That is 25.5% when compared to the total storage account count shown (443) — the percentage printed in the sheet is 25.5%. If someone used the property totalResponded (210) as the denominator they would get 113/210 = 53.8% (~54%), but the fact sheet's distribution percentage for this property is 25.5%, so the claim of ~54% is not supported by the fact sheet as presented."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "Regional concentration in eastus and westus2: storage and many networking/compute resources are concentrated in eastus a...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "storage eastus ~24%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.storage/storageaccounts: eastus count 107, percentage 24.2%",
+                "explanation": "The fact sheet shows 107 of 443 storage accounts (24.2%) are in eastus, matching the ~24% claim."
+              },
+              {
+                "claim": "many VMs in westus2 ~24%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachines: westus2 count 186, percentage 23.9%",
+                "explanation": "The fact sheet reports 186 of 778 VMs (23.9%) in westus2, which aligns with the ~24% statement."
+              },
+              {
+                "claim": "many public IPs in westus2 ~24%",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.network/publicipaddresses: westus2 count 44, percentage 30.3%",
+                "explanation": "Public IPs are concentrated in westus2, but the fact sheet shows 30.3% (44 of 145) rather than ~24% — a difference of ~6.3 percentage points."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "Private networking adoption: the tenant already uses private connectivity primitives (56 Private Endpoints and 74 Privat...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "the tenant already uses 56 Private Endpoints",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/privateendpoints: totalCount = 56",
+                "explanation": "The fact sheet shows microsoft.network/privateendpoints.totalCount is 56, matching the claim."
+              },
+              {
+                "claim": "the tenant already uses 74 Private DNS zones",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/privatednszones: totalCount = 74",
+                "explanation": "The fact sheet shows microsoft.network/privatednszones.totalCount is 74, matching the claim."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "Key Vault protective defaults: Key Vaults overwhelmingly have soft-delete (enableSoftDelete) and long retention (90 days...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Key Vaults overwhelmingly have soft-delete (enableSoftDelete)",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.enablesoftdelete: totalResponded 167, True count 167 (98.8%)",
+                "explanation": "The fact sheet shows nearly all responded Key Vaults have enablesoftdelete = True (98.8%), matching 'overwhelmingly'."
+              },
+              {
+                "claim": "Key Vaults have long retention (90 days)",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.softdeleteretentionindays: totalResponded 125, 90 count 118 (69.8% of total vaults)",
+                "explanation": "A majority of Key Vaults use a 90-day soft-delete retention (118 vaults, ≈69.8% of vaults), so the 90-day retention claim is supported."
+              },
+              {
+                "claim": "Key Vaults have purge protection enabled",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "properties.enablepurgeprotection: totalResponded 15, True count 15 (8.9% of vaults)",
+                "explanation": "The fact sheet shows only 15 vaults (≈8.9%) have purge protection enabled, so the claim that purge protection is generally enabled is contradicted by the data."
+              },
+              {
+                "claim": "enablerbacauthorization is False for ~60% of vaults",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.enablerbacauthorization: totalResponded 169, False count 102 (60.4%), True count 67 (39.6%)",
+                "explanation": "The fact sheet shows enablerbacauthorization = False for 102 of 169 vaults (60.4%), matching the '~60%' statement."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "App Service sizing and access patterns: App Service plans and sites commonly use Basic SKUs (B1 ~29%) and public network...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "App Service plans commonly use B1 SKU (~29%).",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.web/serverfarms sku.name: B1 count 51 of 177 (28.8%)",
+                "explanation": "The fact sheet shows B1 is the largest single sku.name for serverfarms at 28.8%, which matches the ~29% claim within tolerance."
+              },
+              {
+                "claim": "App Service sites commonly use Basic SKUs.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.web/sites properties.sku: Basic count 50 of 113 (44.2%)",
+                "explanation": "The fact sheet shows the Basic tier is the most frequent sku for sites (44.2%), supporting the statement that sites commonly use Basic SKUs."
+              },
+              {
+                "claim": "Public network access is frequently Enabled.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.web/sites properties.publicnetworkaccess: Enabled count 113 of 113 (100.0%)",
+                "explanation": "For App Service sites the fact sheet reports public network access as Enabled for all responded sites (100%), so 'frequently Enabled' is supported."
+              },
+              {
+                "claim": "Managed identities are widely used.",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "microsoft.web/sites identity (totalResponded=58): SystemAssigned 26 (23.0%), SystemAssigned, UserAssigned 23 (20.4%), UserAssigned 9 (8.0%)",
+                "explanation": "The insight's phrase 'widely used' is qualitative. The fact sheet provides counts for site identities (some sites have identities), but 'widely used' is subjective and not a precise numeric claim to verify. The raw identity counts are provided above if a quantitative interpretation is desired."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Relational DB conventions: existing Azure SQL databases lean toward vCore/Hyperscale configurations (Hyperscale ~60% amo...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Hyperscale ~60% among databases",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers/databases -> properties.currentsku.tier: Hyperscale count 3 out of 5 (60.0%)",
+                "explanation": "The fact sheet shows 3 of 5 databases (60.0%) have tier 'Hyperscale', matching the ~60% statement."
+              },
+              {
+                "claim": "databases lean toward vCore configurations",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers/databases -> properties.currentsku.family: Gen5 count 4 out of 4 (80.0%) (totalResponded 4)",
+                "explanation": "The current SKU family is Gen5 for the databases with reported family (4 of 4), which corresponds to vCore-based families—supporting the assertion that databases lean toward vCore-style SKUs."
+              },
+              {
+                "claim": "databases use user-assigned identities",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers/databases -> identity: totalResponded 1, distribution: UserAssigned count 1 (20.0%)",
+                "explanation": "At least one database (1 of 5, 20.0%) is using a user-assigned identity, so user-assigned identities are in use for databases (though not ubiquitous)."
+              },
+              {
+                "claim": "many SQL servers today still have publicnetworkaccess enabled ~57%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers -> properties.publicnetworkaccess: Enabled count 4 out of 7 (57.1%)",
+                "explanation": "The fact sheet shows 4 of 7 SQL servers (57.1%) have publicnetworkaccess set to Enabled, which matches the ~57% figure."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "Web perimeter security is standardized: Application Gateways are consistently deployed as WAF_v2 and Front Door WAF Prem...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Application Gateways are consistently deployed as WAF_v2",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgateways: totalCount=12, properties.sku.name: WAF_v2 count=12 (100.0%)",
+                "explanation": "The fact sheet shows all 12 Application Gateways report sku.name = WAF_v2 (100%), which supports the claim they are deployed as WAF_v2 across the tenant."
+              },
+              {
+                "claim": "Front Door WAF Premium is used across the tenant",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/frontdoorwebapplicationfirewallpolicies: totalCount=26, properties.sku.name: Premium_AzureFrontDoor count=25 (96.2%), Standard_AzureFrontDoor count=1 (3.8%)",
+                "explanation": "Most Front Door WAF policies (25 of 26, 96.2%) use the Premium_AzureFrontDoor SKU; a single policy uses Standard. This strongly supports the claim that Premium WAF is used tenant-wide (near-universal usage)."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "Subnet and VNet naming conventions: virtual networks frequently include subnets named 'default', 'appSubnet' and 'endpoi...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Virtual networks frequently include subnets named 'default', 'appSubnet' and 'endpointSubnet'.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/virtualnetworks -> properties.subnets.name: totalResponded 339, distribution: 'default' count 83 (40.5%), 'appSubnet' count 22 (10.7%), 'endpointSubnet' count 22 (10.7%).",
+                "explanation": "The fact sheet shows these three subnet names are present and are the most common names (default is the single most frequent at 40.5%, appSubnet and endpointSubnet are next at 10.7% each), so the statement that virtual networks frequently include them is supported."
+              },
+              {
+                "claim": "Top subnet names ~24% for 'default'.",
+                "verdict": "approximate",
+                "fact_sheet_value": "'default' count 83 (40.5%)",
+                "explanation": "The insight's ~24% for 'default' deviates from the fact sheet's 40.5% (a difference of 16.5 percentage points). This is directionally about a leading subnet name but the percentage is substantially off."
+              },
+              {
+                "claim": "Top subnet names ~6.5% for 'appSubnet'.",
+                "verdict": "supported",
+                "fact_sheet_value": "'appSubnet' count 22 (10.7%)",
+                "explanation": "The claim of ~6.5% is close to the actual 10.7% (difference ~4.2 percentage points), which is within the ~5 percentage point tolerance."
+              },
+              {
+                "claim": "Top subnet names ~6.5% for 'endpointSubnet'.",
+                "verdict": "supported",
+                "fact_sheet_value": "'endpointSubnet' count 22 (10.7%)",
+                "explanation": "The claim of ~6.5% is close to the actual 10.7% (difference ~4.2 percentage points), which is within the ~5 percentage point tolerance."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 8,
+          "insight_text": "Managed identity usage is widespread: many platform resources already use SystemAssigned or UserAssigned identities (VMs...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Managed identity usage is widespread",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "fact sheet contains identity distributions for many resource types (e.g., 370 user assigned identities exist, many resource types report identity fields) but no global metric labelled 'widespread' or threshold to quantify 'widespread'.",
+                "explanation": "The insight makes a qualitative statement without a numeric threshold. The fact sheet has many identity entries (and a userAssigned identities resource count), but 'widespread' is subjective and not a directly verifiable numeric claim in the fact sheet."
+              },
+              {
+                "claim": "Many platform resources already use SystemAssigned or UserAssigned identities",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "fact sheet lists identity distributions per resource type (examples below) but does not define 'many' as a specific count or percentage across all 'platform resources'.",
+                "explanation": "The fact sheet shows identity usage for many individual platform resource types (e.g., virtual machines, AKS/managed clusters, containerapps, machine learning workspaces, etc.), but because 'many platform resources' is vague (no quantified set of resources or percentage), the claim cannot be strictly verified or falsified from the provided data."
+              },
+              {
+                "claim": "VMs ... show high identity usage (SystemAssigned or UserAssigned)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachines identity: totalResponded 764; SystemAssigned, UserAssigned: count 755 (97.0%); SystemAssigned: count 9 (1.2%).",
+                "explanation": "The fact sheet shows that of the VMs with identity information (764 responded), 755 (≈97%) have SystemAssigned+UserAssigned identities, which confirms that virtual machines have very high managed identity usage."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 9,
+          "insight_text": "Mixed public network posture across services: several services have publicnetworkaccess enabled (Key Vault ~92%, Storage...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Key Vault ~92% (publicnetworkaccess enabled)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults -> properties.publicnetworkaccess: totalResponded=169, Enabled: count=156, percentage=92.3%",
+                "explanation": "The fact sheet shows 156 of 169 Key Vaults have publicnetworkaccess=Enabled (92.3%), which matches the claim (~92%)."
+              },
+              {
+                "claim": "Storage accounts Enabled ~54% (publicnetworkaccess enabled)",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.storage/storageaccounts -> properties.publicnetworkaccess: totalResponded=210, Enabled: count=113, percentage=25.5% (note: count 113 out of total storage accounts 443 yields 25.5%; 113/210 = 53.8% if using totalResponded as denominator)",
+                "explanation": "The fact sheet records 113 storage accounts with publicnetworkaccess=Enabled. That is 25.5% when compared to the total storage account count shown (443) — the percentage printed in the sheet is 25.5%. If someone used the property totalResponded (210) as the denominator they would get 113/210 = 53.8% (~54%), but the fact sheet's distribution percentage for this property is 25.5%, so the claim of ~54% is not supported by the fact sheet as presented."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "mfi": {
+      "scores": {
+        "total_claims": 32,
+        "verdicts": {
+          "supported": 25,
+          "approximate": 0,
+          "hallucinated": 4,
+          "unverifiable": 3
+        },
+        "verifiable_claims": 29,
+        "accuracy_pct": 86.2,
+        "hallucinated_claims": [
+          {
+            "insight": "Key Vault protections are strong tenant-wide (enablepurgeprotection True for 100% and soft delete retention 90 days for ...",
+            "claim": "enablepurgeprotection True for 100% of Key Vaults",
+            "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded=15, True: count=15, percentage=8.9 (out of 169 total vaults)",
+            "explanation": "The insight asserts 100%, but the fact sheet shows only 15 vaults reported this property as True (8.9%). This contradicts the claimed 100% coverage."
+          },
+          {
+            "insight": "Key Vault protections are strong tenant-wide (enablepurgeprotection True for 100% and soft delete retention 90 days for ...",
+            "claim": "soft delete retention 90 days for ~94% of vaults",
+            "fact_sheet_value": "microsoft.keyvault/vaults.properties.softdeleteretentionindays: totalResponded=125, '90' days: count=118, percentage=69.8 (of total vaults = 169 -> 118/169 = 69.8%)",
+            "explanation": "The insight's ~94% figure is incorrect. The fact sheet shows 118 vaults (69.8% of the 169 total) have 90-day soft-delete retention (118 of 125 responded, and 118 of 169 total vaults = 69.8%)."
+          },
+          {
+            "insight": "Private-link building blocks exist but are not universally enforced (56 private endpoints and 74 private DNS zones are p...",
+            "claim": "storage publicnetworkaccess Enabled ~54%",
+            "fact_sheet_value": "microsoft.storage/storageaccounts -> properties.publicnetworkaccess: totalResponded = 210, Enabled count = 113 (percentage reported in sheet = 25.5% of all 443 storage accounts), Disabled count = 93 (21.0% of all 443), SecuredByPerimeter = 4 (0.9% of all 443)",
+            "explanation": "The fact sheet shows 113 storage accounts with publicnetworkaccess=Enabled. That is 113/443 = 25.5% when using the sheet's denominator (all storage accounts). The insight's ~54% does not match the sheet's reported 25.5% and appears to use a different denominator (e.g., Enabled vs Enabled+Disabled) without stating it, so the claimed ~54% is not supported by the fact sheet's reported percentages."
+          },
+          {
+            "insight": "Azure SQL usage trends toward scalable vCore/Hyperscale instances (Hyperscale present in ~60% of databases, Gen5 familie...",
+            "claim": "database identity shows UserAssigned in 100%",
+            "fact_sheet_value": "microsoft.sql/servers/databases: properties.identity totalResponded=1 distribution: UserAssigned count=1, percentage=20.0",
+            "explanation": "The fact sheet shows only one database identity value was reported and that one is UserAssigned (count=1) but the percentage shown is 20.0 (relative to totalCount=5). It does not show UserAssigned at 100%."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "Key Vault protections are strong tenant-wide (enablepurgeprotection True for 100% and soft delete retention 90 days for ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "enablepurgeprotection True for 100% of Key Vaults",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded=15, True: count=15, percentage=8.9 (out of 169 total vaults)",
+                "explanation": "The insight asserts 100%, but the fact sheet shows only 15 vaults reported this property as True (8.9%). This contradicts the claimed 100% coverage."
+              },
+              {
+                "claim": "soft delete retention 90 days for ~94% of vaults",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.softdeleteretentionindays: totalResponded=125, '90' days: count=118, percentage=69.8 (of total vaults = 169 -> 118/169 = 69.8%)",
+                "explanation": "The insight's ~94% figure is incorrect. The fact sheet shows 118 vaults (69.8% of the 169 total) have 90-day soft-delete retention (118 of 125 responded, and 118 of 169 total vaults = 69.8%)."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "Managed identities are widely adopted (370 user-assigned identities tenant-wide and examples like VMs showing SystemAssi...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "370 user-assigned identities tenant-wide",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.managedidentity/userassignedidentities: totalCount = 370 (location distribution shown; totalCount = 370)",
+                "explanation": "The fact sheet lists microsoft.managedidentity/userassignedidentities totalCount as 370, matching the claimed number."
+              },
+              {
+                "claim": "VMs showing SystemAssigned,UserAssigned in ~98.8% of cases",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachines identity distribution: SystemAssigned, UserAssigned = 755 of 764 responded identities (97.0%)",
+                "explanation": "The fact sheet shows 97.0% of VMs with identity set to 'SystemAssigned, UserAssigned' (755/764). The claimed ~98.8% is close (within ~5 percentage points), so the claim is supported as approximately correct."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "Private-link building blocks exist but are not universally enforced (56 private endpoints and 74 private DNS zones are p...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "56 private endpoints are present",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/privateendpoints: totalCount = 56",
+                "explanation": "The fact sheet shows totalCount 56 for private endpoints, matching the claim."
+              },
+              {
+                "claim": "74 private DNS zones are present",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/privatednszones: totalCount = 74",
+                "explanation": "The fact sheet shows totalCount 74 for private DNS zones, matching the claim."
+              },
+              {
+                "claim": "storage publicnetworkaccess Enabled ~54%",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.storage/storageaccounts -> properties.publicnetworkaccess: totalResponded = 210, Enabled count = 113 (percentage reported in sheet = 25.5% of all 443 storage accounts), Disabled count = 93 (21.0% of all 443), SecuredByPerimeter = 4 (0.9% of all 443)",
+                "explanation": "The fact sheet shows 113 storage accounts with publicnetworkaccess=Enabled. That is 113/443 = 25.5% when using the sheet's denominator (all storage accounts). The insight's ~54% does not match the sheet's reported 25.5% and appears to use a different denominator (e.g., Enabled vs Enabled+Disabled) without stating it, so the claimed ~54% is not supported by the fact sheet's reported percentages."
+              },
+              {
+                "claim": "SQL servers Enabled ~57%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers -> properties.publicnetworkaccess: totalResponded = 7, Enabled count = 4 (57.1%), Disabled count = 3 (42.9%)",
+                "explanation": "The fact sheet shows 4 of 7 SQL servers have publicnetworkaccess=Enabled (57.1%), which matches the claim ~57%."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "App hosting skews to lower-cost, publicly reachable plans (B1 is the largest single serverfarm SKU at ~28.8% and web/sit...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "B1 is the largest single serverfarm SKU at ~28.8%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.web/serverfarms sku.name: B1 count 51 percentage 28.8",
+                "explanation": "The fact sheet shows B1 is the top serverfarm SKU with 51 of 177 serverfarms (28.8%)."
+              },
+              {
+                "claim": "web/sites show public network access enabled",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.web/sites properties.publicnetworkaccess: Enabled count 113 percentage 100.0",
+                "explanation": "All 113 recorded web/sites have public network access set to Enabled in the fact sheet."
+              },
+              {
+                "claim": "App hosting skews to lower-cost plans (many serverfarms are Basic tier)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.web/serverfarms sku.tier: Basic count 54 percentage 30.5",
+                "explanation": "The Basic tier is the largest serverfarm tier (54 of 177, 30.5%), consistent with a tilt toward lower-cost plans."
+              },
+              {
+                "claim": "tenant apps are often on basic, public plans",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.web/sites properties.sku: Basic count 50 percentage 44.2; properties.publicnetworkaccess: Enabled count 113 percentage 100.0",
+                "explanation": "A large share of web/sites use the Basic SKU (50 of 113, 44.2%) and all web/sites report public network access = Enabled, supporting the statement."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Ingress protection is standardized around WAF-enabled Application Gateway (100% of recorded Application Gateways use WAF...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "100% of recorded Application Gateways use WAF_v2",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgateways: totalCount = 12; properties.sku.name distribution = { 'WAF_v2': { count: 12, percentage: 100.0 } }",
+                "explanation": "The fact sheet shows all 12 recorded Application Gateways have sku.name = WAF_v2 (100%)."
+              },
+              {
+                "claim": "WAF policies include rate-limit/custom rules",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgatewaywebapplicationfirewallpolicies: totalCount = 14; properties.customrules.name distribution includes 'RateLimitRule' (count: 13, 92.9%), 'BlockInvalidSymbols' (count: 9, 64.3%), 'BlockHomeQuery' (count: 4, 28.6%)",
+                "explanation": "The WAF policy resources list rate-limit rules ('RateLimitRule') and multiple block-type custom rules, confirming the presence of rate-limit and custom block rules."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "Azure SQL usage trends toward scalable vCore/Hyperscale instances (Hyperscale present in ~60% of databases, Gen5 familie...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Hyperscale present in ~60% of databases",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers/databases: totalCount=5; properties.currentsku.tier distribution: Hyperscale count=3, percentage=60.0",
+                "explanation": "The fact sheet shows 3 of 5 databases (60.0%) have tier 'Hyperscale', matching the ~60% claim."
+              },
+              {
+                "claim": "Gen5 families common",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers/databases: properties.currentsku.family totalResponded=4 distribution: Gen5 count=4, percentage=80.0",
+                "explanation": "The fact sheet indicates the Gen5 family appears in the majority of reported current SKUs (Gen5 80% of the reported family values), supporting the assertion that Gen5 is common."
+              },
+              {
+                "claim": "database identity shows UserAssigned in 100%",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.sql/servers/databases: properties.identity totalResponded=1 distribution: UserAssigned count=1, percentage=20.0",
+                "explanation": "The fact sheet shows only one database identity value was reported and that one is UserAssigned (count=1) but the percentage shown is 20.0 (relative to totalCount=5). It does not show UserAssigned at 100%."
+              },
+              {
+                "claim": "The tenant favors Hyperscale/Gen5 vCore deployments",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.sql/servers/databases: totalCount=5; properties.currentsku.tier: Hyperscale 3/5 (60.0%); properties.currentsku.family: Gen5 4/4 reported (80.0%)",
+                "explanation": "The dataset shows a majority of databases are Hyperscale and the Gen5 family predominates among reported SKUs, so the statement that the tenant trends toward Hyperscale/Gen5 vCore deployments is consistent with the fact sheet metrics."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "Network-level controls are a tenant norm (957 network security groups and 205 virtual networks with frequent pairings in...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "957 network security groups",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/networksecuritygroups totalCount: 957",
+                "explanation": "The fact sheet lists 957 network security groups under microsoft.network/networksecuritygroups."
+              },
+              {
+                "claim": "205 virtual networks",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/virtualnetworks totalCount: 205",
+                "explanation": "The fact sheet shows 205 virtual networks under microsoft.network/virtualnetworks."
+              },
+              {
+                "claim": "with frequent pairings in the itemsets",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (no 'itemsets' frequency or pairing statistics provided)",
+                "explanation": "The fact sheet does not include an 'itemsets' analysis or frequency-of-pairings metric to verify this claim."
+              },
+              {
+                "claim": "application gateway subnets (application gateway subnets exist)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/virtualnetworks.properties.subnets.name includes 'appGatewaySubnet' (count: 8, percentage: 3.9)",
+                "explanation": "The virtual networks' subnet names include 'appGatewaySubnet' (8 occurrences), confirming such subnets exist in the tenant."
+              },
+              {
+                "claim": "enforce strict inbound rules limited to the finance team's IP ranges",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (no finance team IP ranges or team-specific IP lists present)",
+                "explanation": "The fact sheet does not contain any information about team ownership or specific IP ranges, so this restriction cannot be verified."
+              },
+              {
+                "claim": "use subnet-level NSGs",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (no mapping of NSGs to subnet vs. NIC level in the fact sheet)",
+                "explanation": "While NSGs exist, the fact sheet does not show whether they are applied at subnet level or NIC level, so the claim about subnet-level usage cannot be confirmed."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 8,
+          "insight_text": "Monitoring and logging are widely used and regionally concentrated (549 App Insights components and 149 Log Analytics wo...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "There are 549 App Insights components",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/components.totalCount = 549",
+                "explanation": "The fact sheet shows microsoft.insights/components totalCount is 549, matching the claim."
+              },
+              {
+                "claim": "There are 149 Log Analytics workspaces",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.operationalinsights/workspaces.totalCount = 149",
+                "explanation": "The fact sheet shows microsoft.operationalinsights/workspaces totalCount is 149, matching the claim."
+              },
+              {
+                "claim": "App Insights concentrated ~81% in westus2",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/components.location: westus2 count = 444 (80.9%)",
+                "explanation": "The fact sheet reports 444 of 549 App Insights components (80.9%) in westus2, which aligns with the '~81%' claim."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 9,
+          "insight_text": "Storage account practices are mixed on network exposure and favor cost-optimized redundancy (Standard_LRS at ~48.5% and ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Standard_LRS at ~48.5%",
+                "verdict": "supported",
+                "fact_sheet_value": "storage account sku.name: Standard_LRS count = 215, percentage = 48.5% (totalResponded = 443)",
+                "explanation": "The fact sheet shows 215 storage accounts with sku.name Standard_LRS out of 443 responded storage accounts, which is 48.5%, matching the claim."
+              },
+              {
+                "claim": "publicnetworkaccess Enabled ~53.8% but Disabled ~44.3%",
+                "verdict": "supported",
+                "fact_sheet_value": "storage account properties.publicnetworkaccess: totalResponded = 210, Enabled count = 113, Disabled count = 93 (also shows percentages relative to all storage accounts as Enabled 25.5% and Disabled 21.0%)",
+                "explanation": "Of the 210 storage accounts that responded for publicnetworkaccess, 113 are Enabled and 93 are Disabled. 113/210 = 53.8% and 93/210 = 44.3%, so the claimed percentages match the counts in the fact sheet (the fact sheet also lists different percentages computed over all 443 storage accounts)."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 10,
+          "insight_text": "Key Vault access model is heterogeneous with a tilt toward access policies (enablerbacauthorization False ~60.4%): becau...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "enablerbacauthorization False ~60.4%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults -> properties.enablerbacauthorization: totalResponded 169, distribution: False: count 102, percentage 60.4; True: count 67, percentage 39.6",
+                "explanation": "The fact sheet shows 102 of 169 Key Vaults (60.4%) have enablerbacauthorization = False, matching the claimed ~60.4%."
+              },
+              {
+                "claim": "many vaults still use Access Policies instead of Azure RBAC",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults -> properties.enablerbacauthorization: False: count 102 (60.4%), True: count 67 (39.6%)",
+                "explanation": "The majority (60.4%) of Key Vaults have enablerbacauthorization = False (meaning they use access policies rather than Azure RBAC), so the statement that many vaults still use Access Policies is supported by the data."
+              },
+              {
+                "claim": "Key Vault access model is heterogeneous",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults -> properties.enablerbacauthorization: both False (102, 60.4%) and True (67, 39.6%) are present",
+                "explanation": "Both access models (access policies and RBAC) are present across Key Vaults (roughly 60% False, 40% True), so describing the environment as mixed/heterogeneous is supported by the distribution."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "2": {
+    "baseline": {
+      "scores": {
+        "total_claims": 20,
+        "verdicts": {
+          "supported": 13,
+          "approximate": 0,
+          "hallucinated": 4,
+          "unverifiable": 3
+        },
+        "verifiable_claims": 17,
+        "accuracy_pct": 76.5,
+        "hallucinated_claims": [
+          {
+            "insight": "Recovery Services vaults are concentrated in eastus and use the RS0 Standard SKU with infrastructure encryption enabled:...",
+            "claim": "vault encryption shows infrastructureencryption Enabled",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.encryption.infrastructureencryption totalResponded=1, distribution: Enabled count=1, percentage=1.1",
+            "explanation": "The fact sheet has a single responded value showing infrastructureencryption Enabled (1 of 90, 1.1%). The insight implies infrastructure encryption is a general property of vaults, but the data shows only one vault reports it as Enabled, so the broad claim is contradicted by the dataset."
+          },
+          {
+            "insight": "Key Vaults have strong key protection defaults (purge protection and long soft‑delete): because 94.4% of vaults have sof...",
+            "claim": "94.4% of vaults have soft delete set to 90 days",
+            "fact_sheet_value": "Key vaults totalCount = 169. properties.softdeleteretentionindays: totalResponded = 125; 90 days count = 118. (118/169 = 69.8% of all vaults; 118/125 = 94.4% of vaults that responded to this property.)",
+            "explanation": "The insight's 94.4% matches 118/125 (only among vaults that reported a retention value), but the claim says 'of vaults' (implying all vaults). Across all 169 key vaults, only 118 have 90‑day retention (69.8%), so the blanket 94.4% figure is misleading/contradicted when applied to all vaults."
+          },
+          {
+            "insight": "Key Vaults have strong key protection defaults (purge protection and long soft‑delete): because 94.4% of vaults have sof...",
+            "claim": "enablepurgeprotection is True for 100% of key vaults",
+            "fact_sheet_value": "properties.enablepurgeprotection: totalResponded = 15; True count = 15 (which is 8.9% of the 169 key vaults).",
+            "explanation": "The fact sheet shows enablepurgeprotection = True for 15 vaults only (15/169 = 8.9%). There is no support for a 100% value."
+          },
+          {
+            "insight": "Managed identities are widely used, often as user‑assigned: because 55% of storage accounts have UserAssigned identities...",
+            "claim": "55% of storage accounts have UserAssigned identities",
+            "fact_sheet_value": "storageaccounts.identity.totalResponded = 40; distribution: UserAssigned = {count: 22, percentage: 5.0}, SystemAssigned = 17 (3.8%), SystemAssigned,UserAssigned = 1 (0.2%)",
+            "explanation": "The fact sheet shows ~5.0% of storage accounts reported a UserAssigned identity (22 of 443 storage accounts with identity data), not 55% — the 55% figure is contradicted by the provided data."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "Recovery Services vaults are concentrated in eastus and use the RS0 Standard SKU with infrastructure encryption enabled:...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "68.9% of vaults are in eastus",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: totalCount=90; location distribution: eastus count=62, percentage=68.9",
+                "explanation": "The fact sheet shows 62 of 90 Recovery Services vaults (68.9%) are in eastus, matching the claim."
+              },
+              {
+                "claim": "97.8% use RS0",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: sku.name distribution: RS0 count=88, percentage=97.8",
+                "explanation": "The fact sheet reports 88 of 90 vaults (97.8%) have sku.name RS0, which confirms the claim."
+              },
+              {
+                "claim": "vault encryption shows infrastructureencryption Enabled",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.encryption.infrastructureencryption totalResponded=1, distribution: Enabled count=1, percentage=1.1",
+                "explanation": "The fact sheet has a single responded value showing infrastructureencryption Enabled (1 of 90, 1.1%). The insight implies infrastructure encryption is a general property of vaults, but the data shows only one vault reports it as Enabled, so the broad claim is contradicted by the dataset."
+              },
+              {
+                "claim": "Plan to deploy the new Azure Backup vault in eastus using RS0 and enable infrastructure encryption to meet encryption‑at‑rest requirements and remain consistent with tenant conventions",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (plan/recommendation is not an existing resource property)",
+                "explanation": "This is a proposed deployment plan/recommendation, not a factual statement about current tenant resources; the fact sheet cannot verify future actions or intent."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "Storage redundancy favors geo‑replication: since 23.3% of storage accounts use Standard_GRS and 17.2% use Standard_RAGRS...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "23.3% of storage accounts use Standard_GRS",
+                "verdict": "supported",
+                "fact_sheet_value": "sku.name Standard_GRS: count 103, percentage 23.3%",
+                "explanation": "The fact sheet lists Standard_GRS with 103 of 443 storage accounts (23.3%)."
+              },
+              {
+                "claim": "17.2% of storage accounts use Standard_RAGRS",
+                "verdict": "supported",
+                "fact_sheet_value": "sku.name Standard_RAGRS: count 76, percentage 17.2%",
+                "explanation": "The fact sheet lists Standard_RAGRS with 76 of 443 storage accounts (17.2%)."
+              },
+              {
+                "claim": "with additional LRS usage",
+                "verdict": "supported",
+                "fact_sheet_value": "sku.name Standard_LRS: count 215, percentage 48.5% (also Premium_LRS 17, 3.8%)",
+                "explanation": "The fact sheet shows substantial LRS usage (Standard_LRS is 48.5% of storage accounts), so there is indeed additional LRS usage."
+              },
+              {
+                "claim": "Design backup staging or any required storage for Azure Backup to use Standard_GRS or Standard_RAGRS so backup data is geo‑redundant in a way consistent with existing tenant choices",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "The fact sheet confirms SKU distributions but does not assert the effect of choosing SKUs for Azure Backup or document that using Standard_GRS/Standard_RAGRS will make backup data geo‑redundant within this tenant; the recommendation and the claim about resulting backup behavior are not recorded in the fact sheet."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "Key Vaults have strong key protection defaults (purge protection and long soft‑delete): because 94.4% of vaults have sof...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "94.4% of vaults have soft delete set to 90 days",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "Key vaults totalCount = 169. properties.softdeleteretentionindays: totalResponded = 125; 90 days count = 118. (118/169 = 69.8% of all vaults; 118/125 = 94.4% of vaults that responded to this property.)",
+                "explanation": "The insight's 94.4% matches 118/125 (only among vaults that reported a retention value), but the claim says 'of vaults' (implying all vaults). Across all 169 key vaults, only 118 have 90‑day retention (69.8%), so the blanket 94.4% figure is misleading/contradicted when applied to all vaults."
+              },
+              {
+                "claim": "enablepurgeprotection is True for 100% of key vaults",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "properties.enablepurgeprotection: totalResponded = 15; True count = 15 (which is 8.9% of the 169 key vaults).",
+                "explanation": "The fact sheet shows enablepurgeprotection = True for 15 vaults only (15/169 = 8.9%). There is no support for a 100% value."
+              },
+              {
+                "claim": "Store any customer‑managed keys for Azure Backup in a Key Vault configured with purge protection and a 90‑day soft delete retention to align with tenant recovery and compliance practices.",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (the fact sheet lists key vault properties and counts but does not record guidance, intended usage of key vaults for Azure Backup, or compliance policy mappings).",
+                "explanation": "This is a recommendation (mapping backup key storage to specific vault settings). The fact sheet does not capture backup configurations, intended key usage, or tenant compliance policies, so the alignment claim cannot be verified from the provided data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "Managed identities are widely used, often as user‑assigned: because 55% of storage accounts have UserAssigned identities...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "55% of storage accounts have UserAssigned identities",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "storageaccounts.identity.totalResponded = 40; distribution: UserAssigned = {count: 22, percentage: 5.0}, SystemAssigned = 17 (3.8%), SystemAssigned,UserAssigned = 1 (0.2%)",
+                "explanation": "The fact sheet shows ~5.0% of storage accounts reported a UserAssigned identity (22 of 443 storage accounts with identity data), not 55% — the 55% figure is contradicted by the provided data."
+              },
+              {
+                "claim": "Many compute and platform resources use SystemAssigned, UserAssigned combinations",
+                "verdict": "supported",
+                "fact_sheet_value": "Examples: virtualmachines.identity.totalResponded = 764 with SystemAssigned, UserAssigned = {count: 755, percentage: 97.0}; containerapps.identity includes SystemAssigned, UserAssigned = 2 of 16 (12.5%); machinelearningservices/workspaces/onlineendpoints.identity shows SystemAssigned = 9 and UserAssigned = 42 of 51 (82.4%)",
+                "explanation": "The fact sheet shows large numbers of important compute resources (notably virtual machines) configured with the SystemAssigned, UserAssigned identity combination (VMs: 755/764 ≈ 97%), demonstrating that the combined identity pattern is indeed present across compute/platform resources."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Existing automation tooling is available for orchestration and scheduled tasks: with 95 logic workflows, 10 automation r...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "95 logic workflows",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.logic/workflows totalCount: 95",
+                "explanation": "The fact sheet shows microsoft.logic/workflows totalCount = 95, matching the claim exactly."
+              },
+              {
+                "claim": "10 automation runbooks",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts/runbooks totalCount: 10",
+                "explanation": "The fact sheet shows microsoft.automation/automationaccounts/runbooks totalCount = 10, matching the claim exactly."
+              },
+              {
+                "claim": "several deployment scripts present in the tenant",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.resources/deploymentscripts totalCount: 8",
+                "explanation": "The fact sheet reports 8 deployment scripts; the vague term 'several' is consistent with that count."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "There is substantial on‑prem connectivity capacity to leverage for backups and DR tests: with 170 ExpressRoute cross‑con...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "with 170 ExpressRoute cross‑connections across the tenant",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/expressroutecrossconnections: totalCount = 170",
+                "explanation": "The fact sheet shows microsoft.network/expressroutecrossconnections totalCount = 170, which matches the claim."
+              },
+              {
+                "claim": "existing VPN/Direct connections (to be used where possible)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/virtualnetworkgateways: totalCount = 2 (properties.sku.name: VpnGw1AZ, VpnGw1); microsoft.network/expressroutecircuits: totalCount = 2",
+                "explanation": "The tenant has virtual network gateways (2, with VPN SKU names) indicating VPN capability, and expressroutecircuits (2) in addition to the 170 cross‑connections, so the presence of VPN/Direct connectivity is supported by the fact sheet."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "Public network access is commonly enabled on vaults and key resources today: because most Key Vaults and Recovery Servic...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Most Key Vaults show publicnetworkaccess Enabled",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults: publicnetworkaccess Enabled = 156 of 169 (92.3%)",
+                "explanation": "The fact sheet shows 156 out of 169 Key Vaults have publicnetworkaccess = Enabled (≈92.3%), which confirms that most Key Vaults are enabled for public network access."
+              },
+              {
+                "claim": "Most Recovery Services vaults show publicnetworkaccess Enabled",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: publicnetworkaccess Enabled = 89 of 90 (98.9%)",
+                "explanation": "The fact sheet shows 89 of 90 Recovery Services vaults have publicnetworkaccess = Enabled (≈98.9%), which confirms that the vast majority are enabled for public network access."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "mfi": {
+      "scores": {
+        "total_claims": 33,
+        "verdicts": {
+          "supported": 18,
+          "approximate": 1,
+          "hallucinated": 6,
+          "unverifiable": 8
+        },
+        "verifiable_claims": 25,
+        "accuracy_pct": 76.0,
+        "hallucinated_claims": [
+          {
+            "insight": "Recovery Services vaults are concentrated in eastus and overwhelmingly use the RS0 SKU with infrastructure encryption en...",
+            "claim": "Recovery Services vaults have infrastructure encryption enabled",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.encryption.infrastructureencryption totalResponded 1; Enabled = 1 (1.1%)",
+            "explanation": "The fact sheet shows infrastructure encryption was reported for only 1 vault (1.1% of 90). That contradicts the claim that vaults generally have infrastructure encryption enabled."
+          },
+          {
+            "insight": "Recovery Services vaults are concentrated in eastus and overwhelmingly use the RS0 SKU with infrastructure encryption en...",
+            "claim": "There is a consistent use of platform backup vaults with server-side encryption",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.sku.name RS0 = 88 (97.8%); properties.encryption.infrastructureencryption Enabled = 1 (1.1%)",
+            "explanation": "While RS0 is widely used (supported), server-side/infrastructure encryption is not consistently enabled (only 1 of 90 vaults reported Enabled). The combined claim of consistent RS0 + server-side encryption is not supported by the data."
+          },
+          {
+            "insight": "Key Vaults have soft-delete (90 days) and purge-protection enabled and are frequently publicly accessible: because tenan...",
+            "claim": "Key Vaults have purge-protection enabled",
+            "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded 15, True: count 15 (8.9%)",
+            "explanation": "Only 15 vaults (8.9% of those with a reported value) have purge-protection = True. The claim that vaults 'have purge-protection enabled' as a general statement is contradicted by the data."
+          },
+          {
+            "insight": "Recovery Services vault identities are split with ~50% using user-assigned managed identities and many tenant resources ...",
+            "claim": "Recovery Services vault identities are split with ~50% using user-assigned managed identities",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults: totalCount = 90; identity.totalResponded = 2 with distribution: UserAssigned: count=1 (1.1%), None: count=1 (1.1%)",
+            "explanation": "The fact sheet shows identity was only reported for 2 of 90 vaults and only 1 of those 2 is UserAssigned (≈1.1% of the 90). There is no support for a ~50% split."
+          },
+          {
+            "insight": "Public network access is enabled for the vast majority of Recovery Services vaults (98.9%) and most Key Vaults/storage a...",
+            "claim": "Most storage accounts also allow public access",
+            "fact_sheet_value": "microsoft.storage/storageaccounts: properties.publicnetworkaccess totalResponded=210, Enabled: count=113, percentage=25.5 (of total storage accounts)",
+            "explanation": "The fact sheet shows only 113 storage accounts with publicnetworkaccess=Enabled (25.5% of the 443 storage accounts), so 'most' (i.e., >50%) is not supported and is contradicted by the data."
+          },
+          {
+            "insight": "Key Vault RBAC is not yet broadly enabled (enablerbacauthorization False on ~60% of vaults) while purge protection and s...",
+            "claim": "purge protection is universally enabled",
+            "fact_sheet_value": "properties.enablepurgeprotection (key vaults): totalResponded=15, True count=15 (8.9%)",
+            "explanation": "Only 15 vaults reported enablepurgeprotection=true (8.9% of vaults). This does not support a claim of universal enablement."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "Recovery Services vaults are concentrated in eastus and overwhelmingly use the RS0 SKU with infrastructure encryption en...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Recovery Services vaults are concentrated in eastus",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: totalCount 90; properties.location distribution: eastus = 62 (68.9%)",
+                "explanation": "The fact sheet shows 62 of 90 Recovery Services vaults (68.9%) are in eastus, which supports the claim of concentration in eastus."
+              },
+              {
+                "claim": "Recovery Services vaults overwhelmingly use the RS0 SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.sku.name distribution: RS0 = 88 (97.8%), Standard = 2 (2.2%) (totalResponded 90)",
+                "explanation": "88 out of 90 vaults (≈97.8%) use the RS0 SKU, which matches 'overwhelmingly use RS0'."
+              },
+              {
+                "claim": "Recovery Services vaults have infrastructure encryption enabled",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.encryption.infrastructureencryption totalResponded 1; Enabled = 1 (1.1%)",
+                "explanation": "The fact sheet shows infrastructure encryption was reported for only 1 vault (1.1% of 90). That contradicts the claim that vaults generally have infrastructure encryption enabled."
+              },
+              {
+                "claim": "There is a consistent use of platform backup vaults with server-side encryption",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.sku.name RS0 = 88 (97.8%); properties.encryption.infrastructureencryption Enabled = 1 (1.1%)",
+                "explanation": "While RS0 is widely used (supported), server-side/infrastructure encryption is not consistently enabled (only 1 of 90 vaults reported Enabled). The combined claim of consistent RS0 + server-side encryption is not supported by the data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "Key Vaults have soft-delete (90 days) and purge-protection enabled and are frequently publicly accessible: because tenan...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Key Vaults have soft-delete enabled",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablesoftdelete: totalResponded 167, True: count 167 (98.8%)",
+                "explanation": "Almost all vaults that responded have soft-delete = True (167 of 169 total vaults; 98.8% of responded values)."
+              },
+              {
+                "claim": "Key Vaults have soft-delete (90 days)",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.softdeleteretentionindays: totalResponded 125, '90': count 118 (69.8%)",
+                "explanation": "A majority of vaults with retention data (118 of 125 reported values, 69.8%) use a 90-day retention, but this is not universal across all vaults (not all vaults had retention reported)."
+              },
+              {
+                "claim": "Key Vaults have purge-protection enabled",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded 15, True: count 15 (8.9%)",
+                "explanation": "Only 15 vaults (8.9% of those with a reported value) have purge-protection = True. The claim that vaults 'have purge-protection enabled' as a general statement is contradicted by the data."
+              },
+              {
+                "claim": "Key Vaults are frequently publicly accessible (broad network access allowed)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.publicnetworkaccess: totalResponded 169, Enabled: count 156 (92.3%)",
+                "explanation": "The vast majority of vaults (156 of 169, 92.3%) have public network access = Enabled, supporting the statement that they often allow broad network access."
+              },
+              {
+                "claim": "Tenant vaults already protect keys from accidental deletion",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablesoftdelete: True: count 167 (98.8%); soft-delete retention shows many with 90 days",
+                "explanation": "This is a qualitative judgment inferred from soft-delete data. While the fact sheet shows soft-delete widely enabled (which does protect against accidental deletion), the statement is a qualitative interpretation rather than a directly reportable numeric property."
+              },
+              {
+                "claim": "Enable RBAC or controlled access for the managed identity used by Azure Backup",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "This is a recommendation referencing a specific managed identity for Azure Backup; the fact sheet does not provide information about Azure Backup's managed identity usage or its RBAC configuration."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "A non-trivial portion of storage accounts use geo-redundant SKUs (Standard_GRS 23.3% and Standard_RAGRS 17.2%): this ind...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "23.3% of storage accounts use the Standard_GRS SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "storageaccounts.sku.name: Standard_GRS = 103 accounts (23.3%) out of 443",
+                "explanation": "The fact sheet lists Standard_GRS at 23.3% (count 103) which exactly matches the claim."
+              },
+              {
+                "claim": "17.2% of storage accounts use the Standard_RAGRS SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "storageaccounts.sku.name: Standard_RAGRS = 76 accounts (17.2%) out of 443",
+                "explanation": "The fact sheet lists Standard_RAGRS at 17.2% (count 76) which exactly matches the claim."
+              },
+              {
+                "claim": "A non-trivial portion of storage accounts use geo-redundant SKUs",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "storageaccounts.sku.name shows Standard_GRS 23.3% and Standard_RAGRS 17.2% (combined 40.5% / 179 of 443)",
+                "explanation": "The fact sheet provides the SKU percentages (together ~40.5%), but 'non-trivial' is a qualitative judgement and not a precise measurable claim in the fact sheet."
+              },
+              {
+                "claim": "Standard_GRS and Standard_RAGRS are geo-redundant SKUs",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "fact sheet lists SKU names (Standard_GRS and Standard_RAGRS) and their counts/percentages but does not label SKUs with redundancy semantics",
+                "explanation": "The fact sheet confirms the SKU names and frequencies, but it does not provide metadata that explicitly defines 'GRS'/'RAGRS' as 'geo-redundant' — that is domain knowledge not recorded in this fact sheet."
+              },
+              {
+                "claim": "Plan backup storage for on-prem SQL retention using GRS/RA-GRS redundancy or vault-level geo-redundant backup storage to ensure cross-region durability",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (recommendation; fact sheet does not contain backup planning guidance or vault-level redundancy settings)",
+                "explanation": "This is a planning recommendation rather than a factual statement about the tenant; the fact sheet does not contain information about backup configurations or vault-level geo-redundant backup settings to verify this suggestion."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "Recovery Services vault identities are split with ~50% using user-assigned managed identities and many tenant resources ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Recovery Services vault identities are split with ~50% using user-assigned managed identities",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: totalCount = 90; identity.totalResponded = 2 with distribution: UserAssigned: count=1 (1.1%), None: count=1 (1.1%)",
+                "explanation": "The fact sheet shows identity was only reported for 2 of 90 vaults and only 1 of those 2 is UserAssigned (≈1.1% of the 90). There is no support for a ~50% split."
+              },
+              {
+                "claim": "many tenant resources already using user-assigned identities (user-assigned identities are common)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.managedidentity/userassignedidentities totalCount = 370; multiple resource types report UserAssigned identity usage (e.g., microsoft.app/containerapps: UserAssigned 8/16 = 50.0%; microsoft.machinelearningservices/workspaces/onlineendpoints: UserAssigned 42/51 = 82.4%; microsoft.compute/virtualmachines: SystemAssigned, UserAssigned 755/764 = 97.0% of responded VMs)",
+                "explanation": "The tenant has 370 user-assigned identities and numerous resource types show significant UserAssigned identity usage, so the statement that user-assigned identities are already common in the tenant is supported by the fact sheet."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Automation accounts and runbooks are present but limited (3 automation accounts, 10 runbooks) while Logic workflows are ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "3 automation accounts",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts totalCount: 3",
+                "explanation": "The fact sheet lists microsoft.automation/automationaccounts with totalCount = 3, matching the claim exactly."
+              },
+              {
+                "claim": "10 runbooks",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts/runbooks totalCount: 10",
+                "explanation": "The fact sheet lists microsoft.automation/automationaccounts/runbooks with totalCount = 10, matching the claim exactly."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "Public network access is enabled for the vast majority of Recovery Services vaults (98.9%) and most Key Vaults/storage a...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Public network access is enabled for the vast majority of Recovery Services vaults (98.9%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: properties.publicnetworkaccess totalResponded=90, Enabled: count=89, percentage=98.9",
+                "explanation": "The fact sheet shows 89 of 90 Recovery Services vaults with publicnetworkaccess=Enabled (98.9%), matching the claim."
+              },
+              {
+                "claim": "Most Key Vaults also allow public access",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults: properties.publicnetworkaccess totalResponded=169, Enabled: count=156, percentage=92.3",
+                "explanation": "Key Vaults have publicnetworkaccess=Enabled for 156 of 169 vaults (92.3%), which supports the 'most' characterization."
+              },
+              {
+                "claim": "Most storage accounts also allow public access",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.storage/storageaccounts: properties.publicnetworkaccess totalResponded=210, Enabled: count=113, percentage=25.5 (of total storage accounts)",
+                "explanation": "The fact sheet shows only 113 storage accounts with publicnetworkaccess=Enabled (25.5% of the 443 storage accounts), so 'most' (i.e., >50%) is not supported and is contradicted by the data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "Tenant resources show strong adoption of TLS 1.2 minimums (storage minimum TLS1_2 = 96.6%, SQL servers minimum TLS1.2 = ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "storage minimum TLS1_2 = 96.6%",
+                "verdict": "supported",
+                "fact_sheet_value": "storage accounts: properties.minimumtlsversion totalResponded=443, TLS1_2 count=428, percentage=96.6%",
+                "explanation": "The fact sheet shows 428 of 443 storage accounts (96.6%) report minimum TLS version TLS1_2, matching the claimed percentage."
+              },
+              {
+                "claim": "SQL servers minimum TLS1.2 = 85.7%",
+                "verdict": "supported",
+                "fact_sheet_value": "SQL servers: properties.minimaltlsversion totalResponded=7, 1.2 count=6, percentage=85.7%",
+                "explanation": "The fact sheet shows 6 of 7 SQL servers (85.7%) report minimal TLS version 1.2, matching the claimed percentage."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 8,
+          "insight_text": "Key Vault RBAC is not yet broadly enabled (enablerbacauthorization False on ~60% of vaults) while purge protection and s...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "enablerbacauthorization False on ~60% of vaults",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.enablerbacauthorization (key vaults): totalResponded=169, False count=102 (60.4%), True count=67 (39.6%)",
+                "explanation": "The fact sheet shows 102 of 169 vaults (60.4%) have enablerbacauthorization = False, matching the ~60% statement."
+              },
+              {
+                "claim": "purge protection is universally enabled",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "properties.enablepurgeprotection (key vaults): totalResponded=15, True count=15 (8.9%)",
+                "explanation": "Only 15 vaults reported enablepurgeprotection=true (8.9% of vaults). This does not support a claim of universal enablement."
+              },
+              {
+                "claim": "soft delete is universally enabled",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.enablesoftdelete (key vaults): totalResponded=167, True count=167 (98.8%)",
+                "explanation": "Soft delete is enabled on 167 of 169 vaults (98.8%), which is effectively universal within the ~5 percentage point tolerance."
+              },
+              {
+                "claim": "key access is often managed via legacy access policies",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "The fact sheet does not contain data about whether key access is managed via legacy access policies vs. RBAC for vaults, so this claim cannot be checked."
+              },
+              {
+                "claim": "the CMK used by Azure Backup needs documented/implemented precise access controls",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "The fact sheet does not enumerate customer-managed keys (CMKs), which keys Azure Backup uses, or their access control settings, so this recommendation/assertion cannot be verified from the provided data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 9,
+          "insight_text": "TrafficManager/trafficmanagerprofiles and global DNS-based routing are widely present (294 profiles, global location): s...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "There are 294 TrafficManager/trafficmanagerprofiles.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/trafficmanagerprofiles: totalCount = 294",
+                "explanation": "The fact sheet lists microsoft.network/trafficmanagerprofiles with totalCount 294."
+              },
+              {
+                "claim": "TrafficManager/trafficmanagerprofiles are in the global location.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/trafficmanagerprofiles.location distribution: global = 294 (100.0%)",
+                "explanation": "The location distribution for trafficmanagerprofiles in the fact sheet is 100% 'global' (294 of 294)."
+              },
+              {
+                "claim": "Global DNS-based routing is present.",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (fact sheet shows location 'global' for trafficmanagerprofiles but does not state 'DNS-based routing')",
+                "explanation": "The fact sheet shows traffic manager profiles exist and are in 'global' location, but it does not include a field explicitly describing routing mechanism (e.g., 'DNS-based'). The insight's assertion that these are 'DNS-based' is not explicitly recorded in the fact sheet."
+              },
+              {
+                "claim": "The tenant already uses global traffic routing.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/trafficmanagerprofiles.location distribution: global = 294 (100.0%)",
+                "explanation": "All Traffic Manager profiles are located as 'global' in the fact sheet, which supports the statement that the tenant uses global traffic routing."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "7": {
+    "baseline": {
+      "scores": {
+        "total_claims": 23,
+        "verdicts": {
+          "supported": 14,
+          "approximate": 4,
+          "hallucinated": 1,
+          "unverifiable": 4
+        },
+        "verifiable_claims": 19,
+        "accuracy_pct": 94.7,
+        "hallucinated_claims": [
+          {
+            "insight": "Customer‑managed key usage for disk encryption is rare but Key Vault posture is protective (soft delete/ purge protectio...",
+            "claim": "Key Vaults across the tenant have purge protection = true",
+            "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded = 15, distribution: 'True' = 15 (8.9% of total 169 vaults)",
+            "explanation": "Only 15 vaults report enablepurgeprotection = True (per the fact sheet). That is a small fraction of total vaults, so the assertion that purge protection is enabled across the tenant is contradicted by the data."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "Application Gateway WAF_v2 is the tenant standard (WAF_v2 sku and userAssigned identity used everywhere): because all ex...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "All existing application gateways use the WAF_v2 SKU.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgateways: totalCount 12; properties.sku.name distribution: WAF_v2: count 12 (100.0%)",
+                "explanation": "The fact sheet shows all 12 application gateways have sku.name = WAF_v2 (100%), matching the claim."
+              },
+              {
+                "claim": "All existing application gateways are assigned user‑assigned managed identities.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgateways: totalCount 12; identity distribution: userAssigned: count 12 (100.0%)",
+                "explanation": "The fact sheet reports identity = userAssigned for all 12 application gateways (100%), confirming the claim."
+              },
+              {
+                "claim": "Plan to deploy an Application Gateway WAF_v2 with a user‑assigned managed identity.",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "This is a proposed action/plan and not a factual property about existing tenant resources; the fact sheet does not record deployment plans."
+              },
+              {
+                "claim": "Granting it Key Vault access for TLS certs.",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "The fact sheet does not contain information about planned access grants or Key Vault ACLs, so this cannot be verified."
+              },
+              {
+                "claim": "Enable an HTTP→HTTPS redirect for the legacy app fronting.",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "The insight recommends enabling an HTTP→HTTPS redirect, but the fact sheet contains no data about planned configuration changes or specific redirect rules."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "WAF policies frequently include custom rules for rate limiting and blocking suspicious payloads: since application gatew...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "application gateway WAF policies commonly contain RateLimitRule",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgatewaywebapplicationfirewallpolicies -> properties.customrules.name: RateLimitRule count = 13, percentage = 92.9 (totalCount for resource: 14)",
+                "explanation": "The fact sheet shows a RateLimitRule present in 13 entries (92.9%), i.e. in the large majority of application gateway WAF policies, which supports the claim."
+              },
+              {
+                "claim": "application gateway WAF policies commonly contain BlockInvalidSymbols rules",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgatewaywebapplicationfirewallpolicies -> properties.customrules.name: BlockInvalidSymbols count = 9, percentage = 64.3 (totalCount for resource: 14)",
+                "explanation": "BlockInvalidSymbols appears in 9 entries (64.3%) of the application gateway WAF policies, a clear majority, so the claim is supported."
+              },
+              {
+                "claim": "WAF policies frequently include custom rules for rate limiting and blocking suspicious payloads",
+                "verdict": "supported",
+                "fact_sheet_value": "Combined: RateLimitRule count = 13 (92.9%), BlockInvalidSymbols count = 9 (64.3%) in microsoft.network/applicationgatewaywebapplicationfirewallpolicies",
+                "explanation": "Both specific custom rules cited are present in a majority of the application gateway WAF policies in the fact sheet (92.9% and 64.3%), so the general statement that WAF policies frequently include such rules is supported."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "VM scale sets in the tenant consistently use user‑assigned identities and Windows OS skus and tend to pick Standard_E*/D...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "100% of VMSS have user‑assigned identities",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets.identity: totalResponded=25, distribution: UserAssigned count=25 (86.2%). (totalCount for VMSS = 29)",
+                "explanation": "The insight claims 100%, but the fact sheet shows 25 of the 29 VMSS responded have UserAssigned identity (listed percentage 86.2%). This is directionally correct (VMSS largely use user-assigned identities) but the 100% figure is higher than the data (≈86.2%), so 'approximate'."
+              },
+              {
+                "claim": "~88% of VMSS OS disks are Windows",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets.properties.virtualmachineprofile.storageprofile.osdisk.ostype: totalResponded=25, Windows count=22 (percentage field in sheet = 75.9%), Linux count=3 (10.3%)",
+                "explanation": "The insight's ~88% likely comes from 22/25 = 88.0%, but the fact sheet reports Windows count=22 with a listed percentage of 75.9% (apparently computed over totalCount=29). Depending on whether you use totalResponded (22/25 = 88%) or totalCount (22/29 = 75.9%), the claim is off vs the explicit percentage; it's directionally correct that Windows is dominant, so classified as 'approximate'."
+              },
+              {
+                "claim": "VMSS tend to pick Standard_E*/D* instance types; Standard_E4s_v4 and Standard_D8s_v4 are common",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets.sku.name: totalResponded=25, distribution: Standard_E4s_v4 count=13 (44.8%), Standard_D8s_v4 count=8 (27.6%), Standard_D2s_v3 count=3 (10.3%), Standard_E2s_v6 count=1 (3.4%)",
+                "explanation": "The fact sheet shows the VMSS sku.name entries are primarily Standard E and D family sizes (the two named SKUs are indeed the most common), so the claim that VMSS tend to use Standard_E/Standard_D family and that Standard_E4s_v4 and Standard_D8s_v4 are common is supported."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "Platform fault domain count is commonly set to 5 for scale sets: given ~52% of VMSS use platformFaultDomainCount=5 (the ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Approximately 52% of VMSS use platformFaultDomainCount=5",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets: totalCount=29; properties.platformfaultdomaincount distribution: '5' => count: 15, percentage: 51.7%",
+                "explanation": "Fact sheet shows 15 of 29 VMSS (51.7%) have platformFaultDomainCount=5, which matches ~52% within the allowed tolerance."
+              },
+              {
+                "claim": "The rest use platformFaultDomainCount=1",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets: totalCount=29; properties.platformfaultdomaincount distribution: '1' => count: 14, percentage: 48.3%",
+                "explanation": "Fact sheet shows the remaining 14 of 29 VMSS (48.3%) have platformFaultDomainCount=1, i.e., the non-5 portion is 1."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Tenant uses Standard public IP and Standard network SKUs broadly: because public IPs, load balancers and NAT gateways ov...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Tenant uses Standard public IP and Standard network SKUs broadly",
+                "verdict": "supported",
+                "fact_sheet_value": "public IPs: 139/145 (95.9%) Standard; load balancers: 23/23 (100%) Standard; NAT gateways: 19/19 (100%) Standard",
+                "explanation": "The fact sheet shows very high proportions of Standard SKU across public IPs (95.9%), load balancers (100%), and NAT gateways (100%), supporting the summary that Standard SKUs are used broadly for these network resources."
+              },
+              {
+                "claim": "public IPs overwhelmingly use the Standard SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/publicipaddresses -> sku.name: Standard: count 139 (95.9%), Basic: count 6 (4.1%); totalCount 145",
+                "explanation": "139 out of 145 public IPs (95.9%) are Standard, which qualifies as 'overwhelmingly'."
+              },
+              {
+                "claim": "load balancers overwhelmingly use the Standard SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/loadbalancers -> sku.name: Standard: count 23 (100%); totalCount 23",
+                "explanation": "All 23 load balancers (100%) report the Standard SKU, directly supporting the claim."
+              },
+              {
+                "claim": "NAT gateways overwhelmingly use the Standard SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/natgateways -> sku.name: Standard: count 19 (100%); totalCount 19",
+                "explanation": "All 19 NAT gateways (100%) report the Standard SKU, directly supporting the claim."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "Customer‑managed key usage for disk encryption is rare but Key Vault posture is protective (soft delete/ purge protectio...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "there is only one Disk Encryption Set",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/diskencryptionsets: totalCount = 1",
+                "explanation": "The fact sheet lists exactly one Disk Encryption Set (totalCount = 1)."
+              },
+              {
+                "claim": "Customer-managed key usage for disk encryption is rare",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/diskencryptionsets: totalCount = 1; microsoft.compute/disks: totalCount = 19",
+                "explanation": "Only one Disk Encryption Set exists while there are 19 disks, so CMK-backed disk encryption appears uncommon in this tenant."
+              },
+              {
+                "claim": "Key Vaults across the tenant have soft delete = 90",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.softdeleteretentionindays: totalResponded = 125, distribution: '90' = 118 (69.8% of responded); total key vaults = 169",
+                "explanation": "Many vaults that reported soft-delete retention use 90 days (118 of 125 responded), but this is not universal across all 169 vaults—so the claim is directionally correct but overstates coverage."
+              },
+              {
+                "claim": "Key Vaults across the tenant have purge protection = true",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded = 15, distribution: 'True' = 15 (8.9% of total 169 vaults)",
+                "explanation": "Only 15 vaults report enablepurgeprotection = True (per the fact sheet). That is a small fraction of total vaults, so the assertion that purge protection is enabled across the tenant is contradicted by the data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "VMSS instance counts in the tenant are small (capacity=2 is the norm): because VMSS capacity is 2 for ~96% of existing s...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "VMSS capacity is 2 for ~96% of existing scalesets",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets -> sku.capacity (totalResponded: 25): \"2\": count 24, percentage 82.8%; \"6\": count 1, percentage 3.4%",
+                "explanation": "The fact sheet shows 24 VMSS with sku.capacity=2 (listed percentage 82.8%). The insight's ~96% figure does not match the fact sheet percentage (82.8%). Note: 24/25 = 96% if using totalResponded=25 as the denominator, but the fact sheet's reported percentage is 82.8% (24/29 totalCount). Difference is material, so 'approximate' is appropriate."
+              },
+              {
+                "claim": "there are three legacy VMSS",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "The fact sheet lists total VMSS count (totalCount: 29) and detailed capacity distributions but does not identify any VMSS as 'legacy' nor report a count of three legacy VMSS, so this specific claim cannot be verified from the provided data."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "mfi": {
+      "scores": {
+        "total_claims": 37,
+        "verdicts": {
+          "supported": 21,
+          "approximate": 4,
+          "hallucinated": 6,
+          "unverifiable": 6
+        },
+        "verifiable_claims": 31,
+        "accuracy_pct": 80.6,
+        "hallucinated_claims": [
+          {
+            "insight": "VM scale sets consistently use user-assigned managed identities (100%): because microsoft.compute/virtualmachinescaleset...",
+            "claim": "microsoft.compute/virtualmachinescalesets identity is UserAssigned for all instances",
+            "fact_sheet_value": "microsoft.compute/virtualmachinescalesets: totalCount=29; identity.totalResponded=25 with UserAssigned count=25 (86.2%)",
+            "explanation": "The claim of 'all instances' is contradicted: not all 29 VM scale sets are shown as having identity data, and only 86.2% (25/29 responded entries) are UserAssigned."
+          },
+          {
+            "insight": "VM scale sets consistently use user-assigned managed identities (100%): because microsoft.compute/virtualmachinescaleset...",
+            "claim": "there are three VM scale sets",
+            "fact_sheet_value": "microsoft.compute/virtualmachinescalesets totalCount = 29",
+            "explanation": "The fact sheet reports 29 VM scale sets, not three."
+          },
+          {
+            "insight": "Application Gateway usage is standardized on WAF_v2 with user-assigned identity and HTTP-to-HTTPS redirect: because micr...",
+            "claim": "Application Gateway usage is standardized on HTTP-to-HTTPS redirect",
+            "fact_sheet_value": "properties.redirectconfigurations.name: httpToHttpsRedirect: count 6 (50.0%)",
+            "explanation": "Only half of the redirect configurations are named httpToHttpsRedirect (6 occurrences). That does not support a claim that HTTP→HTTPS redirect is standardized across all Application Gateways."
+          },
+          {
+            "insight": "Customer-managed disk-keying is uncommon but key vault usage is mature with purge protection (Key Vault enablepurgeprote...",
+            "claim": "Key Vault enablepurgeprotection True = 1.0 (100%)",
+            "fact_sheet_value": "microsoft.keyvault/vaults properties.enablepurgeprotection totalResponded = 15; True count = 15 (8.9% of total vaults/responded)",
+            "explanation": "The insight's claim of 100% is contradicted by the fact sheet: only 15 vaults reported enablepurgeprotection=True (15 of 169 total, 8.9% of vaults that responded)."
+          },
+          {
+            "insight": "Customer-managed disk-keying is uncommon but key vault usage is mature with purge protection (Key Vault enablepurgeprote...",
+            "claim": "many key vaults with purge protection",
+            "fact_sheet_value": "microsoft.keyvault/vaults properties.enablepurgeprotection True count = 15 (8.9% of vaults/responded)",
+            "explanation": "Only 15 vaults have purge protection set to True (small fraction of the 169 key vaults), so the characterization 'many' is not supported by the data."
+          },
+          {
+            "insight": "Public IPs and load-balancing components use Standard SKUs across the tenant (Public IP Standard ~95.9%, Load Balancer S...",
+            "claim": "Public IPs and load-balancing components use Standard SKUs across the tenant",
+            "fact_sheet_value": "publicipaddresses: Standard 95.9%; loadbalancers: Standard 100%; applicationgateways: sku.name = WAF_v2 100%",
+            "explanation": "This blanket statement is contradicted by the fact sheet when 'load-balancing components' is interpreted broadly: while Public IPs and (regional) Load Balancers are overwhelmingly Standard, Application Gateways in the tenant use sku.name = WAF_v2 (100%), not a 'Standard' SKU. Therefore the generalization that all load-balancing components use Standard SKUs is not supported by the data."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "VM scale sets consistently use user-assigned managed identities (100%): because microsoft.compute/virtualmachinescaleset...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "VM scale sets consistently use user-assigned managed identities (100%)",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets: totalCount=29; identity.totalResponded=25 with UserAssigned count=25 (86.2%)",
+                "explanation": "The fact sheet shows 25 of 29 VM scale sets responded for identity and all 25 responded have UserAssigned (86.2% of total VMSS). That is directionally correct (most VMSS use user-assigned identities) but not 100%."
+              },
+              {
+                "claim": "microsoft.compute/virtualmachinescalesets identity is UserAssigned for all instances",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets: totalCount=29; identity.totalResponded=25 with UserAssigned count=25 (86.2%)",
+                "explanation": "The claim of 'all instances' is contradicted: not all 29 VM scale sets are shown as having identity data, and only 86.2% (25/29 responded entries) are UserAssigned."
+              },
+              {
+                "claim": "there are three VM scale sets",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets totalCount = 29",
+                "explanation": "The fact sheet reports 29 VM scale sets, not three."
+              },
+              {
+                "claim": "they can reuse tenant-managed credentials for Key Vault, logging, and other resource access",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found",
+                "explanation": "The fact sheet records identity types but does not contain information about intended usage patterns (Key Vault, logging, reuse of tenant-managed credentials), so this capability/plan cannot be verified from the data provided."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "VM scale sets are primarily Windows and sized to E/D series (88% Windows, 52% Standard_E4s_v4 / 32% Standard_D8s_v4): be...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "VM scale sets are primarily Windows (88% Windows)",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets -> properties.virtualmachineprofile.storageprofile.osdisk.ostype: totalResponded 25, Windows: count 22, percentage 75.9; Linux: count 3, percentage 10.3",
+                "explanation": "The fact sheet shows Windows is the majority OS for VM scale sets (22 of 25 responded), but the percentage in the fact sheet (75.9%) does not match the claimed 88% (difference ~12 percentage points), so the direction is correct but the number is off."
+              },
+              {
+                "claim": "Standard_E4s_v4 is 52% of VM scale sets",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets -> sku.name: Standard_E4s_v4: count 13, percentage 44.8 (totalResponded 25)",
+                "explanation": "Standard_E4s_v4 is the largest single SKU but the fact sheet shows 44.8%, not 52% (difference ~7.2 percentage points), so the claim is directionally correct but the percentage is off."
+              },
+              {
+                "claim": "Standard_D8s_v4 is 32% of VM scale sets",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets -> sku.name: Standard_D8s_v4: count 8, percentage 27.6 (totalResponded 25)",
+                "explanation": "The fact sheet shows Standard_D8s_v4 is the second most common SKU (8 of 25). The claimed 32% is close to the reported 27.6% (difference ~4.4 percentage points), which is within the acceptable margin."
+              },
+              {
+                "claim": "the virtualmachineprofile shows Windows OS",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets -> properties.virtualmachineprofile.storageprofile.osdisk.ostype: Windows: count 22, percentage 75.9; Linux: count 3, percentage 10.3",
+                "explanation": "The fact sheet includes a virtualmachineprofile osdisk.ostype property and it lists Windows entries (22), confirming Windows OS is present in the VM scale set profiles."
+              },
+              {
+                "claim": "Standard_E4s_v4 and Standard_D8s_v4 are the most common VM scale set SKUs",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets -> sku.name distribution: Standard_E4s_v4: count 13 (44.8%); Standard_D8s_v4: count 8 (27.6); next SKUs are lower (Standard_D2s_v3: 3 (10.3%), Standard_E2s_v6: 1 (3.4%))",
+                "explanation": "The two SKUs cited have the highest counts in the sku.name distribution, so describing them as the most common is supported by the fact sheet."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "VM scale sets commonly configure platform fault domains of 5 (51.7%) or 1 (48.3%): because platformfaultdomaincount is s...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "VM scale sets commonly configure platform fault domains of 5 (51.7%) or 1 (48.3%).",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets (totalCount: 29) -> properties.platformfaultdomaincount distribution: 5: count 15 (51.7%), 1: count 14 (48.3%)",
+                "explanation": "The fact sheet shows 29 VM scale sets with platformfaultdomaincount = 5 for 15 (51.7%) and = 1 for 14 (48.3%), matching the claimed percentages."
+              },
+              {
+                "claim": "platformfaultdomaincount is split between 5 and 1.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachinescalesets -> properties.platformfaultdomaincount distribution contains only '5' (15/29, 51.7%) and '1' (14/29, 48.3%)",
+                "explanation": "The distribution for platformfaultdomaincount in the fact sheet lists only values 5 and 1, accounting for the VM scale sets."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "Application Gateway usage is standardized on WAF_v2 with user-assigned identity and HTTP-to-HTTPS redirect: because micr...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "microsoft.network/applicationgateways shows sku WAF_v2",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.sku.name: totalResponded 12 — WAF_v2: count 12 (100.0%)",
+                "explanation": "The fact sheet shows all 12 Application Gateway resources have sku.name = WAF_v2 (100%)."
+              },
+              {
+                "claim": "microsoft.network/applicationgateways shows identity userAssigned",
+                "verdict": "supported",
+                "fact_sheet_value": "identity: totalResponded 12 — userAssigned: count 12 (100.0%)",
+                "explanation": "The fact sheet indicates every Application Gateway reported has identity = userAssigned (12 of 12, 100%)."
+              },
+              {
+                "claim": "microsoft.network/applicationgateways redirectconfigurations include httpToHttpsRedirect",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.redirectconfigurations.name: totalResponded 6 — httpToHttpsRedirect: count 6 (50.0%)",
+                "explanation": "The httpToHttpsRedirect redirect configuration is present in the dataset (6 occurrences, i.e., appears among the redirect configurations)."
+              },
+              {
+                "claim": "Application Gateway usage is standardized on WAF_v2",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.sku.name: WAF_v2: count 12 (100.0%)",
+                "explanation": "All Application Gateway resources in the fact sheet use the WAF_v2 SKU, so the claim that usage is standardized on WAF_v2 is supported."
+              },
+              {
+                "claim": "Application Gateway usage is standardized on user-assigned identity",
+                "verdict": "supported",
+                "fact_sheet_value": "identity: userAssigned: count 12 (100.0%)",
+                "explanation": "All Application Gateway resources report a user-assigned identity, so the claim of standardization on user-assigned identity is supported."
+              },
+              {
+                "claim": "Application Gateway usage is standardized on HTTP-to-HTTPS redirect",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "properties.redirectconfigurations.name: httpToHttpsRedirect: count 6 (50.0%)",
+                "explanation": "Only half of the redirect configurations are named httpToHttpsRedirect (6 occurrences). That does not support a claim that HTTP→HTTPS redirect is standardized across all Application Gateways."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Application Gateway is commonly paired with VNets, NSGs and Public IPs: because association itemsets link applicationgat...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Application Gateway is commonly paired with VNets",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.network/virtualnetworks: totalCount=205; properties.subnets.name includes \"appGatewaySubnet\" (count=8 of 339 subnets, 3.9%). microsoft.network/applicationgateways: totalCount=12; properties.frontendipconfigurations.name present for 12 application gateways.",
+                "explanation": "The fact sheet shows an existing pattern (there are subnets named \"appGatewaySubnet\" and all 12 App Gateways have frontend IP configurations), so the statement is directionally correct. The sheet does not provide explicit per-AppGateway VNet-pairing counts, so the exact frequency of VNet pairing per App Gateway cannot be precisely confirmed."
+              },
+              {
+                "claim": "Application Gateway is commonly paired with NSGs",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "microsoft.network/networksecuritygroups: totalCount=957 (locations listed). No explicit links or counts showing NSG associations to application gateways in the fact sheet.",
+                "explanation": "The tenant has many NSGs, but the fact sheet does not include itemized associations between application gateways and network security groups, so we cannot verify how commonly App Gateways are paired with NSGs."
+              },
+              {
+                "claim": "Application Gateway is commonly paired with Public IPs",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/applicationgateways: totalCount=12; properties.frontendipconfigurations.name reported (appGatewayFrontendIP count=12). microsoft.network/publicipaddresses: totalCount=145 (sku.name Standard=139, 95.9%).",
+                "explanation": "All 12 Application Gateways include a frontend IP configuration (appGatewayFrontendIP), and there are many Public IP resources in the tenant (mostly Standard SKU). This supports the claim that App Gateways are commonly used with public IPs."
+              },
+              {
+                "claim": "association itemsets link applicationgateways to virtualnetworks, networksecuritygroups and publicipaddresses",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (the fact sheet does not expose 'association itemsets' linking resources explicitly)",
+                "explanation": "The fact sheet lists resource types and some property distributions but does not expose any 'association itemsets' data structure or explicit cross-resource linkage counts, so this specific claim cannot be verified from the provided data."
+              },
+              {
+                "claim": "place the App Gateway in a dedicated AppGateway subnet within the chosen VNet",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/virtualnetworks: properties.subnets.name includes \"appGatewaySubnet\" (count=8 of 339 subnets, 3.9%).",
+                "explanation": "Subnets named 'appGatewaySubnet' are present in the tenant's virtual networks, demonstrating that use of a dedicated AppGateway subnet is an existing pattern."
+              },
+              {
+                "claim": "provision a Standard public IP",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/publicipaddresses: totalCount=145; sku.name distribution: Standard=139 (95.9%), Basic=6 (4.1%).",
+                "explanation": "The vast majority of Public IP resources in the tenant are Standard SKU, so recommending a Standard public IP aligns with the tenant's existing resource distribution."
+              },
+              {
+                "claim": "ensure NSG/network controls and routing align with existing network patterns",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (the fact sheet lists NSGs, routing-related resources and locations but does not expose a summary of 'network patterns' or specific routing/NSG configurations tied to App Gateways)",
+                "explanation": "This is a configuration recommendation and references alignment with unspecified existing network patterns. The fact sheet does not include detailed per-resource NSG or routing rule mappings that would let us verify alignment, so the claim is unverifiable from the provided data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "Customer-managed disk-keying is uncommon but key vault usage is mature with purge protection (Key Vault enablepurgeprote...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "there is one diskencryptionset",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/diskencryptionsets totalCount = 1",
+                "explanation": "Fact sheet shows microsoft.compute/diskencryptionsets totalCount = 1."
+              },
+              {
+                "claim": "Key Vault enablepurgeprotection True = 1.0 (100%)",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults properties.enablepurgeprotection totalResponded = 15; True count = 15 (8.9% of total vaults/responded)",
+                "explanation": "The insight's claim of 100% is contradicted by the fact sheet: only 15 vaults reported enablepurgeprotection=True (15 of 169 total, 8.9% of vaults that responded)."
+              },
+              {
+                "claim": "many key vaults with purge protection",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults properties.enablepurgeprotection True count = 15 (8.9% of vaults/responded)",
+                "explanation": "Only 15 vaults have purge protection set to True (small fraction of the 169 key vaults), so the characterization 'many' is not supported by the data."
+              },
+              {
+                "claim": "many key vaults with long soft-delete retention",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults properties.softdeleteretentionindays totalResponded = 125; 90 days count = 118 (69.8% of those responded)",
+                "explanation": "A large majority of vaults that reported soft-delete retention have 90 days (118 of 125), which supports the statement about long soft-delete retention."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "Managed disk SKUs skew to Premium_LRS (63.2%): because microsoft.compute/disks shows Premium_LRS as the majority, provis...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Managed disk SKUs skew to Premium_LRS (63.2%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/disks -> sku.name: Premium_LRS count 12, percentage 63.2 (totalCount 19)",
+                "explanation": "The fact sheet lists Premium_LRS as 12 of 19 disks (63.2%), matching the stated percentage and the assertion that SKUs skew to Premium_LRS."
+              },
+              {
+                "claim": "microsoft.compute/disks shows Premium_LRS as the majority",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/disks -> sku.name: Premium_LRS count 12, percentage 63.2 (totalCount 19)",
+                "explanation": "Premium_LRS is the largest single SKU in the microsoft.compute/disks distribution (63.2%), so it is the majority SKU in that resource set."
+              },
+              {
+                "claim": "provision data disks as Premium_LRS for the legacy scale sets",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (fact sheet shows virtual machine scale sets and disk SKUs but does not include a concept labeled 'legacy scale sets' nor records of per-scale-set data disk provisioning choices)",
+                "explanation": "The insight is a provisioning recommendation referencing 'legacy scale sets' and specific data-disk provisioning choices. The fact sheet lists virtual machine scale sets and disk SKUs but does not contain data mapping which scale sets are 'legacy' or what SKU their data disks are/would be provisioned with, so this cannot be verified from the provided data."
+              },
+              {
+                "claim": "apply encryption (while provisioning data disks as Premium_LRS)",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "microsoft.compute/diskencryptionsets: totalCount 1 (no linkage shown to disks); disks entries do not include encryption state",
+                "explanation": "The insight asserts applying encryption when provisioning, but the disks records in the fact sheet do not show per-disk encryption settings and there is no linkage between the single disk encryption set and the listed disks. Therefore whether encryption is (or will be) applied cannot be verified from the fact sheet."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 8,
+          "insight_text": "Key Vaults predominantly use vault access policies rather than RBAC (enablerbacauthorization False ~60.4%): because most...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "enablerbacauthorization False ~60.4% of Key Vaults",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.enablerbacauthorization — totalResponded: 169; distribution: False: count 102 (60.4%), True: count 67 (39.6%)",
+                "explanation": "The fact sheet shows 102 of 169 Key Vaults (60.4%) have properties.enablerbacauthorization = False, matching the cited ~60.4% figure."
+              },
+              {
+                "claim": "most key vaults have enablerbacauthorization set to False",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.enablerbacauthorization — False: 102/169 (60.4%)",
+                "explanation": "A majority (>50%) of Key Vaults (60.4%) in the fact sheet have enablerbacauthorization = False, so the statement that 'most' have it set to False is supported."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 9,
+          "insight_text": "Public IPs and load-balancing components use Standard SKUs across the tenant (Public IP Standard ~95.9%, Load Balancer S...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Public IP Standard ~95.9%",
+                "verdict": "supported",
+                "fact_sheet_value": "publicipaddresses sku.name: Standard = 139 / 145 = 95.9%",
+                "explanation": "The fact sheet shows 139 of 145 Public IPs use the Standard SKU (95.9%), matching the claim."
+              },
+              {
+                "claim": "Load Balancer Standard = 100%",
+                "verdict": "supported",
+                "fact_sheet_value": "loadbalancers sku.name: Standard = 23 / 23 = 100%",
+                "explanation": "The fact sheet shows all recorded Load Balancers have sku.name = Standard (100%), matching the claim."
+              },
+              {
+                "claim": "Public IPs and load-balancing components use Standard SKUs across the tenant",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "publicipaddresses: Standard 95.9%; loadbalancers: Standard 100%; applicationgateways: sku.name = WAF_v2 100%",
+                "explanation": "This blanket statement is contradicted by the fact sheet when 'load-balancing components' is interpreted broadly: while Public IPs and (regional) Load Balancers are overwhelmingly Standard, Application Gateways in the tenant use sku.name = WAF_v2 (100%), not a 'Standard' SKU. Therefore the generalization that all load-balancing components use Standard SKUs is not supported by the data."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "9": {
+    "baseline": {
+      "scores": {
+        "total_claims": 26,
+        "verdicts": {
+          "supported": 18,
+          "approximate": 1,
+          "hallucinated": 7,
+          "unverifiable": 0
+        },
+        "verifiable_claims": 26,
+        "accuracy_pct": 73.1,
+        "hallucinated_claims": [
+          {
+            "insight": "50% of Recovery Services vaults use user-assigned identities (UAMI): because the tenant already applies UAMIs to vaults,...",
+            "claim": "50% of Recovery Services vaults use user-assigned identities (UAMI)",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults: totalCount = 90; identity.totalResponded = 2 with distribution: UserAssigned count = 1 (≈1.1% of total), None count = 1 (≈1.1% of total)",
+            "explanation": "The fact sheet shows only 1 vault with a UserAssigned identity out of 90 Recovery Services vaults (≈1.1%), not 50%. (Only 2 vaults had identity data reported, of which 1 used UserAssigned — 50% of the small responded subset — but that does not support a claim of 50% across all vaults.)"
+          },
+          {
+            "insight": "Key Vaults show strong data-protection posture (100% enablepurgeprotection, 94.4% soft-delete 90 days): because secrets ...",
+            "claim": "100% enablepurgeprotection",
+            "fact_sheet_value": "Key Vaults properties.enablepurgeprotection: totalResponded 15, distribution True: count 15 (8.9%)",
+            "explanation": "The fact sheet shows enablepurgeprotection = True for 15 Key Vaults (8.9% of vaults with that property reported), not 100%."
+          },
+          {
+            "insight": "Key Vaults show strong data-protection posture (100% enablepurgeprotection, 94.4% soft-delete 90 days): because secrets ...",
+            "claim": "94.4% soft-delete 90 days",
+            "fact_sheet_value": "Key Vaults properties.softdeleteretentionindays: totalResponded 125, distribution '90': count 118 (69.8%)",
+            "explanation": "The fact sheet reports 118 vaults (69.8% of those with the property reported) have a 90-day soft-delete retention, not 94.4%."
+          },
+          {
+            "insight": "Key Vaults show strong data-protection posture (100% enablepurgeprotection, 94.4% soft-delete 90 days): because secrets ...",
+            "claim": "secrets and keys retention/purge protection is standard across the tenant",
+            "fact_sheet_value": "Key Vaults: enablepurgeprotection True on 15/169 reported (8.9%); soft-delete 90 days on 118/169 reported (69.8%)",
+            "explanation": "The fact sheet does not show retention/purge protection as a tenant-wide standard: purge protection is present on a small minority of vaults (8.9%), and 90-day soft-delete is present on ~69.8% — so it is not universally standard."
+          },
+          {
+            "insight": "Recovery Services vaults report infrastructure encryption enabled (100%): because vault-level infrastructure encryption ...",
+            "claim": "Recovery Services vaults report infrastructure encryption enabled (100%)",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults.properties.encryption.infrastructureencryption: totalResponded: 1, distribution: {\"Enabled\": {\"count\": 1, \"percentage\": 1.1}} (totalCount of vaults: 90)",
+            "explanation": "The insight asserts 100% of Recovery Services vaults have infrastructure encryption enabled, but the fact sheet shows only 1 vault reported this setting (≈1.1% of 90), so the claim is contradicted by the data."
+          },
+          {
+            "insight": "Monitoring and alerting conventions use scheduled query rules and user-assigned identities (75% of scheduled query rules...",
+            "claim": "75% of scheduled query rules use UAMI (user-assigned managed identities).",
+            "fact_sheet_value": "microsoft.insights/scheduledqueryrules: totalCount = 26; identity.totalResponded = 4; identity distribution: UserAssigned count = 3 (≈11.5% of 26).",
+            "explanation": "The fact sheet shows only 3 scheduled query rules with UserAssigned identities (about 11.5% of the 26 scheduled query rules), not 75%."
+          },
+          {
+            "insight": "Monitoring and alerting conventions use scheduled query rules and user-assigned identities (75% of scheduled query rules...",
+            "claim": "Monitoring is implemented with identity-backed automation.",
+            "fact_sheet_value": "Relevant monitoring resources: scheduled query rules (26) have only 3 UserAssigned identities; metric alerts (microsoft.insights/metricalerts totalCount=665) show identity.totalResponded=8 with UserAssigned count=8 (small proportion); activity log alerts have no identity property reported.",
+            "explanation": "The fact sheet does not show widespread use of identities across monitoring resources — UserAssigned identity usage is low on scheduled query rules and metric alerts, and activity log alerts lack identity data — so the claim that monitoring is implemented (broadly) with identity-backed automation is not supported by the data."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "Recovery Services vaults concentrated in eastus (68.9%) while virtual machines are distributed with peaks in westus2 (23...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Recovery Services vaults concentrated in eastus (68.9%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: totalCount 90; location distribution: eastus = 62 (68.9%)",
+                "explanation": "Fact sheet shows 62 of 90 Recovery Services vaults (68.9%) located in eastus, matching the claim exactly."
+              },
+              {
+                "claim": "Virtual machines are distributed with peaks in westus2 (23.9%), centralindia (20.8%) and southeastasia (18%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachines: totalCount 778; location distribution: westus2 = 186 (23.9%), centralindia = 162 (20.8%), southeastasia = 140 (18.0%)",
+                "explanation": "The VM location percentages and regions in the fact sheet match the claimed peaks and percentages."
+              },
+              {
+                "claim": "Primary compute is not colocated with most recovery vaults",
+                "verdict": "supported",
+                "fact_sheet_value": "Recovery Services vaults: eastus 68.9%; Virtual machines: eastus 84 (10.8%), primary VM peaks are westus2/centralindia/southeastasia (23.9%/20.8%/18.0%)",
+                "explanation": "Because most vaults (68.9%) are in eastus while the largest VM populations are in westus2, centralindia and southeastasia (and only 10.8% of VMs are in eastus), the data supports that primary compute is largely not colocated with the majority of recovery vaults."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "50% of Recovery Services vaults use user-assigned identities (UAMI): because the tenant already applies UAMIs to vaults,...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "50% of Recovery Services vaults use user-assigned identities (UAMI)",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults: totalCount = 90; identity.totalResponded = 2 with distribution: UserAssigned count = 1 (≈1.1% of total), None count = 1 (≈1.1% of total)",
+                "explanation": "The fact sheet shows only 1 vault with a UserAssigned identity out of 90 Recovery Services vaults (≈1.1%), not 50%. (Only 2 vaults had identity data reported, of which 1 used UserAssigned — 50% of the small responded subset — but that does not support a claim of 50% across all vaults.)"
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "Virtual machines overwhelmingly have both system- and user-assigned managed identities (98.8%): because VMs already carr...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Virtual machines overwhelmingly have both system- and user-assigned managed identities (98.8%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachines.identity: totalResponded=764; SystemAssigned, UserAssigned = 755 (97.0%), SystemAssigned = 9 (1.2%)",
+                "explanation": "The fact sheet shows the vast majority of VMs have both SystemAssigned and UserAssigned identities (755 of 764 responded, 97.0%). The insight's 98.8% figure is slightly different (≈1.8 percentage points) but within the ~5 percentage point tolerance, so the claim is supported."
+              },
+              {
+                "claim": "VMs already carry managed identities",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachines.identity: totalResponded=764; 755 (97.0%) are SystemAssigned,UserAssigned and 9 (1.2%) are SystemAssigned",
+                "explanation": "The fact sheet confirms managed identities are present on nearly all VMs (majority with both system and user-assigned identities), so the statement that VMs carry managed identities is supported."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "Automation accounts are few (3) with Basic SKU and public network access enabled, and there are 10 runbooks concentrated...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "There are 3 automation accounts",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts: totalCount = 3",
+                "explanation": "The fact sheet shows totalCount 3 for automation accounts."
+              },
+              {
+                "claim": "Automation accounts have Basic SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts properties.sku.name: totalResponded = 3, distribution = { Basic: count 3 (100.0%) }",
+                "explanation": "All 3 reported automation accounts are using the Basic SKU."
+              },
+              {
+                "claim": "Automation accounts have public network access enabled",
+                "verdict": "approximate",
+                "fact_sheet_value": "microsoft.automation/automationaccounts properties.publicnetworkaccess: totalResponded = 2, distribution = { True: count 2 (66.7%) }",
+                "explanation": "The insight implies public network access is enabled (for the automation footprint). The fact sheet shows 2 of the 3 accounts (66.7% of total) reported publicnetworkaccess = True; one account did not report this property. So most accounts have it enabled, but not all three are confirmed as enabled."
+              },
+              {
+                "claim": "There are 10 runbooks",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts/runbooks: totalCount = 10",
+                "explanation": "The fact sheet lists 10 runbooks under automation accounts."
+              },
+              {
+                "claim": "The runbooks are concentrated in eastus and westus2",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts/runbooks properties.location: totalResponded = 10, distribution = { eastus: count 6 (60.0%), westus2: count 4 (40.0%) }",
+                "explanation": "All 10 runbooks report location and they are only in eastus (6) and westus2 (4), so they are concentrated in those two regions."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Operational Insights (Log Analytics) workspaces are widely deployed (149) with public ingestion/query access enabled (~9...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Operational Insights (Log Analytics) workspaces are widely deployed (149)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.operationalinsights/workspaces totalCount = 149",
+                "explanation": "The fact sheet shows 149 Log Analytics workspaces (totalCount = 149), matching the claim."
+              },
+              {
+                "claim": "public ingestion access enabled (~98%)",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.publicnetworkaccessforingestion: Enabled = 146 of 149 (98.0%), Disabled = 3 (2.0%)",
+                "explanation": "The fact sheet reports 146/149 workspaces (98.0%) have public ingestion enabled, which matches the ~98% claim."
+              },
+              {
+                "claim": "public query access enabled (~98%)",
+                "verdict": "supported",
+                "fact_sheet_value": "properties.publicnetworkaccessforquery: Enabled = 148 of 149 (99.3%), Disabled = 1 (0.7%)",
+                "explanation": "The fact sheet reports 148/149 workspaces (99.3%) have public query access enabled; 99.3% is close to ~98% (within the acceptable tolerance), so the claim is supported."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "Key Vaults show strong data-protection posture (100% enablepurgeprotection, 94.4% soft-delete 90 days): because secrets ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "100% enablepurgeprotection",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "Key Vaults properties.enablepurgeprotection: totalResponded 15, distribution True: count 15 (8.9%)",
+                "explanation": "The fact sheet shows enablepurgeprotection = True for 15 Key Vaults (8.9% of vaults with that property reported), not 100%."
+              },
+              {
+                "claim": "94.4% soft-delete 90 days",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "Key Vaults properties.softdeleteretentionindays: totalResponded 125, distribution '90': count 118 (69.8%)",
+                "explanation": "The fact sheet reports 118 vaults (69.8% of those with the property reported) have a 90-day soft-delete retention, not 94.4%."
+              },
+              {
+                "claim": "secrets and keys retention/purge protection is standard across the tenant",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "Key Vaults: enablepurgeprotection True on 15/169 reported (8.9%); soft-delete 90 days on 118/169 reported (69.8%)",
+                "explanation": "The fact sheet does not show retention/purge protection as a tenant-wide standard: purge protection is present on a small minority of vaults (8.9%), and 90-day soft-delete is present on ~69.8% — so it is not universally standard."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "Recovery Services vaults report infrastructure encryption enabled (100%): because vault-level infrastructure encryption ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Recovery Services vaults report infrastructure encryption enabled (100%)",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults.properties.encryption.infrastructureencryption: totalResponded: 1, distribution: {\"Enabled\": {\"count\": 1, \"percentage\": 1.1}} (totalCount of vaults: 90)",
+                "explanation": "The insight asserts 100% of Recovery Services vaults have infrastructure encryption enabled, but the fact sheet shows only 1 vault reported this setting (≈1.1% of 90), so the claim is contradicted by the data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 8,
+          "insight_text": "The tenant has heavy use of ExpressRoute cross-connections (170) and a small number of virtual network gateways: because...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "The tenant has heavy use of ExpressRoute cross-connections (170)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/expressroutecrossconnections totalCount: 170",
+                "explanation": "The fact sheet shows microsoft.network/expressroutecrossconnections with totalCount = 170, matching the claim exactly."
+              },
+              {
+                "claim": "the tenant has a small number of virtual network gateways",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/virtualnetworkgateways totalCount: 2",
+                "explanation": "The fact sheet lists microsoft.network/virtualnetworkgateways totalCount = 2. While 'small' is qualitative, the concrete count (2) in the fact sheet supports the characterization."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 9,
+          "insight_text": "Storage redundancy across tenant storage accounts favors Standard_LRS (48.5%) with meaningful usage of GRS/RAGRS (23.3%/...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Storage redundancy across tenant storage accounts favors Standard_LRS (48.5%)",
+                "verdict": "supported",
+                "fact_sheet_value": "storage accounts totalCount 443; sku.name distribution: Standard_LRS = 215 (48.5%)",
+                "explanation": "The fact sheet shows 215 of 443 storage accounts use Standard_LRS, i.e. 48.5%, which matches the claim."
+              },
+              {
+                "claim": "meaningful usage of GRS/RAGRS (23.3%/17.2%)",
+                "verdict": "supported",
+                "fact_sheet_value": "storage accounts sku.name distribution: Standard_GRS = 103 (23.3%), Standard_RAGRS = 76 (17.2%)",
+                "explanation": "The fact sheet lists Standard_GRS at 23.3% and Standard_RAGRS at 17.2%, matching the claimed percentages."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 10,
+          "insight_text": "Monitoring and alerting conventions use scheduled query rules and user-assigned identities (75% of scheduled query rules...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "75% of scheduled query rules use UAMI (user-assigned managed identities).",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.insights/scheduledqueryrules: totalCount = 26; identity.totalResponded = 4; identity distribution: UserAssigned count = 3 (≈11.5% of 26).",
+                "explanation": "The fact sheet shows only 3 scheduled query rules with UserAssigned identities (about 11.5% of the 26 scheduled query rules), not 75%."
+              },
+              {
+                "claim": "Scheduled query rules use user-assigned identities.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/scheduledqueryrules: identity.totalResponded = 4; UserAssigned count = 3.",
+                "explanation": "The fact sheet records some scheduled query rules (3) configured with UserAssigned identities, so the statement that scheduled query rules use user-assigned identities is true in part."
+              },
+              {
+                "claim": "Activity Log alerts exist.",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/activitylogalerts: totalCount = 13.",
+                "explanation": "The fact sheet lists 13 Activity Log alerts, confirming that Activity Log alerts exist in the tenant."
+              },
+              {
+                "claim": "Monitoring is implemented with identity-backed automation.",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "Relevant monitoring resources: scheduled query rules (26) have only 3 UserAssigned identities; metric alerts (microsoft.insights/metricalerts totalCount=665) show identity.totalResponded=8 with UserAssigned count=8 (small proportion); activity log alerts have no identity property reported.",
+                "explanation": "The fact sheet does not show widespread use of identities across monitoring resources — UserAssigned identity usage is low on scheduled query rules and metric alerts, and activity log alerts lack identity data — so the claim that monitoring is implemented (broadly) with identity-backed automation is not supported by the data."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "mfi": {
+      "scores": {
+        "total_claims": 30,
+        "verdicts": {
+          "supported": 24,
+          "approximate": 0,
+          "hallucinated": 5,
+          "unverifiable": 1
+        },
+        "verifiable_claims": 29,
+        "accuracy_pct": 82.8,
+        "hallucinated_claims": [
+          {
+            "insight": "Recovery Services vaults are concentrated in eastus (68.9%) and overwhelmingly use the RS0 SKU (97.8%) with infrastructu...",
+            "claim": "Recovery Services vaults have infrastructure encryption enabled (100%)",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults — properties.encryption.infrastructureencryption: totalResponded 1, distribution: Enabled: count 1, percentage 1.1",
+            "explanation": "The fact sheet does not show 100% enabled: only 1 response (1.1%) reports infrastructure encryption enabled. The claim of 100% is contradicted by the data."
+          },
+          {
+            "insight": "Automation accounts are present (3) with runbooks located in eastus and westus2 and Automation accounts set to public ne...",
+            "claim": "Automation accounts set to public network access (100%)",
+            "fact_sheet_value": "microsoft.automation/automationaccounts properties.publicnetworkaccess totalResponded = 2; True = 2 (66.7% of responses)",
+            "explanation": "The fact sheet shows 2 responded automation accounts with public network access = True (2 of 2 responded). It does not show 100% public access across all 3 accounts (overall totalCount = 3)."
+          },
+          {
+            "insight": "Key Vaults enforce strong retention and protection (soft delete enabled 100% with 90-day retention for 94.4% and purge p...",
+            "claim": "90-day retention for 94.4%",
+            "fact_sheet_value": "microsoft.keyvault/vaults.properties.softdeleteretentionindays: totalResponded=125, 90-day retention=118 (69.8%)",
+            "explanation": "The fact sheet reports 69.8% of vaults with a 90-day soft-delete retention (118/125), which contradicts the claimed 94.4%."
+          },
+          {
+            "insight": "Key Vaults enforce strong retention and protection (soft delete enabled 100% with 90-day retention for 94.4% and purge p...",
+            "claim": "purge protection enabled 100%",
+            "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded=15, True=15 (8.9%)",
+            "explanation": "Only 8.9% of Key Vaults in the fact sheet have purge protection reported as True, which contradicts the claimed 100%."
+          },
+          {
+            "insight": "Recovery Services vaults frequently use user-assigned identities (50% of vaults) and public network access is mostly ena...",
+            "claim": "Recovery Services vaults frequently use user-assigned identities (50% of vaults)",
+            "fact_sheet_value": "microsoft.recoveryservices/vaults.identity: totalResponded=2, distribution: UserAssigned: count=1, percentage=1.1%; None: count=1, percentage=1.1%",
+            "explanation": "The fact sheet shows only 1.1% of Recovery Services vaults reported as UserAssigned (1 of 90 reported in publicnetworkaccess, identity had only 2 responses), which contradicts the claimed 50%."
+          }
+        ]
+      },
+      "verifications": [
+        {
+          "insight_index": 1,
+          "insight_text": "Recovery Services vaults are concentrated in eastus (68.9%) and overwhelmingly use the RS0 SKU (97.8%) with infrastructu...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Recovery Services vaults are concentrated in eastus (68.9%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults — location distribution: eastus: count 62, percentage 68.9 (totalCount 90)",
+                "explanation": "The fact sheet shows 62 of 90 Recovery Services vaults (68.9%) are in eastus, matching the claim."
+              },
+              {
+                "claim": "Recovery Services vaults overwhelmingly use the RS0 SKU (97.8%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults — sku.name distribution: RS0: count 88, percentage 97.8 (totalResponded 90)",
+                "explanation": "The fact sheet reports 88 of 90 vaults (97.8%) use the RS0 SKU, which supports the claim."
+              },
+              {
+                "claim": "Recovery Services vaults have infrastructure encryption enabled (100%)",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults — properties.encryption.infrastructureencryption: totalResponded 1, distribution: Enabled: count 1, percentage 1.1",
+                "explanation": "The fact sheet does not show 100% enabled: only 1 response (1.1%) reports infrastructure encryption enabled. The claim of 100% is contradicted by the data."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 2,
+          "insight_text": "Automation accounts are present (3) with runbooks located in eastus and westus2 and Automation accounts set to public ne...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Automation accounts are present (3)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts totalCount = 3",
+                "explanation": "The fact sheet lists 3 automation accounts (totalCount: 3)."
+              },
+              {
+                "claim": "runbooks located in eastus and westus2",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts/runbooks totalCount = 10; location distribution: eastus = 6, westus2 = 4",
+                "explanation": "Runbooks are present in eastus (6) and westus2 (4) according to the runbooks location distribution."
+              },
+              {
+                "claim": "Automation accounts set to public network access (100%)",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.automation/automationaccounts properties.publicnetworkaccess totalResponded = 2; True = 2 (66.7% of responses)",
+                "explanation": "The fact sheet shows 2 responded automation accounts with public network access = True (2 of 2 responded). It does not show 100% public access across all 3 accounts (overall totalCount = 3)."
+              },
+              {
+                "claim": "Automation accounts Basic SKU",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts properties.sku.name totalResponded = 3; Basic = 3 (100.0%)",
+                "explanation": "All 3 automation accounts reported have sku.name = Basic."
+              },
+              {
+                "claim": "runbook execution is already regionalized to these locations",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts/runbooks location distribution: eastus = 6, westus2 = 4",
+                "explanation": "The presence of runbooks in eastus and westus2 indicates runbook execution is regionalized to those locations."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 3,
+          "insight_text": "User-assigned managed identities are widely used (370 UAI) and nearly all VMs expose both system and user-assigned ident...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "User-assigned managed identities are widely used (370 UAI)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.managedidentity/userassignedidentities totalCount = 370",
+                "explanation": "The fact sheet lists 370 user-assigned managed identities (totalCount 370), which matches the claimed number."
+              },
+              {
+                "claim": "Nearly all VMs expose both system and user-assigned identities (VMs: 98.8% have SystemAssigned, UserAssigned)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.compute/virtualmachines identity.totalResponded = 764; 'SystemAssigned, UserAssigned' count = 755 (97.0%)",
+                "explanation": "The fact sheet shows 755 of 764 VMs (97.0%) have both SystemAssigned and UserAssigned identities. This supports the claim that nearly all VMs expose both identities; the quoted percentage (98.8%) differs slightly from the sheet (97.0%) but is within the ~5 percentage point tolerance."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 4,
+          "insight_text": "Key Vaults enforce strong retention and protection (soft delete enabled 100% with 90-day retention for 94.4% and purge p...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "soft delete enabled 100%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablesoftdelete: totalResponded=167, True=167 (98.8%)",
+                "explanation": "The fact sheet shows soft delete is True for 98.8% of vaults — this is within the ~5 percentage-point tolerance of the claimed 100%, so the claim is supported."
+              },
+              {
+                "claim": "90-day retention for 94.4%",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.softdeleteretentionindays: totalResponded=125, 90-day retention=118 (69.8%)",
+                "explanation": "The fact sheet reports 69.8% of vaults with a 90-day soft-delete retention (118/125), which contradicts the claimed 94.4%."
+              },
+              {
+                "claim": "purge protection enabled 100%",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.keyvault/vaults.properties.enablepurgeprotection: totalResponded=15, True=15 (8.9%)",
+                "explanation": "Only 8.9% of Key Vaults in the fact sheet have purge protection reported as True, which contradicts the claimed 100%."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 5,
+          "insight_text": "Operational Insights (Log Analytics) is widely deployed (149 workspaces) with PerGB2018 SKU (87.9%) and public ingestion...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Operational Insights (Log Analytics) is widely deployed (149 workspaces)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.operationalinsights/workspaces.totalCount = 149",
+                "explanation": "The fact sheet lists 149 Log Analytics workspaces, matching the claimed count."
+              },
+              {
+                "claim": "with PerGB2018 SKU (87.9%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.operationalinsights/workspaces.properties.sku.name: PerGB2018 count = 131 (87.9%)",
+                "explanation": "The SKU distribution shows PerGB2018 is 131 of 149 workspaces (87.9%), matching the claim."
+              },
+              {
+                "claim": "and public ingestion enabled (≈98%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.operationalinsights/workspaces.properties.publicnetworkaccessforingestion: Enabled count = 146 (98.0%)",
+                "explanation": "The fact sheet reports public ingestion enabled for 146 of 149 workspaces (98.0%), consistent with '≈98%'."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 6,
+          "insight_text": "Storage accounts show mixed redundancy (Standard_LRS 48.5%, Standard_GRS 23.3%, Standard_RAGRS 17.2%): this demonstrates...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Standard_LRS 48.5%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.storage/storageaccounts -> sku.name: Standard_LRS: count 215, percentage 48.5 (totalResponded 443)",
+                "explanation": "The fact sheet shows Standard_LRS at 48.5% (215 of 443), matching the claim."
+              },
+              {
+                "claim": "Standard_GRS 23.3%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.storage/storageaccounts -> sku.name: Standard_GRS: count 103, percentage 23.3 (totalResponded 443)",
+                "explanation": "The fact sheet shows Standard_GRS at 23.3% (103 of 443), matching the claim."
+              },
+              {
+                "claim": "Standard_RAGRS 17.2%",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.storage/storageaccounts -> sku.name: Standard_RAGRS: count 76, percentage 17.2 (totalResponded 443)",
+                "explanation": "The fact sheet shows Standard_RAGRS at 17.2% (76 of 443), matching the claim."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 7,
+          "insight_text": "Network building blocks are pervasive (network security groups 957, virtual networks 205, Traffic Manager profiles 294):...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "network security groups 957",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/networksecuritygroups: totalCount = 957",
+                "explanation": "The fact sheet lists microsoft.network/networksecuritygroups with totalCount 957, matching the claim exactly."
+              },
+              {
+                "claim": "virtual networks 205",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/virtualnetworks: totalCount = 205",
+                "explanation": "The fact sheet lists microsoft.network/virtualnetworks with totalCount 205, matching the claim exactly."
+              },
+              {
+                "claim": "Traffic Manager profiles 294",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.network/trafficmanagerprofiles: totalCount = 294",
+                "explanation": "The fact sheet lists microsoft.network/trafficmanagerprofiles with totalCount 294, matching the claim exactly."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 8,
+          "insight_text": "Recovery Services vaults frequently use user-assigned identities (50% of vaults) and public network access is mostly ena...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "Recovery Services vaults frequently use user-assigned identities (50% of vaults)",
+                "verdict": "hallucinated",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults.identity: totalResponded=2, distribution: UserAssigned: count=1, percentage=1.1%; None: count=1, percentage=1.1%",
+                "explanation": "The fact sheet shows only 1.1% of Recovery Services vaults reported as UserAssigned (1 of 90 reported in publicnetworkaccess, identity had only 2 responses), which contradicts the claimed 50%."
+              },
+              {
+                "claim": "public network access is mostly enabled (98.9%)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.recoveryservices/vaults.properties.publicnetworkaccess: totalResponded=90, Enabled: count=89, percentage=98.9%",
+                "explanation": "The fact sheet reports 89 of 90 Recovery Services vaults (98.9%) have public network access enabled, matching the claim."
+              }
+            ]
+          }
+        },
+        {
+          "insight_index": 9,
+          "insight_text": "Monitoring and alerting artifacts are already in place (datacollectionrules 57, metricalerts 665, scheduled query rules ...",
+          "verification": {
+            "claims": [
+              {
+                "claim": "datacollectionrules 57",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/datacollectionrules totalCount: 57",
+                "explanation": "The fact sheet shows microsoft.insights/datacollectionrules totalCount is 57, matching the claim."
+              },
+              {
+                "claim": "metricalerts 665",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/metricalerts totalCount: 665",
+                "explanation": "The fact sheet lists microsoft.insights/metricalerts with totalCount 665, matching the claim."
+              },
+              {
+                "claim": "scheduled query rules 26",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/scheduledqueryrules totalCount: 26",
+                "explanation": "The fact sheet shows microsoft.insights/scheduledqueryrules totalCount is 26, matching the claim."
+              },
+              {
+                "claim": "activity log alerts 13",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.insights/activitylogalerts totalCount: 13",
+                "explanation": "The fact sheet lists microsoft.insights/activitylogalerts with totalCount 13, matching the claim."
+              },
+              {
+                "claim": "runbook execution events (implied available to integrate)",
+                "verdict": "supported",
+                "fact_sheet_value": "microsoft.automation/automationaccounts/runbooks totalCount: 10",
+                "explanation": "The insight implies runbook execution events exist; the fact sheet shows 10 runbooks are present, so runbook-related events/resources do exist."
+              },
+              {
+                "claim": "ASR replication/health metrics (implied available to integrate)",
+                "verdict": "unverifiable",
+                "fact_sheet_value": "not found (no explicit 'ASR' or 'Site Recovery' replication/health metric resource counts in the fact sheet)",
+                "explanation": "The insight refers to ASR replication/health metrics but the fact sheet does not explicitly report Azure Site Recovery (ASR) replication or health metric resources, so this specific claim cannot be verified from the provided data."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

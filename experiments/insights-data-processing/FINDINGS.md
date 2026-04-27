@@ -163,6 +163,57 @@ Notably, the one prompt where baseline clearly won (VMware DR) is a scenario inv
 
 The stronger signal remains property counts. Any effort to improve insight quality should prioritize prompt engineering and property aggregation depth over MFI sophistication.
 
+---
+
+## Factual Accuracy Verification
+
+The LLM evaluator compared insights at face value — it judged "quality" without checking whether the numerical claims are true. To independently verify, we built a deterministic fact sheet from the raw ARG data (same aggregation logic as the notebooks) and used an LLM to match each insight's claims against it.
+
+### Method
+
+1. **Stage 1 (deterministic)**: Python script computes all resource counts and property distributions from the raw ARG cache — no LLM involved. This is ground truth.
+2. **Stage 2 (LLM-assisted)**: For each insight, an LLM extracts verifiable factual claims and checks them against the fact sheet. Each claim is graded as:
+   - **Supported (S)**: confirmed within ~5pp / ~10% tolerance
+   - **Approximate (A)**: directionally correct but off by more than tolerances
+   - **Hallucinated (H)**: contradicted by data or property doesn't exist
+
+### Results
+
+| Prompt | Baseline Accuracy | MFI Accuracy | Baseline H | MFI H |
+|--------|-------------------|--------------|------------|-------|
+| 1 (web app) | 92.0% | 86.2% | 2 | 4 |
+| 2 (backup/DR) | 76.5% | 76.0% | 4 | 6 |
+| 7 (VMSS/WAF) | 94.7% | 80.6% | 1 | 6 |
+| 9 (VMware DR) | 73.1% | 82.8% | 7 | 5 |
+| **Average** | **84.1%** | **81.4%** | **3.5** | **5.25** |
+
+### Common Hallucination Patterns
+
+Both approaches hallucinate the same types of claims:
+
+1. **Key Vault purge protection**: Both consistently claim "enablePurgeProtection True for 100%" when the actual figure is ~8.9%. This is the same hallucination found in the initial experiments — the model confuses `enableSoftDelete` (~98.8% True) with `enablePurgeProtection`.
+
+2. **Recovery Services vault encryption**: Both claim "infrastructure encryption Enabled for 100%" — this property may not be represented the same way in the fact sheet due to how the property is nested.
+
+3. **Identity type distributions**: MFI occasionally overstates identity adoption (e.g., "UserAssigned in 100% of databases") when the actual distribution is more mixed.
+
+### Interpretation
+
+**Baseline is slightly more factually accurate than MFI on average** (84.1% vs 81.4%), with fewer hallucinations per prompt (3.5 vs 5.25). This is the opposite of what the LLM-as-judge found — MFI insights "sound better" but hallucinate more.
+
+However, the gap is modest and driven largely by the same recurring hallucination (Key Vault purge protection) that appears in both approaches. The extra MFI data may encourage the model to make more claims overall (MFI insights average 9.25 per prompt vs baseline's 8.25), and more claims means more opportunities for hallucination.
+
+The one exception is prompt 9 (VMware DR) where MFI is actually more accurate than baseline (82.8% vs 73.1%). This was also the prompt where baseline won the quality comparison — suggesting baseline makes bolder but less accurate claims for that domain.
+
+### Implications for the MFI Recommendation
+
+The factual accuracy findings temper but don't reverse the MFI recommendation:
+
+- MFI still produces more architecturally relevant insights (per the quality evaluation)
+- But it also produces slightly more hallucinated claims
+- The hallucination rate is manageable (~81% accuracy) and mostly concentrated in a few recurring patterns (Key Vault purge protection, infrastructure encryption)
+- **Mitigation**: These specific hallucination patterns could be addressed by improving the property aggregation (e.g., ensuring `enablePurgeProtection` is correctly captured and prominently surfaced in the data)
+
 ## Files
 
 | File | Description |
@@ -178,3 +229,6 @@ The stronger signal remains property counts. Any effort to improve insight quali
 | `insights_bm25.ipynb` | BM25 retrieval pipeline |
 | `../mfi-value/mfi_value_test.ipynb` | Multi-prompt baseline vs MFI comparison |
 | `../mfi-value/results/` | Per-prompt insight outputs, evaluations, and summary |
+| `../mfi-value/verify_facts.py` | Factual accuracy verification script (Stage 1 + 2) |
+| `../mfi-value/results/fact_sheet.json` | Deterministic ground truth from ARG data |
+| `../mfi-value/results/factual_verification.json` | Per-claim verification results |
