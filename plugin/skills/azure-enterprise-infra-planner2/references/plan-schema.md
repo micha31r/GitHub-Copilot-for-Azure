@@ -52,7 +52,7 @@ Each element represents one Azure resource, include resource groups:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `whyChosen` | string | Justification referencing WAF pillars (see [research.md](research.md)) or requirements |
+| `whyChosen` | string | Justification referencing WAF pillars (see [2-research-best-practices.md](phases/2-research-best-practices.md) and [3-research-resources.md](phases/3-research-resources.md)) or requirements |
 | `alternativesConsidered` | string[] | Other options evaluated |
 | `tradeoffs` | string | Key tradeoffs in this choice |
 
