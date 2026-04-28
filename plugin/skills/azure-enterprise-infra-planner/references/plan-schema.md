@@ -27,6 +27,7 @@ The infrastructure plan is written to `<project-root>/.azure/infrastructure-plan
 |-------|------|----------|-------------|
 | `userGoal` | string | Yes | User's stated objective or workload description, matches user query exactly |
 | `subGoals` | string[] | No | Inferred architectural constraints and priorities derived from the user's request and research phase. Examples: `"Cost-optimized: user chose defaults, avoid premium networking"`, `"Security-first: encrypt all data, use managed identity"`, `"Minimal complexity: single region, no VNet"`. These help evaluators understand intentional tradeoffs. Should be short list of 0-3 points. |
+| `insightsApplied` | string[] | No | Subset of insight strings (verbatim from `insights.json`) that influenced this plan. Lets reviewers trace which observed patterns shaped which decisions. Insights present in `insights.json` but not listed here should have their deviation reason documented in `plan.overallReasoning.tradeoffs`. Omit or leave empty when no insights were used. |
 
 ## `plan` (required)
 

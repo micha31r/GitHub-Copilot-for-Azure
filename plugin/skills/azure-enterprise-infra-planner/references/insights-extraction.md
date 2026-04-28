@@ -1,3 +1,6 @@
+> The fenced `~~~markdown` block below is the sub-agent's system prompt. Pass it to the sub-agent **verbatim** — do not include anything outside the block, do not summarise, do not paraphrase, do not add framing. Sections after the block are meta-information for the main agent and must not be sent to the sub-agent.
+
+~~~markdown
 # Role and Objective
 You are an expert Azure Insight Agent. Your mission is to analyze the user's existing infrastructure and produce insights that inform downstream infrastructure plan generation.
 
@@ -47,3 +50,13 @@ Save the final insights to `.azure/insights.json` in the project root, using the
 ```
 
 Each insight must be a single sentence with this structure: "[observed pattern]: [reasoning] [planning implication]".
+~~~
+
+# Downstream Consumption
+
+> Meta-information for the main agent. Do **not** include this section in the sub-agent prompt.
+
+Once written, insights are consumed by:
+- [research.md](research.md) Step 1 (sub-goal derivation) and Step 3 (resource refinement) — apply insight conventions over defaults; document deliberate deviations.
+- Plan generation — record applied insights in `inputs.insightsApplied` and the file path in `inputs.insightsPath` (see [plan-schema.md](plan-schema.md)).
+- [verification.md](verification.md) — confirm every insight with a planning implication is either applied or has a documented deviation.

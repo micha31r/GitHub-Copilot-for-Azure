@@ -26,7 +26,7 @@ Activate this skill when user wants to:
 | MCP tools | `get_azure_bestpractices_get`, `wellarchitectedframework_serviceguide_get`, `microsoft_docs_fetch`, `microsoft_docs_search`, `bicepschema_get` |
 | CLI commands | `az deployment group create`, `az bicep build`, `az resource list`, `terraform init`, `terraform plan`, `terraform validate`, `terraform apply` |
 | Output schema | [plan-schema.md](references/plan-schema.md) |
-| Key references | [research.md](references/research.md), [resources/](references/resources/README.md), [waf-checklist.md](references/waf-checklist.md), [constraints/](references/constraints/README.md) |
+| Key references | [research.md](references/research.md), [resources/](references/resources/README.md), [waf-checklist.md](references/waf-checklist.md), [constraints/](references/constraints/README.md), [insights-extraction.md](references/insights-extraction.md) |
 
 ## Workflow
 
@@ -34,6 +34,7 @@ Read [workflow.md](references/workflow.md) for detailed step-by-step instruction
 
 | Phase | Action | Key Gate |
 |-------|--------|----------|
+| 0 | Insights Extraction | Insights sub-agent invoked |
 | 1 | Research — WAF Tools | All MCP tool calls complete |
 | 2 | Research — Refine & Lookup | Resource list approved by user |
 | 3 | Plan Generation | Plan JSON written to disk |
