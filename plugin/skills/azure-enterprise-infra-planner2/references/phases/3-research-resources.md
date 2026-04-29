@@ -10,12 +10,15 @@ Read [WAF cross-cutting checklist](../waf-checklist.md). For every checklist ite
 - Add missing resources / harden properties, or;
 - Document the the intentional omission in `overallReasoning.tradeoffs` and `inputs.subGoals`.
 
-Read `.azure/insights.json` produced by Phase 1:
-- Prefer conventions surfaced by insights (e.g. region, SKU tier, security posture, naming, and tagging) over defaults.
-- Insights never override hard WAF or pairing requirements. When an insight conflicts with a requirement, follow the requirement and document the omission in `overallReasoning.tradeoffs`.
-- Track each insight you actually apply in `inputs.insightsApplied` so the user can trace why a decision was made.
+## Insights Integration
 
-Gate: Present the refinement summary to the user before proceeding to Step 2.
+Read `.azure/insights.json` produced by Phase 1 and evaluate each insight against the current workload and sub-goals identified in Phase 2:
+* If an insight applies, prefer it over defaults — especially for region, SKU tier, security posture, naming, and tagging.
+* If an insight doesn't apply, document the intentional omission in `overallReasoning.tradeoffs`.
+* Insights can shape both resource selection and property configuration.
+* Track each insight you apply in `inputs.insightsApplied` so the user can trace why a decision was made.
+
+> Mandatory Security rule: only apply a security-related insight if it results in an equal or stronger security posture than the alternatives. A weaker security posture from an insight is only acceptable when the user has explicitly requested it in the initial prompt.
 
 ## Step 2 - Resource Lookup
 
