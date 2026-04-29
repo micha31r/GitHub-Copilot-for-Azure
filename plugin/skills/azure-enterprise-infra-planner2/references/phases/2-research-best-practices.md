@@ -1,6 +1,6 @@
-# Phase 2: Research Best Practices
+# Phase 2: Research WAF
 
-> The goal of this phase is to gather Azure best practices and WAF guidance using MCP tools.
+> The goal of this phase is to understand user intent and gather WAF guidance using MCP tools.
 
 ## Step 1 - Clarify Requirements
 
@@ -15,12 +15,12 @@ Clarify the user's requirements until you can confidently describe what they wan
 
 Derive sub-goals and include in `inputs.subGoals`. Sub-goals are implicit constraints the user hasn't stated but the workload clearly requires. Examples:
 
-- "assume all defaults" - Cost-optimized: consumption/serverless tiers, minimal complexity.
-- "production system" - Production-grade: zone redundancy, private networking, managed identity.
-- "secure" - Security-first: no public IPs on workload VMs; Bastion + Key Vault SSH key; Trusted Launch; managed identity over keys.
-- "observable" - Operational excellence baseline: Log Analytics + VM Insights, NSG flow logs, boot diagnostics, NAT Gateway for deterministic egress.
+- "assume all defaults" -> Cost-optimized: consumption/serverless tiers, minimal complexity.
+- "production system" -> Production-grade: zone redundancy, private networking, managed identity.
+- "secure" -> Security-first: no public IPs on workload VMs; Bastion + Key Vault SSH key; Trusted Launch; managed identity over keys.
+- "observable" -> Operational excellence baseline: Log Analytics + VM Insights, NSG flow logs, boot diagnostics, NAT Gateway for deterministic egress.
 
-## Step 3 - WAF Tool Calls
+## Step 3 - Research WAF
 
 > Mandatory: Call WAF MCP tools before reading local resource files.
 
