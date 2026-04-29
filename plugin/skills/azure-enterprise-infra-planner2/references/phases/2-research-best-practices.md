@@ -2,38 +2,32 @@
 
 > The goal of this phase is to gather Azure best practices and WAF guidance using MCP tools.
 
-## Step 1 - Identify Core Resources and Sub-Goals
+## Step 1 - Clarify Requirements
 
-From the user's description, list the core Azure services (compute, data, networking, messaging). Also derive sub-goals — implicit constraints to include in `inputs.subGoals`:
-- "assume all defaults" → `"Cost-optimized: consumption/serverless tiers, minimal complexity"`
-- "production system" → `"Production-grade: zone redundancy, private networking, managed identity"`
+Clarify the user's requirements until you can confidently describe what they want to build. Do NOT proceed to Step 2 until all critical gaps are resolved. Stay focused on *what* the user needs — do not make architectural decisions or propose specific services yet.
 
-Read `<project-root>/.azure/insights.json` (from Phase 1) and derive sub-goals from each planning implication (e.g., `"Tenant convention: prefer westus2 region per insights"`).
+1. Extract what's explicitly stated in the user's prompt: workload purpose, traffic expectations, data storage needs, security requirements, and budget constraints.
+2. Identify gaps across: workload purpose, data/storage needs, networking requirements, security/compliance constraints, availability expectations, environments, expected scale, and budget. A gap is **critical** if it would fundamentally change the scope of the infrastructure.
+3. Ask the user focused questions (≤5 per round) for critical gaps only. Do not suggest answers — ask open questions to understand their intent. Repeat until no critical gaps remain.
+4. Summarize your understanding of the user's requirements and wait for confirmation before proceeding.
 
-### Input Analysis
+## Step 2 - Identify Sub-Goals
 
-You may use the following additional methods to better understand user goals:
+Derive sub-goals and include in `inputs.subGoals`. Sub-goals are implicit constraints the user hasn't stated but the workload clearly requires. Examples:
 
-| Scenario | Action |
-|----------|--------|
-| Repository | Scan `package.json`, `requirements.txt`, `Dockerfile`, `*.csproj` for runtime/dependencies. |
-| User requirements | Clarify workload purpose, traffic, data storage, security, budget. |
-| Multi-environment | Ask about dev/staging/prod sizing differences. |
+- "assume all defaults" - Cost-optimized: consumption/serverless tiers, minimal complexity.
+- "production system" - Production-grade: zone redundancy, private networking, managed identity.
+- "secure" - Security-first: no public IPs on workload VMs; Bastion + Key Vault SSH key; Trusted Launch; managed identity over keys.
+- "observable" - Operational excellence baseline: Log Analytics + VM Insights, NSG flow logs, boot diagnostics, NAT Gateway for deterministic egress.
 
-## Step 2 - WAF Tool Calls
+## Step 3 - WAF Tool Calls
 
-> Mandatory: Call WAF MCP tools before reading local resource files. Complete this step before proceeding.
+> Mandatory: Call WAF MCP tools before reading local resource files.
 
 1. Call `get_azure_bestpractices` with `resource: "general"`, `action: "all"` for baseline guidance. Call once only.
 2. Call `wellarchitectedframework_serviceguide_get` with `service: "<name>"` for each core service (in parallel). Examples: `"Container Apps"`, `"Cosmos DB"`, `"App Service"`, `"Event Grid"`, `"Key Vault"`. Return URLs only.
-3. The tool returns a markdown URL. Use a sub-agent to fetch and summarize in ≤500 tokens, focusing on: additional resources needed, required properties for security/reliability, key design decisions.
+Dispatch sub-agents in parallel to fetch every WAF URL (never inline — guides are 20–60 KB) and summarize in ≤500 tokens. Focus on: additional resources needed, required properties for security and reliability, and key design decisions.
 4. Collect all WAF findings: missing resources, property hardening, architecture patterns.
 
-## Step 3 - Summarise WAF Guides
-
-Use sub-agents to fetch and summarize each WAF guide URL from step 2. 
-
-> Note: the responses from WAF guides are large - 20-60KB each.
-
 ## Gate
-- All tool calls must be completed and WAF guides summarized.
+- All tool calls must be completed and all WAF guides summarized.
