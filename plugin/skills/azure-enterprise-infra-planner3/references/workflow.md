@@ -9,11 +9,11 @@
 
 ## Overview
 
-Start with Phase 1, once the subagent has been created, you can run Phase 2 in parallel. Then, you must wait for both Phase 1 and 2 to complete before moving onto Phase 3, and all subsequent phases must be executed in sequence.
+Start by running Phase 1 and Phase 2 in parallel. You must wait for both Phase 1 and 2 to complete before moving onto Phase 3, and all subsequent phases must be executed in sequence.
 
 | Phase | Action | Reference | Key Gate |
 |-------|--------|-----------|----------|
-| 1 | Extract insights | [1-extract-insights.md](phases/1-extract-insights.md) | Insights written to `.azure/insights.json` |
+| 1 | Extract insights | [1-extract-insights.md](phases/1-extract-insights.md) | Insights written to `<project-root>/.azure/insights.json` |
 | 2 | Research best practices | [2-research-best-practices.md](phases/2-research-best-practices.md) | All MCP tool calls complete and WAF guides summarized |
 | 3 | Research resources | [3-research-resources.md](phases/3-research-resources.md) | All resources have ARM type, naming rules, and pairing constraints; user approves resource list |
 | 4 | Generate plan | [4-generate-plan.md](phases/4-generate-plan.md) | Plan JSON written to disk |
