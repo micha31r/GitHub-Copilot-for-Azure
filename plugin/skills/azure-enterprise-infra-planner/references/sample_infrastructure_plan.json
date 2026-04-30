@@ -10,12 +10,7 @@
     "subGoals": [
       "Cost-optimized: user chose defaults — consumption/serverless tiers, minimal complexity",
       "Minimal complexity: single region (eastus), no VNet, no private endpoints",
-      "Security baseline: managed identity for service-to-service auth, RBAC over keys, Key Vault for secrets",
-      "Tenant convention: eastus is the dominant region in existing footprint per insights"
-    ],
-    "insightsApplied": [
-      "Region concentration in eastus (87% of resources): tenant standardizes on eastus for latency and cost predictability — deploy new resources to eastus unless DR requires otherwise.",
-      "Managed identity adoption is dominant (74% of compute resources): tenant prefers identity-based auth over connection strings — use managed identity for all service-to-service auth in this plan."
+      "Security baseline: managed identity for service-to-service auth, RBAC over keys, Key Vault for secrets"
     ]
   },
   "plan": {

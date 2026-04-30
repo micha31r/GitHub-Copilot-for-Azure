@@ -16,8 +16,6 @@ From the user's description, list the core Azure services (compute, data, networ
 - "assume all defaults" → `"Cost-optimized: consumption/serverless tiers, minimal complexity"`
 - production system → `"Production-grade: zone redundancy, private networking, managed identity"`
 
-Read `<project-root>/.azure/insights.json` (produced in Phase 0) and derive sub-goals from each planning implication (e.g., `"Tenant convention: prefer westus2 region per insights"`).
-
 ## Step 2 — WAF Tool Calls
 
 > Mandatory: Call WAF MCP tools before reading local resource files. Complete this step before proceeding.
@@ -32,8 +30,6 @@ Read `<project-root>/.azure/insights.json` (produced in Phase 0) and derive sub-
 > Mandatory: Walk through the WAF checklist and document what was added or intentionally omitted.
 
 Walk through every concern in the [WAF cross-cutting checklist](waf-checklist.md) and add missing resources or harden properties. For each checklist item, either add the resource/property or document the intentional omission in `overallReasoning.tradeoffs` and `inputs.subGoals`. Present the refinement summary to the user before proceeding to Step 4.
-
-Prefer the conventions surfaced in `.azure/insights.json` (region, SKU tier, security posture, naming, tagging) over defaults. Insights never override hard WAF or pairing requirements — when an insight conflicts with a requirement, follow the requirement and document the deviation in `overallReasoning.tradeoffs`. Track each insight you actually apply in `inputs.insightsApplied` so reviewers can trace why a decision was made.
 
 ## Step 4 — Resource Lookup via Tools
 

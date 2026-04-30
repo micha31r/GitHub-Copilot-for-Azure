@@ -10,14 +10,6 @@
 
 > Complete each phase fully before starting the next. Phases are sequential, not parallel.
 
-## Phase 0: Insights Extraction
-
-Spawn a sub-agent to extract patterns from the user's existing Azure footprint. Pass the **fenced `~~~markdown` block in [insights-extraction.md](insights-extraction.md) verbatim** as the sub-agent's system prompt — nothing outside that block, no paraphrasing, no summarising.
-
-> Note: The sub-agent handles its own data fetch and produces `<project-root>/.azure/insights.json`. Insights are advisory in later phases — they shape decisions but never override hard WAF or pairing requirements.
-
-Gate: Insights sub-agent invoked.
-
 ## Phase 1: Research — WAF Tools
 Call MCP tools to gather best practices and WAF guidance. See [research.md](research.md) Steps 1-2.
 - Call `get_azure_bestpractices` once (direct call — small response)
@@ -73,7 +65,6 @@ Gate: `meta.status` must be `approved`. Destructive actions require explicit use
 
 | Artifact | Location |
 |----------|----------|
-| Insights | `<project-root>/.azure/insights.json` |
 | Infrastructure Plan | `<project-root>/.azure/infrastructure-plan.json` |
 | Bicep files | `<project-root>/infra/main.bicep`, `<project-root>/infra/modules/*.bicep` |
 | Terraform files | `<project-root>/infra/main.tf`, `<project-root>/infra/modules/**/*.tf` |
