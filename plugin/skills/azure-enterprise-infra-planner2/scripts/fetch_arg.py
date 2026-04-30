@@ -8,7 +8,6 @@ import json
 import logging
 import sys
 from collections import Counter
-from pathlib import Path
 
 import requests
 from azure.identity import DefaultAzureCredential
@@ -151,17 +150,10 @@ def aggregate_resources(rows: list) -> dict:
     return result_map
 
 
-RAW_CACHE_PATH = Path(__file__).parent / "arg_raw_output_all.json"
-
-
 if __name__ == "__main__":
     logging.basicConfig(level=logging.ERROR)
     raw = query_resources()
     rows = raw.get("data", []) if isinstance(raw, dict) else []
-
-    # Save raw resource rows for downstream notebooks
-    RAW_CACHE_PATH.write_text(json.dumps(rows, ensure_ascii=False), encoding="utf-8")
-    print(f"Saved {len(rows):,} raw resources to {RAW_CACHE_PATH}", file=sys.stderr)
 
     aggregated = aggregate_resources(rows)
     print(json.dumps(aggregated, indent=2))
