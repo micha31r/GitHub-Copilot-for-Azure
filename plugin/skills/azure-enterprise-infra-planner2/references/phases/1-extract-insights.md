@@ -4,6 +4,8 @@
 
 You must use a **general-purpose** subagent to derive the insights. When creating the subagent, you must provide the following instructions verbatim. Do not truncate lines, do not summarise, do not paraphrase, do not add framing, do not insert assumptions, do not replace variables in the paths, and do not add error handling. Since the context of the subagent must be carefully controlled, any attempts to modify the prompt will result in subpar insights.
 
+> Important: do not read fetch_arg.py which uses unnecessary context.
+
 ### Subagent Instructions
 
 ~~~markdown
