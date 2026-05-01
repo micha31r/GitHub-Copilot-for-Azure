@@ -6,6 +6,7 @@
 - You must stop on all "gate" conditions and only continue when the conditions have been met.
 - Destructive actions require explicit user confirmation.
 - You must read each phase's reference file in full before executing it.
+- Never assume knowledge and cut corners or skip research steps.
 
 ## Overview
 

@@ -25,8 +25,8 @@ Derive sub-goals and include in `inputs.subGoals`. Sub-goals are implicit constr
 > Mandatory: Call WAF MCP tools before reading local resource files.
 
 1. Call `get_azure_bestpractices` with `resource: "general"`, `action: "all"` for baseline guidance. Call once only.
-2. Call `wellarchitectedframework_serviceguide_get` with `service: "<name>"` for each core service (in parallel). Examples: `"Container Apps"`, `"Cosmos DB"`, `"App Service"`, `"Event Grid"`, `"Key Vault"`. Return URLs only.
-Dispatch sub-agents in parallel to fetch every WAF URL (never inline — guides are 20–60 KB) and summarize in ≤500 tokens. Focus on: additional resources needed, required properties for security and reliability, and key design decisions.
+2. Call `wellarchitectedframework_serviceguide_get` with `service: "<name>"` **for each** core service (in parallel). Examples: `"Container Apps"`, `"Cosmos DB"`, `"App Service"`, `"Event Grid"`, `"Key Vault"`. Return URLs only.
+3. Dispatch sub-agents in parallel to fetch **every** WAF URL (never inline — guides are 20–60 KB) and summarize in ≤500 tokens. Focus on: additional resources needed, required properties for security and reliability, and key design decisions. Do not skip this step to keep token usage down, even if the core WAF principles for these services are already well-established and captured in your plan.
 4. Collect all WAF findings: missing resources, property hardening, architecture patterns.
 
 ## Gate
