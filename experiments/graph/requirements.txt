@@ -1,0 +1,3 @@
+# Python stdlib only — no third-party runtime dependencies.
+# This file exists so `pip install -r requirements.txt` is a no-op stub
+# and CI / consumers know there's nothing to install at runtime.

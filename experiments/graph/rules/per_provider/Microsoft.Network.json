@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    {
+      "sourceType": "Microsoft.Network/networkInterfaces",
+      "propertyPath": "properties.ipConfigurations[].properties.subnet",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "1..*",
+      "targetType": "Microsoft.Network/virtualNetworks/subnets",
+      "relationshipKind": "connection",
+      "label": "in subnet",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/networkinterfaces",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/networkInterfaces",
+      "propertyPath": "properties.ipConfigurations[].properties.publicIPAddress",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..*",
+      "targetType": "Microsoft.Network/publicIPAddresses",
+      "relationshipKind": "connection",
+      "label": "uses public ip",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/networkinterfaces",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/networkInterfaces",
+      "propertyPath": "properties.networkSecurityGroup",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/networkSecurityGroups",
+      "relationshipKind": "connection",
+      "label": "protected by",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/networkinterfaces",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/virtualNetworks/subnets",
+      "propertyPath": "properties.networkSecurityGroup",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/networkSecurityGroups",
+      "relationshipKind": "connection",
+      "label": "protected by",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/virtualnetworks/subnets",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/virtualNetworks/subnets",
+      "propertyPath": "properties.routeTable",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/routeTables",
+      "relationshipKind": "connection",
+      "label": "routes via",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/virtualnetworks/subnets",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/virtualNetworks/subnets",
+      "propertyPath": "properties.natGateway",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/natGateways",
+      "relationshipKind": "connection",
+      "label": "egresses via",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/virtualnetworks/subnets",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/loadBalancers",
+      "propertyPath": "properties.frontendIPConfigurations[].properties.publicIPAddress",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..*",
+      "targetType": "Microsoft.Network/publicIPAddresses",
+      "relationshipKind": "connection",
+      "label": "frontend ip",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/loadbalancers",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/loadBalancers",
+      "propertyPath": "properties.frontendIPConfigurations[].properties.subnet",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..*",
+      "targetType": "Microsoft.Network/virtualNetworks/subnets",
+      "relationshipKind": "connection",
+      "label": "frontend subnet",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/loadbalancers",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/applicationGateways",
+      "propertyPath": "properties.gatewayIPConfigurations[].properties.subnet",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "1..*",
+      "targetType": "Microsoft.Network/virtualNetworks/subnets",
+      "relationshipKind": "connection",
+      "label": "in subnet",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/applicationgateways",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/applicationGateways",
+      "propertyPath": "properties.frontendIPConfigurations[].properties.publicIPAddress",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..*",
+      "targetType": "Microsoft.Network/publicIPAddresses",
+      "relationshipKind": "connection",
+      "label": "frontend ip",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/applicationgateways",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/applicationGateways",
+      "propertyPath": "properties.firewallPolicy",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies",
+      "relationshipKind": "connection",
+      "label": "waf policy",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/applicationgateways",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/azureFirewalls",
+      "propertyPath": "properties.firewallPolicy",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/firewallPolicies",
+      "relationshipKind": "connection",
+      "label": "uses policy",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/azurefirewalls",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/privateEndpoints",
+      "propertyPath": "properties.subnet",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "1..1",
+      "targetType": "Microsoft.Network/virtualNetworks/subnets",
+      "relationshipKind": "connection",
+      "label": "in subnet",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/privateendpoints",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Network/privateEndpoints",
+      "propertyPath": "properties.privateLinkServiceConnections[].properties.privateLinkServiceId",
+      "valueShape": "resourceId",
+      "cardinality": "0..*",
+      "targetType": "*",
+      "relationshipKind": "connection",
+      "label": "links to",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/privateendpoints",
+      "notes": "Target type varies — any PaaS resource that supports Private Link. Script must accept any targetType when '*' is present."
+    },
+    {
+      "sourceType": "Microsoft.Network/virtualNetworkGateways",
+      "propertyPath": "properties.ipConfigurations[].properties.subnet",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "1..*",
+      "targetType": "Microsoft.Network/virtualNetworks/subnets",
+      "relationshipKind": "connection",
+      "label": "in subnet",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/virtualnetworkgateways",
+      "notes": "Typically the GatewaySubnet."
+    },
+    {
+      "sourceType": "Microsoft.Network/virtualNetworkGateways",
+      "propertyPath": "properties.ipConfigurations[].properties.publicIPAddress",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..*",
+      "targetType": "Microsoft.Network/publicIPAddresses",
+      "relationshipKind": "connection",
+      "label": "uses public ip",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.network/virtualnetworkgateways",
+      "notes": ""
+    }
+  ]
+}

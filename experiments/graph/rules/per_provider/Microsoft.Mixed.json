@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    {
+      "sourceType": "Microsoft.Web/sites",
+      "propertyPath": "properties.serverFarmId",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Web/serverfarms",
+      "relationshipKind": "connection",
+      "label": "hosted by",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Web/sites",
+      "propertyPath": "properties.virtualNetworkSubnetId",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/virtualNetworks/subnets",
+      "relationshipKind": "connection",
+      "label": "vnet integration",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites",
+      "notes": "Regional VNet integration target."
+    },
+    {
+      "sourceType": "Microsoft.Web/sites/slots",
+      "propertyPath": "properties.serverFarmId",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Web/serverfarms",
+      "relationshipKind": "connection",
+      "label": "hosted by",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites/slots",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Insights/components",
+      "propertyPath": "properties.WorkspaceResourceId",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.OperationalInsights/workspaces",
+      "relationshipKind": "connection",
+      "label": "logs to",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components",
+      "notes": "Workspace-based App Insights references its backing Log Analytics workspace."
+    },
+    {
+      "sourceType": "Microsoft.Sql/servers/databases",
+      "propertyPath": "properties.elasticPoolId",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Sql/servers/elasticPools",
+      "relationshipKind": "connection",
+      "label": "in elastic pool",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/databases",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.ContainerService/managedClusters",
+      "propertyPath": "properties.networkProfile.loadBalancerProfile.outboundIPs.publicIPs[]",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..*",
+      "targetType": "Microsoft.Network/publicIPAddresses",
+      "relationshipKind": "connection",
+      "label": "outbound ip",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.containerservice/managedclusters",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.ContainerService/managedClusters/agentPools",
+      "propertyPath": "properties.vnetSubnetID",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Network/virtualNetworks/subnets",
+      "relationshipKind": "connection",
+      "label": "in subnet",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.containerservice/managedclusters/agentpools",
+      "notes": ""
+    }
+  ]
+}

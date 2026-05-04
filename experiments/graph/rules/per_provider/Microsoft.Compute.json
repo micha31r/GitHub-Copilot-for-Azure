@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    {
+      "sourceType": "Microsoft.Compute/disks",
+      "propertyPath": "properties.managedBy",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Compute/virtualMachines",
+      "relationshipKind": "connection",
+      "label": "managed by",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/disks",
+      "notes": "Disk is attached to a VM. Empty when unattached."
+    },
+    {
+      "sourceType": "Microsoft.Compute/virtualMachines",
+      "propertyPath": "properties.storageProfile.osDisk.managedDisk",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Compute/disks",
+      "relationshipKind": "connection",
+      "label": "uses os disk",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/virtualmachines",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Compute/virtualMachines",
+      "propertyPath": "properties.storageProfile.dataDisks[].managedDisk",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..*",
+      "targetType": "Microsoft.Compute/disks",
+      "relationshipKind": "connection",
+      "label": "uses data disk",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/virtualmachines",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Compute/virtualMachines",
+      "propertyPath": "properties.networkProfile.networkInterfaces[]",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "1..*",
+      "targetType": "Microsoft.Network/networkInterfaces",
+      "relationshipKind": "connection",
+      "label": "attached to nic",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/virtualmachines",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Compute/virtualMachines",
+      "propertyPath": "properties.availabilitySet",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Compute/availabilitySets",
+      "relationshipKind": "connection",
+      "label": "in availability set",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/virtualmachines",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Compute/virtualMachines",
+      "propertyPath": "properties.proximityPlacementGroup",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Compute/proximityPlacementGroups",
+      "relationshipKind": "connection",
+      "label": "in ppg",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/virtualmachines",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Compute/virtualMachineScaleSets",
+      "propertyPath": "properties.proximityPlacementGroup",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Compute/proximityPlacementGroups",
+      "relationshipKind": "connection",
+      "label": "in ppg",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/virtualmachinescalesets",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Compute/snapshots",
+      "propertyPath": "properties.creationData.sourceResourceId",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Compute/disks",
+      "relationshipKind": "connection",
+      "label": "snapshot of",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/snapshots",
+      "notes": "sourceResourceId may also reference another snapshot or a managed image; rule keeps the most common case."
+    },
+    {
+      "sourceType": "Microsoft.Compute/disks",
+      "propertyPath": "properties.encryption.diskEncryptionSetId",
+      "valueShape": "resourceId",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.Compute/diskEncryptionSets",
+      "relationshipKind": "connection",
+      "label": "encrypted by",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/disks",
+      "notes": ""
+    },
+    {
+      "sourceType": "Microsoft.Compute/diskEncryptionSets",
+      "propertyPath": "properties.activeKey.sourceVault",
+      "valueShape": "object{id:resourceId}",
+      "cardinality": "0..1",
+      "targetType": "Microsoft.KeyVault/vaults",
+      "relationshipKind": "connection",
+      "label": "key from",
+      "docsRef": "https://learn.microsoft.com/en-us/azure/templates/microsoft.compute/diskencryptionsets",
+      "notes": ""
+    }
+  ]
+}

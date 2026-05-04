@@ -1,4 +1,5 @@
 arg_raw_output_all.json
+arg.json
 venv/
 .venv/
 __integration_*__/
